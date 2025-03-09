@@ -1,0 +1,752 @@
+﻿NesMemory:2000:PpuControl_2000:7  bit  0\n---- ----\nVPHB SINN\n|||| ||||\n|||| ||++- Base nametable address\n|||| ||    (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)\n|||| |+--- VRAM address increment per CPU read/write of PPUDATA\n|||| |     (0: add 1, going across; 1: add 32, going down)\n|||| +---- Sprite pattern table address for 8x8 sprites\n||||       (0: $0000; 1: $1000; ignored in 8x16 mode)\n|||+------ Background pattern table address (0: $0000; 1: $1000)\n||+------- Sprite size (0: 8x8; 1: 8x16)\n|+-------- PPU master/slave select\n|          (0: read backdrop from EXT pins; 1: output color on EXT pins)\n+--------- Generate an NMI at the start of the\n           vertical blanking interval (0: off; 1: on)
+NesMemory:2001:PpuMask_2001:7  bit  0\n---- ----\nBGRs bMmG\n|||| ||||\n|||| |||+- Display type: (0: color, 1: grayscale)\n|||| ||+-- 1: Show background in leftmost 8 pixels of screen, 0: Hide\n|||| |+--- 1: Show sprites in leftmost 8 pixels of screen, 0: Hide\n|||| +---- 1: Show background\n|||+------ 1: Show sprites\n||+------- Emphasize red\n|+-------- Emphasize green\n+--------- Emphasize blue
+NesMemory:2002:PpuStatus_2002:7  bit  0\n---- ----\nVSO. ....\n|||| ||||\n|||+-++++- Least significant bits previously written into a PPU register\n|||        (due to register not being updated for this address)\n||+------- Sprite overflow. The intent was for this flag to be set\n||         whenever more than eight sprites appear on a scanline, but a\n||         hardware bug causes the actual behavior to be more complicated\n||         and generate false positives as well as false negatives; see\n||         PPU sprite evaluation. This flag is set during sprite\n||         evaluation and cleared at dot 1 (the second dot) of the\n||         pre-render line.\n|+-------- Sprite 0 Hit.  Set when a nonzero pixel of sprite 0 overlaps\n|          a nonzero background pixel; cleared at dot 1 of the pre-render\n|          line.  Used for raster timing.\n+--------- Vertical blank has started (0: not in vblank; 1: in vblank).\n           Set at dot 1 of line 241 (the line *after* the post-render\n           line); cleared after reading $2002 and at dot 1 of the\n           pre-render line.
+NesMemory:2003:OamAddr_2003:Set OAM address - Write only
+NesMemory:2004:OamData_2004:Read/Write OAM data
+NesMemory:2005:PpuScroll_2005:Set PPU scroll, write twice - Write only
+NesMemory:2006:PpuAddr_2006:Set PPU address, write twice - Write only
+NesMemory:2007:PpuData_2007:Read/Write VRAM
+NesMemory:4000:Sq0Duty_4000:DDLC VVVV\nDuty (D), envelope loop / length counter halt (L), constant volume (C), volume/envelope (V)
+NesMemory:4001:Sq0Sweep_4001:EPPP NSSS\nSweep unit: enabled (E), period (P), negate (N), shift (S)
+NesMemory:4002:Sq0Timer_4002:TTTT TTTT\nTimer low (T)
+NesMemory:4003:Sq0Length_4003:LLLL LTTT\nLength counter load (L), timer high (T)
+NesMemory:4004:Sq1Duty_4004:DDLC VVVV\nDuty (D), envelope loop / length counter halt (L), constant volume (C), volume/envelope (V)
+NesMemory:4005:Sq1Sweep_4005:EPPP NSSS\nSweep unit: enabled (E), period (P), negate (N), shift (S)
+NesMemory:4006:Sq1Timer_4006:TTTT TTTT\nTimer low (T)
+NesMemory:4007:Sq1Length_4007:LLLL LTTT\nLength counter load (L), timer high (T)
+NesMemory:4008:TrgLinear_4008:CRRR RRRR\nLength counter halt / linear counter control (C), linear counter load (R)
+NesMemory:400A:TrgTimer_400A:TTTT TTTT\nTimer low (T)
+NesMemory:400B:TrgLength_400B:LLLL LTTT\nLength counter load (L), timer high (T)
+NesMemory:400C:NoiseVolume_400C:--LC VVVV\nEnvelope loop / length counter halt (L), constant volume (C), volume/envelope (V)
+NesMemory:400E:NoisePeriod_400E:L--- PPPP\nLoop noise (L), noise period (P)
+NesMemory:400F:NoiseLength_400F:LLLL L---\nLength counter load (L)
+NesMemory:4010:DmcFreq_4010:IL-- RRRR\nIRQ enable (I), loop (L), frequency (R)
+NesMemory:4011:DmcCounter_4011:-DDD DDDD\nLoad counter (D)
+NesMemory:4012:DmcAddress_4012:AAAA AAAA\nSample address (A)
+NesMemory:4013:DmcLength_4013:LLLL LLLL\nSample length (L)
+NesMemory:4014:SpriteDma_4014:Writing $XX will upload 256 bytes of data from CPU page $XX00-$XXFF to the internal PPU OAM.
+NesMemory:4015:ApuStatus_4015:Read:\nIF-D NT21\nDMC interrupt (I), frame interrupt (F), DMC active (D), length counter > 0 (N/T/2/1)\n\nWrite:\n---D NT21\nEnable DMC (D), noise (N), triangle (T), and pulse channels (2/1)
+NesMemory:4016:Ctrl1_4016:Read (NES - input):\n---4 3210\nRead data from controller port #1.\n\nWrite:\n---- ---A\nOutput data (strobe) to both controllers.
+NesMemory:4017:Ctrl2_FrameCtr_4017:Read (NES - input):\n---4 3210\nRead data from controller port #2.\n\nWrite (Frame counter): MI-- ----\nMode (M, 0 = 4-step, 1 = 5-step), IRQ inhibit flag (I)
+NesMemory:8000:MMC3_BANKSELECT
+NesMemory:8001:MMC3_BANKDATA
+NesMemory:A000:MMC3_MIRRORING
+NesMemory:A001:MMC3_RAMCTRL
+NesMemory:C000:MMC3_IRQLATCH
+NesMemory:C001:MMC3_IRQRELOAD
+NesMemory:E000:MMC3_IRQDISABLE
+NesMemory:E001:MMC3_IRQENABLE
+NesPrgRom:0000-09FF:Map_Palette_00
+NesPrgRom:B418-B717:Map_CHR_Bank
+NesPrgRom:244D1-24617:Map_Data_Banks:Set MSB to enable "return to previous map when dying" flag
+NesPrgRom:24618-2475E:Map_Data_Tilesets
+NesPrgRom:2475F-248A5:Map_Data_Ptrs_Hi
+NesPrgRom:248A6-249EC:Map_Data_Ptrs_Lo
+NesPrgRom:249ED-24A1D:Tileset_Banks
+NesPrgRom:24A1E-24A4E:Tileset_Ptrs_Hi
+NesPrgRom:24A4F-24A7F:Tileset_Ptrs_Lo
+NesPrgRom:24A80-24BC6:Enemy_Banks
+NesPrgRom:24BC7-24D0D:Enemy_Ptrs_Hi
+NesPrgRom:24D0E-24E54:Enemy_Ptrs_Lo
+NesPrgRom:24E55-24F80:Sprite_Palettes:50 sets of 6 colors
+NesPrgRom:25213-25C21:Door_Data:515 sets of 5 bytes
+NesPrgRom:25C4A-25C5E:Boss_Battle_Locations:8 sets of 3 bytes
+NesPrgRom:26690:LoadMapChrAndPalette_Impl
+NesPrgRom:266C2:LoadMapPalette_Impl
+NesPrgRom:26904:SetMinimumKirbyX
+NesPrgRom:26916:SetMaximumKirbyX
+NesPrgRom:26D5A:WriteHubWallPattern
+NesPrgRom:26F9B:MAYBE_UpdateStatusBar
+NesPrgRom:2879B:KirbyTick_Idle:Tick callback for kirby state 03 (Idle)\n
+NesPrgRom:287AC::Falling state
+NesPrgRom:287B6::Walking state
+NesPrgRom:287C0::Climbing state
+NesPrgRom:287CA::Crouching state
+NesPrgRom:287D4::Jumping state
+NesPrgRom:287DE::Inhaling state
+NesPrgRom:287E8::Entering door state
+NesPrgRom:287F2::Flying state
+NesPrgRom:287FC::Idling state
+NesPrgRom:28804:SetKirbyIdlePose
+NesPrgRom:28811:Idle_Kirby_Poses_By_Slope_State
+NesPrgRom:288B9:KirbyTick_Walk:Tick callback for Kirby state 04/05 (Walk)\n
+NesPrgRom:288C4::Idle state
+NesPrgRom:288CE::Falling state
+NesPrgRom:288D8::Idle state
+NesPrgRom:288E2::Skid state
+NesPrgRom:288EC::Dashing state
+NesPrgRom:288F6::Climbing state
+NesPrgRom:28900::Crouching state
+NesPrgRom:2890A::Jumping state
+NesPrgRom:28914::Inhaling state
+NesPrgRom:2891E::Entering door state
+NesPrgRom:28928::Flying state
+NesPrgRom:28932::Walking slope changed state
+NesPrgRom:28961:KirbyTick_Dash:Tick callback for Kirby state 06/07 (Dash)\n
+NesPrgRom:2896C::Idle state
+NesPrgRom:28976::Falling state
+NesPrgRom:28980::Skid state
+NesPrgRom:2898A::Walk state
+NesPrgRom:28994::Climb state
+NesPrgRom:2899E::Crouch state
+NesPrgRom:289A8::Jump state
+NesPrgRom:289B2::Inhale state
+NesPrgRom:289BC::Enter door state
+NesPrgRom:289C6::Fly state
+NesPrgRom:289D0::Dash slope changed state
+NesPrgRom:289F0:KirbyTick_Skid:Tick callback for Kirby state 08 (Skid)\n
+NesPrgRom:289FB::Idle state
+NesPrgRom:28A05::Falling state
+NesPrgRom:28A0F::Idle state
+NesPrgRom:28A19::Jump state
+NesPrgRom:28A23::Inhaling state
+NesPrgRom:2A03A:KirbyTick_SwordIdle:Tick callback for Kirby state $61 (sword, idle)\n
+NesPrgRom:2A04B::Sword, falling
+NesPrgRom:2A055::Sword, walking
+NesPrgRom:2A05F::Sword, climbing
+NesPrgRom:2A069::Sword, crouching
+NesPrgRom:2A073::Sword, jumping
+NesPrgRom:2A07D::Sword slash
+NesPrgRom:2A087::Entering door
+NesPrgRom:2A091::Sword, begin flying
+NesPrgRom:2A09B::Sword, idle
+NesPrgRom:2A0A5::Discarding ability
+NesPrgRom:2A0AD:SetSwordKirbyIdlePose
+NesPrgRom:2A749:TICK_KirbySwordSlash
+NesPrgRom:2A773:KirbySwordSlash_GetHitbox
+NesPrgRom:2AC43:KirbyTick_ParasolIdle:Tick callback for Kirby state $B4 (parasol, idle)\n
+NesPrgRom:2AC54::Parasol, falling
+NesPrgRom:2AC5E::Parasol, walking
+NesPrgRom:2AC68::Parasol, climbing
+NesPrgRom:2AC72::Parasol, crouching
+NesPrgRom:2AC7C::Parasol, jumping
+NesPrgRom:2AC86::Parasol attack
+NesPrgRom:2AC90::Entering door
+NesPrgRom:2AC9A::Parasol, begin flying
+NesPrgRom:2ACA4::Parasol, idle
+NesPrgRom:2ACAE::Discarding ability
+NesPrgRom:2ACB9:SetParasolKirbyIdlePose
+NesPrgRom:2BC4C:RemoveUfoAbility
+NesPrgRom:2BC4F::UFO
+NesPrgRom:2C0C4:SCR_IsNotHoldingB
+NesPrgRom:2C19E:KirbySpark_ShouldStop
+NesPrgRom:2C1AD:KirbySpark_GetHitbox
+NesPrgRom:2C3AE:SCR_IsNotHoldingB_2
+NesPrgRom:2D228:Drink_Heal_Amount
+NesPrgRom:2E03F:KirbyTick_StarRodIdle:Tick callback for Kirby state $7D (star rod, idle)\n
+NesPrgRom:2E050::Star rod, falling
+NesPrgRom:2E05A::Star rod, walking
+NesPrgRom:2E064::Star rod, climbing
+NesPrgRom:2E06E::Star rod, crouching
+NesPrgRom:2E078::Star rod, jumping
+NesPrgRom:2E082::Star rod attack
+NesPrgRom:2E08C::Entering door
+NesPrgRom:2E096::Star rod, begin flying
+NesPrgRom:2E0A0::Star rod, idle
+NesPrgRom:2E0AA::Discarding ability
+NesPrgRom:2E0B2:SetStarRodKirbyIdlePose
+NesPrgRom:2EC09:KirbyTick_HammerIdle:Tick callback for Kirby state $98 (hammer, idle)
+NesPrgRom:2EC1A::Hammer, falling
+NesPrgRom:2EC24::Hammer, walking
+NesPrgRom:2EC2E::Hammer, climbing
+NesPrgRom:2EC38::Hammer, crouch
+NesPrgRom:2EC42::Hammer, jumping
+NesPrgRom:2EC4C::Hammer attack
+NesPrgRom:2EC56::Entering door
+NesPrgRom:2EC60::Hammer, start flying
+NesPrgRom:2EC6A::Hammer, idle
+NesPrgRom:2EC74::Discarding ability
+NesPrgRom:2EC7C:SetHammerKirbyIdlePose
+NesPrgRom:30051:InitializeObjects
+NesPrgRom:300A7:Script_Ptrs_Lo
+NesPrgRom:30117:Script_Ptrs_Hi
+NesPrgRom:30187:Script_Banks
+NesPrgRom:30761:InitializeGameVariables
+NesPrgRom:3081C:CheckColdReset:Set `is_cold_reset` flag and return carry set if cold reset\n
+NesPrgRom:30842-30846:Cold_Reset_Marker
+NesPrgRom:30F83:KirbyTick_MouthfulIdle:Tick callback for Kirby state $4E (mouthful, idle)\n
+NesPrgRom:30F94::Mouthful, falling
+NesPrgRom:30F9E::Mouthful, walking
+NesPrgRom:30FA8::Mouthful, begin jump
+NesPrgRom:30FB2::Swallow
+NesPrgRom:30FBC::Spit
+NesPrgRom:30FC6::Entering door
+NesPrgRom:30FD0::Mouthful, idle
+NesPrgRom:30FD8:SetMouthfulKirbyIdlePose
+NesPrgRom:3A000:InitializeApu_Impl
+NesPrgRom:3A028:PlaySoundEffect_Internal
+NesPrgRom:3A153:SoundDriver_Internal
+NesPrgRom:3A155::5-step, IRQ inhibit
+NesPrgRom:3A4E0:Music_GetNextByte
+NesPrgRom:42049:KirbyPhysics
+NesPrgRom:4205B:KirbyFinalize
+NesPrgRom:420C0:MAYBE_CheckSpike
+NesPrgRom:420FD:EmitUnderwaterBubbles
+NesPrgRom:4210A::Kirby Particle 0x0E (Underwater bubbles)
+NesPrgRom:42112:GetKirbyVelXAbs
+NesPrgRom:4213A:SetVelXFromKirby
+NesPrgRom:4256F:SetKirbyVelX
+NesPrgRom:426E2:CompareKirbyVelX:C = (ya >= kirby_vel_x)\n
+NesPrgRom:426FB:ZeroKirbyVelX
+NesPrgRom:42710:SCR_SetKirbyVelX
+NesPrgRom:4272A:KirbyAccelX
+NesPrgRom:427AD:SetVelYFromKirby
+NesPrgRom:427BA:MAYBE_KirbyGravity
+NesPrgRom:42846:SetKirbyVelY:A = fraction\nX = integer
+NesPrgRom:4284D:ZeroKirbyVelY
+NesPrgRom:4285C:SCR_SetKirbyVelY
+NesPrgRom:42874:KirbyAccelY
+NesPrgRom:428C1:IsKirbyNotFalling
+NesPrgRom:428CA:HasLandedHeadFirstOnEnemy
+NesPrgRom:4294D:IsHoldingUpOrA
+NesPrgRom:42957:TryDiscardCopyAbility
+NesPrgRom:429D9:HasJustEnteredWater
+NesPrgRom:429E6:HasJustLeftWater
+NesPrgRom:42A15:WillEnterDoor
+NesPrgRom:42A23:IsDoneSliding:Checks if X velocity is below 0.75 px/f\nIf so, zeroes X velocity and returns CF set
+NesPrgRom:42A36:IsNotHoldingDown
+NesPrgRom:42A5D:HasSlopeStateChanged
+NesPrgRom:42A6C:IsKirbyVelXZero
+NesPrgRom:42ADE:IsPressingAB
+NesPrgRom:42AE8:HasJustPressedA
+NesPrgRom:42AF2:HasJustPressedB
+NesPrgRom:42AFC:IsHoldingB
+NesPrgRom:42B06:IsHoldingUp
+NesPrgRom:42B10:IsHoldingDown
+NesPrgRom:42B1A:KirbyCheckDPadHorizontal
+NesPrgRom:42B4E:MAYBE_KirbyGroundCollision
+NesPrgRom:42C7D:WillGrabOntoLadder
+NesPrgRom:42CE8:DoStateTransition
+NesPrgRom:42CEE:ChangeKirbyState:Too many states...\n
+NesPrgRom:42FCC:SetKirbyPoseDirection
+NesPrgRom:42FDC:AS_SetPoseWithFacing
+NesPrgRom:42FE6:SetPoseWithFacing:pose = a + (var1 >= 0x80);\n
+NesPrgRom:42FFB:SlopeStateToIndex:Returns in A:\n  0 - level ground\n  1 - gentle slope up\n  2 - gentle slope down\n  3 - steep slope up\n  4 - steep slope down
+NesPrgRom:43016:MAYBE_KirbyCeilingFloorCollision
+NesPrgRom:43021:MAYBE_KirbyWallCollision
+NesPrgRom:4304A:TODO_OtherKirbyMapCollision
+NesPrgRom:43420:Kirby_DamageEnemyCollision
+NesPrgRom:435CD:SetKirbyPosition
+NesPrgRom:4387D:ZeroKirbyVelocity
+NesPrgRom:43883:SetSwimState
+NesPrgRom:4388D:SetUnderwaterFlag
+NesPrgRom:43893:ClearUnderwaterFlag
+NesPrgRom:438C3:GetDirectionInX:X = (var1 >= 0x80)\n
+NesPrgRom:43955:CreateOrReplaceKirbyParticle_Impl
+NesPrgRom:43992:ReplaceWithKirbyParticle
+NesPrgRom:43995:CreateKirbyParticle
+NesPrgRom:43A8B:RunKirbyCode05EE
+NesPrgRom:43C5A:SetKirbyDirection
+NesPrgRom:43C72:GetKirbyHitbox
+NesPrgRom:43CED:GetObjectXY:Get current object's XY position\n\nOutput:\n  X         = x_lo\n  Y         = y_lo\n  temp_x_hi = x_hi\n  temp_y_hi = y_hi\n
+NesPrgRom:43D01:GetObjectXYWithOffset:Get current object's XY position, offset by a certain amount\n\nInput:\n  X = X offset\n  Y = Y offset\n\nOutput:\n  X         = x_lo\n  Y         = y_lo\n  temp_x_hi = x_hi\n  temp_y_hi = y_hi\n
+NesPrgRom:43DFD:DamageKirby_Impl:Returns carry set if Kirby died\n
+NesPrgRom:444B9:FlipCurrentObject
+NesPrgRom:444BC:FlipFacingAndXVelocity
+NesPrgRom:444D1:FlipObjectFacing
+NesPrgRom:444DB:FlipPose
+NesPrgRom:444E6:FlipXVelocity
+NesPrgRom:444E8:FlipObjectXVelocity
+NesPrgRom:44501:FlipYVelocity
+NesPrgRom:44503:FlipObjectYVelocity
+NesPrgRom:4451C:ApplyGravityConstant:Apply gravity constant 0x15, with terminal velocity of 3.0 px/f\n
+NesPrgRom:4451E:ApplyGravity:Apply gravity value A, with terminal velocity 3.0 px/f\n
+NesPrgRom:44520:ApplyGravityTerminalVelocty:Apply gravity value A, with terminal velocity X px/f\n
+NesPrgRom:4482B:SetPoseRespectFacing
+NesPrgRom:44851:FaceTowardsKirby
+NesPrgRom:44C9D:AdvanceScriptPtrY
+NesPrgRom:44E83::Kirby particle?
+NesPrgRom:44E8A::Type $14? TODO: What is this type
+NesPrgRom:44E91::Type $17? TODO: what is this type
+NesPrgRom:4501A::Parasol?
+NesPrgRom:450D6:GetXDistanceFromKirby:Return abs(dx) in $00\nReturn sign of dx in $04 (0=positive)
+NesPrgRom:450D8:GetXDistanceFromObject:Pass other object in Y\n\nReturn abs(dx) in $00\nReturn sign of dx in $04 (0=positive)
+NesPrgRom:45112:GetYDistanceFromKirby:Return abs(dy) in $02\nReturn sign of dy in $05 (0=positive)
+NesPrgRom:45114:GetYDistanceFromObject:Pass other object in Y\n\nReturn abs(dy) in $02\nReturn sign of dy in $05 (0=positive)
+NesPrgRom:457EF:MAYBE_GroundCollision:Carry set if touching ground\n
+NesPrgRom:45E67:GetObjectXYWithOffset_2:IN:\n - X: signed X offset\n - Y: signed Y offset\n\nOUT:\n - X:         X low\n - Y:         Y low\n - temp_x_hi: X high\n - temp_y_hi: Y high
+NesPrgRom:4A912:CheckWaterDirectlyBelow
+NesPrgRom:56F1F:MetaKnight_ReactToAttack
+NesPrgRom:570AD::Meta Knight yellow + freeze + shake timer
+NesPrgRom:570E1::Meta Knight i-frames
+NesPrgRom:570E8-570F4:Mosaic_CHR_Banks
+NesPrgRom:572B5:MetaTick_Jump:Tick callback for Meta Knight states $04 and $05 (jump up/jump forward)\n
+NesPrgRom:572BE::Landing
+NesPrgRom:572F2::Landing
+NesPrgRom:57359:MetaTick_Slash:Tick callback for Meta Knight states $0E and $0F (slash/triple slash)\n
+NesPrgRom:57596:Walking_Poses
+NesPrgRom:5759E:Walking_Sleep_Timers
+NesPrgRom:5765D-5765E:Base_Transition_Timer
+NesPrgRom:5765F-57660:Minimum_Transition_Timer
+NesPrgRom:576B9:MetaKnight_RepositionToCamera
+NesPrgRom:5772F:MetaKnight_DistanceFromKirby
+NesPrgRom:579C8:ChangeMetaKnightState
+NesPrgRom:70010::Goal bonus room
+NesPrgRom:70019::Branch if not a level hub map
+NesPrgRom:70CCA:LoadMapData
+NesPrgRom:70E2F:RevealDoorAfterBossDefeat_Impl
+NesPrgRom:7228B::Shotzo
+NesPrgRom:7228F::Gordo
+NesPrgRom:72293::Item/collectable
+NesPrgRom:722EB::Item/collectable
+NesPrgRom:7230C::Museum display
+NesPrgRom:7241F::Item/collectable
+NesPrgRom:72426::Script 07 -- unknown
+NesPrgRom:724B6::Kirby touched an item/collectable?\n
+NesPrgRom:724BF::Maxim tomato
+NesPrgRom:724D1::1UP
+NesPrgRom:724E2::Hyper candy
+NesPrgRom:724FE::Drink
+NesPrgRom:72510::Unknown item type 04
+NesPrgRom:72536::Meta Knight sword
+NesPrgRom:7270F:DestroyBombBlock_Impl
+NesPrgRom:7C000::Sprites at $1000
+NesPrgRom:7C005::Show sprites, show background
+NesPrgRom:7C00A::Disable IRQ
+NesPrgRom:7C00F::5-step frame counter
+NesPrgRom:7C014::Disable MMC3 interrupts
+NesPrgRom:7C057:DisableNmi
+NesPrgRom:7C061:EnableNmi
+NesPrgRom:7C067:WaitFrame
+NesPrgRom:7C282:UpdatePaletteFrom6000
+NesPrgRom:7C2C2:ReadPads
+NesPrgRom:7C2E0:NormalizePad
+NesPrgRom:7C301:ReadPadX
+NesPrgRom:7C32C:UpdatePadState
+NesPrgRom:7C341:NmiHandler
+NesPrgRom:7C401:UpdateChrBanks
+NesPrgRom:7C42B:SetVerticalMirroring
+NesPrgRom:7C42F:SetHorizontalMirroring
+NesPrgRom:7C43A:Decompress:$16 = source\n$18 = dest
+NesPrgRom:7C8DD:Rand
+NesPrgRom:7CAAE-7CAB5:All_Bits_Not:from FE to 7F
+NesPrgRom:7CAB6-7CABD:All_Bits_Not_Reverse:from 7F to FE
+NesPrgRom:7CABE-7CAC5:All_Bits:from 01 to 80
+NesPrgRom:7CAC6-7CACD:All_Bits_Reverse:from 80 to 01
+NesPrgRom:7CB23::Modify STA $xxxx to STA $0120
+NesPrgRom:7CB62:SetIrqHandler:A  = line counter\nXY = code pointer
+NesPrgRom:7CB71:InitializeObjects_GLOBAL:Global version of InitializeObjects\n
+NesPrgRom:7CB78:InitNewObject
+NesPrgRom:7CBA2:InitNewObject2
+NesPrgRom:7CCA7:TryReplaceObjectScript:YA = script pointer\n\nFails silently if current object is not running a script\n
+NesPrgRom:7CCB2:ReplaceObjectScript:YA = script pointer\n
+NesPrgRom:7CCC4:InitializeScript:YA = script pointer\n
+NesPrgRom:7CCE5:ProcessObjects
+NesPrgRom:7CD76:TickObject
+NesPrgRom:7CDAD:RunActionScript
+NesPrgRom:7CE13:AS_RunNextInstruction
+NesPrgRom:7CEC1:AS_End:Instruction 00\n
+NesPrgRom:7CED3:AS_LoopImm:Instruction 01\n
+NesPrgRom:7CEFC:AS_LoopReg:Instruction 22\n
+NesPrgRom:7CF05:AS_EndLoop:Instruction 02\n
+NesPrgRom:7CF2E:AS_Jmp:Instruction 17\n
+NesPrgRom:7CF40:AS_Jml:Instruction 03\n
+NesPrgRom:7CF5F:AS_Jsr:Instruction 18\n
+NesPrgRom:7CF8B:AS_Jsl:Instruction 04\n
+NesPrgRom:7CFC8:AS_Rts:Instruction 19\n
+NesPrgRom:7CFD2:AS_Rtl:Instruction 05\n
+NesPrgRom:7CFF8:AS_Wait:Instruction 06\n
+NesPrgRom:7D006:AS_Pose:Instruction 5x\n
+NesPrgRom:7D014:AS_SetXPos:Instruction 2A\n
+NesPrgRom:7D02A:AS_SetYPos:Instruction 2B\n
+NesPrgRom:7D040:AS_SetZPos:Instruction 3A\n
+NesPrgRom:7D059:AS_SetXVel:Instruction Bx\n
+NesPrgRom:7D06D:AS_SetYVel:Instruction Cx\n
+NesPrgRom:7D081:AS_SetZVel:Instruction 3C\n
+NesPrgRom:7D095:AS_AddXVel:Instruction 2E\n
+NesPrgRom:7D0B0:AS_AddYVel:Instruction 2F\n
+NesPrgRom:7D0CB:AS_AddZVel:Instruction 3D\n
+NesPrgRom:7D0E6:AS_Instr_30:Instruction 30\n
+NesPrgRom:7D0FA:AS_Instr_31:Instruction 31\n
+NesPrgRom:7D10E:AS_Instr_32:Instruction 32\n
+NesPrgRom:7D11E:AS_Instr_33:Instruction 33\n
+NesPrgRom:7D12E:AS_Instr_34:Instruction 34\n
+NesPrgRom:7D143:AS_Instr_35:Instruction 35\n
+NesPrgRom:7D158:AS_AddXPos:Instruction 2C\n
+NesPrgRom:7D16F:AS_AddYPos:Instruction 2D\n
+NesPrgRom:7D186:AS_AddZPos:Instruction 3B\n
+NesPrgRom:7D1A1:AS_Instr_36:Instruction 36\n
+NesPrgRom:7D1B6:AS_Instr_37:Instruction 37\n
+NesPrgRom:7D1CB:AS_ZeroVel:Instruction 38\n
+NesPrgRom:7D1E0:AS_Instr_39:Instruction 39\n
+NesPrgRom:7D1EF:AS_AsmCall:Instruction Dx\n
+NesPrgRom:7D219:AS_AsmCallLower:Instruction 26\n
+NesPrgRom:7D250:AS_Jeq:Instruction 0A\n
+NesPrgRom:7D26E:AS_Jne:Instruction 0B\n
+NesPrgRom:7D278:AS_MultiJmp:Instruction 0F\n
+NesPrgRom:7D2A5:AS_MultiJsr:Instruction 10\n
+NesPrgRom:7D2D1:AS_Instr_29:Instruction 29\n
+NesPrgRom:7D30F:AS_Instr_3E:Instruction 3E\n
+NesPrgRom:7D345:AS_EndTask:Instruction 0C\n
+NesPrgRom:7D35E:AS_Task:Instruction 07\n
+NesPrgRom:7D396:AS_EndLastTask:Instruction 12\n
+NesPrgRom:7D39E:AS_OnTick:Instruction 08\n
+NesPrgRom:7D3B8:AS_Halt:Instruction 09\n
+NesPrgRom:7D3C4:AS_IncPose:Instruction 7x\n
+NesPrgRom:7D3CE:AS_DecPose:Instruction 8x\n
+NesPrgRom:7D3D8:AS_Inc2Pose:Instruction 9x\n
+NesPrgRom:7D3E5:AS_Dec2Pose:Instruction Ax\n
+NesPrgRom:7D3F2:AS_AddPose:Instruction 6x\n
+NesPrgRom:7D404:AS_BinopMem:Instruction 16\n
+NesPrgRom:7D430:AS_BinopVar:Instruction 13\n
+NesPrgRom:7D44A:AS_BinopReg:Instruction 25\n
+NesPrgRom:7D482:AS_MoveVarImm:Instruction 0D\n
+NesPrgRom:7D4B1:AS_NopTick:Instruction 0E\n
+NesPrgRom:7D4BB:AS_MoveMemImm:Instruction 11\n
+NesPrgRom:7D4D2:AS_Instr_27:Instruction 27\n
+NesPrgRom:7D4F1:AS_BreakEq:Instruction 14\n
+NesPrgRom:7D518:AS_BreakNe:Instruction 15\n
+NesPrgRom:7D522:AS_Instr_1A:Instruction 1A\n
+NesPrgRom:7D53C:AS_MovRegImm:Instruction 1B\n
+NesPrgRom:7D54A:AS_MovRegMem:Instruction 1C\n
+NesPrgRom:7D563:AS_MoveVarReg:Instruction 1D\n
+NesPrgRom:7D580:AS_MovRegObjvar:Instruction 1E\n
+NesPrgRom:7D59D:AS_WaitVar:Instruction 1F\n
+NesPrgRom:7D5BA:AS_SetPoseVar:Instruction 24\n
+NesPrgRom:7D5D5:AS_OnDraw:Instruction 20\n
+NesPrgRom:7D5E9:AS_OnPosition:Instruction 21\n
+NesPrgRom:7D5FD:AS_OnMove:Instruction 23\n
+NesPrgRom:7D611:AS_SetBank:Instruction 28\n
+NesPrgRom:7D622:AllocateObjectSlot
+NesPrgRom:7D655:DeinitObject
+NesPrgRom:7D672:LinkObject
+NesPrgRom:7D694:UnlinkObject
+NesPrgRom:7D6B9:UnlinkScript
+NesPrgRom:7D6EE:AllocateScriptSlot
+NesPrgRom:7D777:NopObjectTick
+NesPrgRom:7D787:LowerBankswitch
+NesPrgRom:7D796:UpperBankswitch
+NesPrgRom:7D7A5:IndirectJmp_YA
+NesPrgRom:7D7AB:CallFromScriptJmpAddr
+NesPrgRom:7D7AE:CallFrom603B
+NesPrgRom:7D7B1:Script_ReadByte
+NesPrgRom:7D7BC:AdvanceScriptPtr
+NesPrgRom:7D805:LongCall
+NesPrgRom:7D864:AS_Move_ApplyXY_Absolute
+NesPrgRom:7D867:AS_Position_Absolute
+NesPrgRom:7D86A:AS_Move_Nop
+NesPrgRom:7D86B:AS_Move_ApplyXY_KirbyRelative
+NesPrgRom:7D86E:AS_Position_KirbyRelative
+NesPrgRom:7D871:AddObjectVelXY
+NesPrgRom:7D8A6:AddCameraVelXY
+NesPrgRom:7D8D5:SetPositionAbsolute
+NesPrgRom:7D8F8:SetPositionKirbyRelative
+NesPrgRom:7D91D:AS_Move_Camera_Relative
+NesPrgRom:7D920:AS_Move_ApplyXY_CameraRelative
+NesPrgRom:7D923:AS_Position_CameraRelative
+NesPrgRom:7D942:AS_Move_Camera_Absolute
+NesPrgRom:7D945:AS_Move_ApplyXY_CameraAbsolute
+NesPrgRom:7D948:AS_Position_CameraAbsolute
+NesPrgRom:7D94B:AS_Move_ApplyY
+NesPrgRom:7D9A8:KillKirby
+NesPrgRom:7D9B8::Jump to "KirbyStateEE" (death)
+NesPrgRom:7DE03:ClearOam
+NesPrgRom:7DE11:ClearOamBuffer1
+NesPrgRom:7DE20:ClearOamBuffer2
+NesPrgRom:7DE2F:ClearBothOamBuffers
+NesPrgRom:7DFE5:FreezeAllObjects
+NesPrgRom:7DFFB:UnfreezeAllObjects
+NesPrgRom:7E298:ZeroPPUSCROLL
+NesPrgRom:7E31D:MAYBE_HitDetection:Pass hitbox data(?) in XA. Bank $39\n
+NesPrgRom:7E330:DestroyBombBlock
+NesPrgRom:7E376:CreateOrReplaceKirbyParticle
+NesPrgRom:7E385:AddExtraLives
+NesPrgRom:7E393:AddScore:Pass value in XA\n
+NesPrgRom:7E3A7:TODO_InhaledObjectAddScore:Called when something is inhaled?\n
+NesPrgRom:7E3BA:DamageKirby:Returns carry set if Kirby died\n
+NesPrgRom:7E3E7::InitializeGameVariables
+NesPrgRom:7E3EE::CheckColdReset
+NesPrgRom:7E3F6::First you draw a circle
+NesPrgRom:7E400::Title screen
+NesPrgRom:7E426::Story
+NesPrgRom:7E430::Title screen
+NesPrgRom:7E44D::Level intro
+NesPrgRom:7E566::Game over
+NesPrgRom:7E59A:RunScriptUntilEnd:Run an actionscript until it ends and no objects exist\n
+NesPrgRom:7E645::LoadMapData
+NesPrgRom:7E6CD:LoadMapChrAndPalette
+NesPrgRom:7E6D5:LoadMapPalette
+NesPrgRom:7E6E8:RevealDoorAfterBossDefeat
+NesPrgRom:7E6F3:UpdateCamera
+NesPrgRom:7EA93:Mul_10_LUT
+NesPrgRom:7EB59:MAYBE_ScrollMapVertically
+NesPrgRom:7EB7E:MAYBE_ScrollMapHorizontally
+NesPrgRom:7ECF1:DivideBy192ForMapData:A:  x pos?\nXY: y pos?
+NesPrgRom:7ED55-7ED74:Map_Screen_Ptrs
+NesPrgRom:7ED91:IsTileSemiPlatform
+NesPrgRom:7ED9C:GetTileFlagsAND1F
+NesPrgRom:7EEDB:IsTileWater
+NesPrgRom:7EF85:GetTileFlags
+NesPrgRom:7EF90:GetTileAttribute:Returns something in Y
+NesPrgRom:7F025:TempLowerBankswitch
+NesPrgRom:7F02C:LowerBankswitch2
+NesPrgRom:7F03B:RestoreLowerPrg
+NesPrgRom:7F04B:TempUpperBankswitch
+NesPrgRom:7F052:UpperBankswitch2
+NesPrgRom:7F061:RestoreUpperPrg
+NesPrgRom:7F071:MergeAYHighNibbles:A = (A & 0xF0) | (Y >> 4)\n(Yes, the name is bad. I know.)
+NesPrgRom:7F804:InitializeApu
+NesPrgRom:7F826:PlaySoundEffect
+NesPrgRom:7F8A0:SoundDriver
+NesPrgRom:7F8E9:SoundDriver2:An identical copy... Why.\n
+NesInternalRam:0010:tmp0lo
+NesInternalRam:0011:tmp0hi
+NesInternalRam:0012:tmp1lo
+NesInternalRam:0013:tmp1hi
+NesInternalRam:0014:tmp2lo
+NesInternalRam:0015:tmp2hi
+NesInternalRam:0016:ptr0lo
+NesInternalRam:0017:ptr0hi
+NesInternalRam:0018:ptr1lo
+NesInternalRam:0019:ptr1hi
+NesInternalRam:001A:ptr2lo
+NesInternalRam:001B:ptr2hi
+NesInternalRam:001E-001F:script_ptr
+NesInternalRam:0020-0021:script_stack
+NesInternalRam:0027-0028:hitbox_data_ptr_0027
+NesInternalRam:0033-0034:irq_code_pointer
+NesInternalRam:0035:ram_PPUCTRL
+NesInternalRam:0036:ram_PPUMASK
+NesInternalRam:0037:screen_on:FF = screen on\n00 = screen off\n\nThis value is ANDed with PPUMASK
+NesInternalRam:0038:ram_BANKSELECT
+NesInternalRam:0039:nmi_done_flag
+NesInternalRam:003A-003B:pad_hold
+NesInternalRam:003C-003D:pad_press
+NesInternalRam:003E-003F:random_number
+NesInternalRam:0040:vram_update_queue_begin
+NesInternalRam:0041:vram_update_queue_end
+NesInternalRam:0042-0047:chr_banks:spr01, spr23, bg0, bg1, bg2, bg3
+NesInternalRam:0048:lower_prg
+NesInternalRam:0049:upper_prg
+NesInternalRam:004A:nametable_mirroring
+NesInternalRam:004B:temp_x_hi
+NesInternalRam:004C:temp_y_hi
+NesInternalRam:004D:status_bar_health_chr:Health & dancing kirby
+NesInternalRam:004E:status_bar_copy_chr:Copy ability icon
+NesInternalRam:004F:status_bar_background_chr:Background of status bar
+NesInternalRam:0050:status_bar_text_chr
+NesInternalRam:0065:file_select_irq_line
+NesInternalRam:0067:soft_reset_timer
+NesInternalRam:0068:oam_index
+NesInternalRam:006A-006B:temp_obj_screen_x
+NesInternalRam:006C-006D:temp_obj_screen_y
+NesInternalRam:006E:curr_object_slot
+NesInternalRam:006F:curr_script_slot
+NesInternalRam:0070:OBJ_x_frac
+NesInternalRam:0082:OBJ_x_lo
+NesInternalRam:0083:kirby_x_lo
+NesInternalRam:0094:OBJ_x_hi
+NesInternalRam:0095:kirby_x_hi
+NesInternalRam:00A6:OBJ_y_frac
+NesInternalRam:00B8:OBJ_y_lo
+NesInternalRam:00B9:kirby_y_lo
+NesInternalRam:00CA:OBJ_y_hi
+NesInternalRam:00CB:kirby_y_hi
+NesInternalRam:00DC:camera_x_frac
+NesInternalRam:00DD-00DE:camera_x
+NesInternalRam:00DF:camera_y_frac
+NesInternalRam:00E0-00E1:camera_y
+NesInternalRam:00E2-00E3:camera_vel_x
+NesInternalRam:00E4-00E5:camera_vel_y
+NesInternalRam:00E6:temp_pad1_hold
+NesInternalRam:00E7:temp_pad1_press
+NesInternalRam:00EA:temp_camera_y
+NesInternalRam:00EB-00EC:temp_camera_x
+NesInternalRam:00F4:extra_game_flag
+NesInternalRam:0180:scroll_type
+NesInternalRam:0181:last_scroll_type
+NesInternalRam:0182-01A1:color_palette
+NesInternalRam:01A2:palette_fade
+NesInternalRam:01A3-01A4:ram_PPUSCROLL
+NesInternalRam:01A5:use_dynamic_chr0_bank
+NesInternalRam:01A6:oam_attribute_mask
+NesInternalRam:01A7:oam_extra_attribute
+NesInternalRam:0200-02FF:oam1
+NesInternalRam:0300-03FF:oam2
+NesInternalRam:0500:palette_update_something
+NesInternalRam:0501:hitbox1_flags_0501
+NesInternalRam:0502-0503:hitbox1_x
+NesInternalRam:0504-0505:hitbox1_y
+NesInternalRam:0506:hitbox1_width
+NesInternalRam:0507:hitbox1_height
+NesInternalRam:0508:OBJ_slot_hitbox
+NesInternalRam:0509-050A:kirby_hitbox_y
+NesInternalRam:050B:kirby_hitbox_height
+NesInternalRam:050C:kirby_050C
+NesInternalRam:050E:hitbox2_width
+NesInternalRam:050F:hitbox2_height
+NesInternalRam:0510-0511:hitbox2_x
+NesInternalRam:0512-0513:hitbox2_y
+NesInternalRam:0514:collision_slot
+NesInternalRam:0517-051B:cold_reset_marker:ASCII for "KIRBY"
+NesInternalRam:051E:kirby_camera_051E
+NesInternalRam:0521-0528:level_progress
+NesInternalRam:0529-0530:level_switch_progress
+NesInternalRam:0531-0538:level_boss_status:Set msb for defeated state
+NesInternalRam:0558:current_level
+NesInternalRam:0559:current_stage
+NesInternalRam:055A-055B:room_055A
+NesInternalRam:055E-055F:current_room
+NesInternalRam:0562-0563:room_0562
+NesInternalRam:056C:kirby_056C
+NesInternalRam:056F-0570:MAYBE_camera_seam_x
+NesInternalRam:0575:temp_obj_lower_prg
+NesInternalRam:0576:temp_upper_prg
+NesInternalRam:0577:last_camera_x_0577
+NesInternalRam:0579-057A:kirby_0579_unknown_x_offset
+NesInternalRam:057B:last_camera_x_057B
+NesInternalRam:057C:last_camera_y_057C
+NesInternalRam:057D:upper_prg_057D
+NesInternalRam:0590-0592:unknown_MAYBE_score_0590
+NesInternalRam:0593-0595:current_score
+NesInternalRam:0596:kirby_max_health
+NesInternalRam:0597:kirby_health
+NesInternalRam:0598:ability_uses
+NesInternalRam:0599:extra_lives
+NesInternalRam:059A:unknown_camera_obj_slot_059A
+NesInternalRam:05B9-05BA:kirby_vel_x
+NesInternalRam:05BB-05BC:kirby_vel_x_abs
+NesInternalRam:05BD-05BE:kirby_vel_y
+NesInternalRam:05BF:kirby_05BF
+NesInternalRam:05C0-05C1:minimum_scroll_x:Minimum horizontal scroll value
+NesInternalRam:05C2-05C3:maximum_scroll_x:Maximum horizontal scroll value (level width)
+NesInternalRam:05C4-05C5:minimum_scroll_y:Minimum vertical scroll
+NesInternalRam:05C6-05C7:maximum_scroll_y:Maximum vertical scroll (level height)
+NesInternalRam:05C8-05C9:minimum_kirby_x:Minimum accepted value for Kirby's X position
+NesInternalRam:05CA-05CB:maximum_kirby_x:Maximum value accepted for Kirby's X position
+NesInternalRam:05CC-05CD:minimum_kirby_y:Minimum value accepted for Kirby's Y position
+NesInternalRam:05E0:kirby_05E0
+NesInternalRam:05E1:kirby_05E1
+NesInternalRam:05E3:kirby_copy_ability
+NesInternalRam:05E4:kirby_05E4
+NesInternalRam:05E5:inhaling_count
+NesInternalRam:05E6:inhaled_count
+NesInternalRam:05EA:kirby_05EA
+NesInternalRam:05ED:kirby_last_slope_index
+NesInternalRam:05EE-05EF:kirby_05EE_code
+NesInternalRam:05F2:kirby_05F2
+NesInternalRam:05F3:kirby_05F3
+NesInternalRam:05F4:kirby_slope_state:2 = level ground\n3 = gentle up\n4 = gentle down\n5 = steep up\n6 = steep down
+NesInternalRam:05F5:kirby_swim_direction
+NesInternalRam:05F6:kirby_swim_up_timer
+NesInternalRam:05F7:kirby_underwater_flag
+NesInternalRam:05F8:kirby_05F8
+NesInternalRam:05F9:kirby_yellow_flash_timer
+NesInternalRam:05FA:kirby_05FA
+NesInternalRam:05FB:kirby_flags:01 = ??? (cleared when taking damage)\n02 = ??? \n04 = is grounded\n08 = land head-first on enemy\n10 = ???\n20 = can't discard ability\n40 = hyper\n80 = can't pause? (demoing ability, crash ability, etc)
+NesInternalRam:0600:music_upper_prg
+NesInternalRam:0627-062A:music_ram_4000
+NesInternalRam:062B-062E:music_ram_4004
+NesInternalRam:062F-0632:music_ram_4008
+NesInternalRam:0633-0636:music_ram_400C
+NesInternalRam:0641-0649:music_timer_0641
+NesInternalRam:064B-0653:music_data_ptr_lo_064B
+NesInternalRam:0655-065D:music_data_ptr_hi_0655
+NesInternalRam:065F-0667:music_timer_065F
+NesInternalRam:0669-0671:music_data_ptr_lo_0669
+NesInternalRam:0673-067B:music_data_ptr_hi_0673
+NesInternalRam:067D-0685:music_timer_067D
+NesInternalRam:0784-0795:OBJ_0784
+NesInternalRam:07D2-07D3:minigame_bonus_score
+NesInternalRam:07D4:minigame_bonus_lives
+NesInternalRam:07F4:is_cold_reset
+NesSaveRam:0000-001F:palette_buffer
+NesSaveRam:0021-0022:pad_previous
+NesSaveRam:0023:new_object_var0
+NesSaveRam:0024:new_object_var1
+NesSaveRam:0025:new_object_var2
+NesSaveRam:0026:new_object_var3
+NesSaveRam:0027:new_object_var4
+NesSaveRam:0028:new_object_var5
+NesSaveRam:0029:new_object_var6
+NesSaveRam:002A:new_object_var7
+NesSaveRam:002B:new_object_x_hi
+NesSaveRam:002C:new_object_y_hi
+NesSaveRam:002D:new_object_z_lo
+NesSaveRam:002E:new_object_z_hi
+NesSaveRam:002F:obj_alloc_min_slot
+NesSaveRam:0030:obj_alloc_max_slot
+NesSaveRam:0031:script_bank
+NesSaveRam:0032:first_obj
+NesSaveRam:0035:OBJ_first_draw
+NesSaveRam:0036:next_obj
+NesSaveRam:0037:next_script
+NesSaveRam:0038-0039:script_jmp_addr
+NesSaveRam:003D:frame_counter
+NesSaveRam:003E-004F:OBJ_z_frac
+NesSaveRam:0050-0061:OBJ_z_lo
+NesSaveRam:0062-0073:OBJ_z_hi
+NesSaveRam:0074-0085:OBJ_store_x_lo
+NesSaveRam:0086-0097:OBJ_store_x_hi
+NesSaveRam:0098-00A9:OBJ_store_y_lo
+NesSaveRam:00AA-00BB:OBJ_store_y_hi
+NesSaveRam:00BC-00CD:OBJ_store_z_lo
+NesSaveRam:00CE-00DF:OBJ_store_z_hi
+NesSaveRam:00E0-00F1:OBJ_vel_x_lo
+NesSaveRam:00F2-0103:OBJ_vel_x_hi
+NesSaveRam:0104-0115:OBJ_vel_y_lo
+NesSaveRam:0116-0127:OBJ_vel_y_hi
+NesSaveRam:0128-0139:OBJ_script
+NesSaveRam:013A-014B:OBJ_next
+NesSaveRam:014C-015D:OBJ_script_slot
+NesSaveRam:015E-016F:obj_onposition_lo
+NesSaveRam:0170-0181:obj_onposition_hi
+NesSaveRam:0182-0193:obj_draw_lo
+NesSaveRam:0194-01A5:obj_draw_hi
+NesSaveRam:01A6-01B7:obj_move_lo
+NesSaveRam:01B8-01C9:obj_move_hi
+NesSaveRam:01CA-01DB:OBJ_var0
+NesSaveRam:01DC-01ED:OBJ_var1
+NesSaveRam:01EE-01FF:OBJ_var2
+NesSaveRam:0200-0211:OBJ_var3
+NesSaveRam:0212-0223:OBJ_var4
+NesSaveRam:0224-0235:OBJ_var5
+NesSaveRam:0236-0247:OBJ_var6
+NesSaveRam:0248-0259:OBJ_var7
+NesSaveRam:025A-026B:OBJ_vel_z_lo
+NesSaveRam:026C-027D:OBJ_vel_z_hi
+NesSaveRam:027E-028F:OBJ_tick_lo
+NesSaveRam:0290-02A1:OBJ_tick_hi
+NesSaveRam:02A2-02B3:OBJ_tick_bank
+NesSaveRam:02B4-02C5:OBJ_draw_sorting
+NesSaveRam:02C6-02D7:OBJ_pose
+NesSaveRam:02D8-02E9:OBJ_spritemap_lo
+NesSaveRam:02EA-02FB:OBJ_spritemap_hi
+NesSaveRam:02FC-030D:OBJ_spritemap_bank
+NesSaveRam:030E-031F:OBJ_lower_prg
+NesSaveRam:0320-033F:SCR_next
+NesSaveRam:0340:SCR_stack_pointer
+NesSaveRam:0360:SCR_sleep_timer
+NesSaveRam:0380-039F:SCR_ip_lo
+NesSaveRam:03A0-03BF:SCR_ip_hi
+NesSaveRam:03C0-03DF:SCR_bank
+NesSaveRam:03E0-03FF:SCR_work_register
+NesSaveRam:06D5-06DC:mul_10_lut
+NesSaveRam:06E3-06E5:unknown_score_66E3
+NesSaveRam:06E6:unknown_kirby_health_66E5
+NesSaveRam:06E8:unknown_extra_lives_66E8
+NesSaveRam:06EB:MAYBE_copy_ability_icon
+NesSaveRam:076D:map_width_multiply_lut
+NesSaveRam:07EE:map_width
+NesSaveRam:07EF:map_height
+NesSaveRam:07F0:map_chr_index
+NesSaveRam:07F1:map_palette_index
+NesSaveRam:07F4:map_music
+NesSaveRam:08C8-14C7:map_data
+NesSaveRam:18D0:wind_type:FF = NONE\n00 = UP_0\n01 = UP_1\n02 = UP_2\n03 = RIGHT_0\n04 = RIGHT_1\n05 = RIGHT_2\n06 = DOWN_0\n07 = DOWN_1\n08 = DOWN_2\n09 = LEFT_0\n0A = LEFT_1\n0B = LEFT_2\n(number is intensity)
+NesSaveRam:18D1:has_boss_door_OR_oob_tile_attribute:1 when this map has a boss door?
+NesSaveRam:18D6:wind_smoke_timer
+NesSaveRam:18D7-18DE:wind_smoke_x
+NesSaveRam:18DF-18E6:wind_smoke_y
+NesSaveRam:18E7:kirby_78E7
+NesSaveRam:18E8-18EA:bak_script_ptr
+NesSaveRam:18EB-18ED:bak_tick_ptr
+NesSaveRam:18EE:bak_script_sleep_timer
+NesSaveRam:18EF:bak_script_work_register
+NesSaveRam:18F0:bak_obj_0501
+NesSaveRam:1A00-1AFF:metatile_top_left
+NesSaveRam:1B00-1BFF:metatile_top_right
+NesSaveRam:1C00-1CFF:metatile_bottom_left
+NesSaveRam:1D00-1DFF:metatile_bottom_right
+NesSaveRam:1E00-1EFF:metatile_palette
+NesSaveRam:1F00:metatile_attribute
