@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.asm": "ca65"
+    },
+    "editor.tabSize": 4,
+}
