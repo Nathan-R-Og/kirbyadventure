@@ -742,6 +742,10 @@ splits:
     - bank: 0x12
     - bank: 0x13
     - bank: 0x14
+      splits:
+      - [0, actionscript1]
+      - [0xd5]
+      - [0x14d]
     - bank: 0x15
     - bank: 0x16
     - bank: 0x17

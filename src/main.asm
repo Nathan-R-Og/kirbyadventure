@@ -1,6 +1,9 @@
 .setcpu "6502"
 .include "hardware.asm"
 .include "macros.asm"
+.include "ca65-actionscript.asm"
+
+.include "ram.asm"
 
 .include "header.asm"
 
