@@ -46,18 +46,18 @@ OPCODES = (
     ('JNE',         'label_16'),               # 0B
     ('ENDTASK',     ''),                       # 0C
     ('MOV',         'obj_var imm_8'),          # 0D
-    ('ONTICK',      'nop'),                    # 0E
-    ('MULTIJMP',    'imm_u8'),                 # 0F
-    ('MULTIJSR',    'imm_u8'),                 # 10
+    ('ENDTICK',      ''),                    # 0E
+    ('TABLEJMP',    'imm_u8'),                 # 0F
+    ('TABLEJSR',    'imm_u8'),                 # 10
     ('MOV',         'addr_16 imm_8'),          # 11
     ('ENDLASTTASK', ''),                       # 12
     ('BINOP',       'obj_var imm_u8 imm_8'),   # 13
     ('BREAKEQ',     'label_16'),               # 14
     ('BREAKNE',     'label_16'),               # 15
     ('BINOP',       'addr_16 imm_u8 imm_8'),   # 16
-    ('JMP',         'label_16'),               # 17
-    ('JSR',         'label_16'),               # 18
-    ('RTS',         ''),                       # 19
+    ('A_JMP',       'label_16'),               # 17
+    ('A_JSR',       'label_16'),               # 18
+    ('A_RTS',         ''),                       # 19
     ('SPRITEMAP',   'addr_24'),                # 1A
     ('MOV',         'reg imm_8'),              # 1B
     ('MOV',         'reg addr_16'),            # 1C
@@ -80,16 +80,16 @@ OPCODES = (
     ('ADDYPOS',     'imm_s16'),                # 2D
     ('ADDXVEL',     'imm_16'),                 # 2E
     ('ADDYVEL',     'imm_16'),                 # 2F
-    ('UNK30',       'imm_8 imm_8'),            # 30
-    ('UNK31',       'imm_8 imm_8'),            # 31
-    ('UNK32',       'imm_8 imm_8'),            # 32
-    ('UNK33',       'imm_8 imm_8'),            # 33
+    ('SETXCAMERA',  'imm_16'),            # 30
+    ('SETYCAMERA',  'imm_16'),            # 31
+    ('SETXCAMERAVEL','imm_16'),            # 32
+    ('SETYCAMERAVEL','imm_16'),            # 33
     ('UNK34',       'imm_8 imm_8'),            # 34
     ('UNK35',       'imm_8 imm_8'),            # 35
     ('UNK36',       'imm_8 imm_8'),            # 36
     ('UNK37',       'imm_8 imm_8'),            # 37
     ('ZEROVEL',     ''),                       # 38
-    ('UNK39',       'imm_8'),                  # 39
+    ('ZEROCAMERAVEL', ''),                  # 39
     ('SETZPOS',     'imm_16'),                 # 3A
     ('ADDZPOS',     'imm_s16'),                # 3B
     ('SETZVEL',     'imm_16'),                 # 3C
@@ -109,7 +109,7 @@ OPCODES_WAITED = (
     ('ASMCALL', 'addr_16'), # Dx
 )
 
-BINOPS = ('AND', 'OR', 'ADD', 'XOR')
+BINOPS = ('A_AND', 'OR', 'ADD', 'XOR')
 
 class disasm_symbol(object):
     def __init__(self, label, size=-1):
@@ -234,6 +234,9 @@ class Disassembler(object):
 
                 self.pc = self.rom_file.tell()
                 if self.force_label:
+                    #write a comment to denote if there are breaks
+                    to_write = 'L_{:06X}'.format(self.nes_pc)
+                    self.out_file.write(f"\n;{to_write}!!!\n")
                     break
 
         l = list(self.bad_asmcall)
@@ -297,7 +300,7 @@ class Disassembler(object):
 
             asm_func = self.asm_functions.get(address, None)
             if asm_func:
-                DIRECTIVES = ('.byte', '.word', '.faraddr', '.dword')
+                DIRECTIVES = ('.byte', '.word', '_is_faraddr', '.dword')
                 comment = ' // ' + asm_func['comment'] if asm_func['comment'] else ''
 
                 #replace address with name if applicable
@@ -353,9 +356,9 @@ class Disassembler(object):
                     size = DATA_TYPE_SIZES[data_type]
                     self.rom_file.seek(-size, os.SEEK_CUR)
                     operands[-1] = self.datatype_to_str(data_type, self.rom_file.read(size))
-        elif mnemonic in ('MULTIJMP', 'MULTIJSR', 'TABLECALL', 'MULTIJSL'):
+        elif mnemonic in ('TABLEJMP', 'TABLEJSR', 'TABLECALL', 'MULTIJSL'):
             # Hack to fix a programming mistake in the original actionscript!
-            # The MULTIJMP instruction at $26A8CF is defined to expect 3 pointers, but 4 pointers are actually defined!
+            # The TABLEJMP instruction at $26A8CF is defined to expect 3 pointers, but 4 pointers are actually defined!
             if self.nes_pc == 0x26A8CF:
                 count = 4
             else:
@@ -363,7 +366,7 @@ class Disassembler(object):
 
             if mnemonic in ('TABLECALL', 'MULTIJSL'):
                 data_type = 'label_24'
-                directive = '.faraddr'
+                directive = '_is_faraddr'
                 data_size = 3
             else:
                 data_type = 'label_16'
@@ -376,7 +379,7 @@ class Disassembler(object):
                 addr = self.datatype_to_str(data_type, b)
                 extra += (indentation + directive.ljust(12) + addr).ljust(40 + len(indentation))
                 extra += '; {:06X}/{}\n'.format(self.nes_pc, b.hex().upper())
-        elif mnemonic in ('END', 'RTL', 'HALT', 'ENDTASK', 'RTS'):
+        elif mnemonic in ('END', 'RTL', 'HALT', 'ENDTASK', 'A_RTS'):
             self.indentation = self._indent
             indentation = ' ' * self.indentation
             self.was_linebreak = True
@@ -501,7 +504,7 @@ class Disassembler(object):
                         else:
                             data_size = DATA_TYPE_SIZES[p]
                             b = self.rom_file.read(data_size)  # Read and discard bytes
-            elif op_byte in (0x0F, 0x10):  # MULTIJMP/MULTIJSR
+            elif op_byte in (0x0F, 0x10):  # TABLEJMP/TABLEJSR
                 count = self.read_rom(1)
                 for i in range(count):
                     addr = (self.nes_pc & 0xFF0000) | self.read_rom(2)
@@ -600,6 +603,7 @@ class Disassembler(object):
                     print('Ignoring line {} from {}: Unknown directive ({})'.format(i, self.asm_functions_file.name, directive), file=sys.stderr)
 
 if __name__ == '__main__':
+    #comment this out if you actually want to use it for real
     sys.argv = ['actionscript_dumper.py', 'kirby.nes', 'test.txt']
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--symfile', help='the symbols definition file')
@@ -614,17 +618,18 @@ if __name__ == '__main__':
         sys.exit(1)
 
     rom_file = open(args.romfile, 'rb')
-    out_file = open(args.outfile, 'w')
-
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    sym_file = open(args.symfile, 'r') if args.symfile else open(script_dir+"/symbols.txt", 'r')
-    asm_funcs_file = open(args.asmfuncfile, 'r') if args.asmfuncfile else open(script_dir+"/asm_funcs.txt", 'r')
 
     from hashlib import md5
     hash_us = "69018a5181f255bc3a66badfb19fdb76"
     if hash_us != md5(rom_file.read()).hexdigest():
         print("The file {} doesn't look like a valid Kirby's Adventure ROM!".format(args.romfile), file=sys.stderr)
         sys.exit(1)
+
+    out_file = open(args.outfile, 'w')
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    sym_file = open(args.symfile, 'r') if args.symfile else open(script_dir+"/symbols.txt", 'r')
+    asm_funcs_file = open(args.asmfuncfile, 'r') if args.asmfuncfile else open(script_dir+"/asm_funcs.txt", 'r')
 
     disassembler = Disassembler(rom_file, out_file, sym_file, asm_funcs_file, LAST_SCRIPT, indent=4)
     disassembler.disassemble_all()

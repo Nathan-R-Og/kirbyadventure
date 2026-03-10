@@ -742,10 +742,6 @@ splits:
     - bank: 0x12
     - bank: 0x13
     - bank: 0x14
-      splits:
-      - [0, actionscript1]
-      - [0xd5]
-      - [0x14d]
     - bank: 0x15
     - bank: 0x16
     - bank: 0x17
@@ -785,8 +781,17 @@ splits:
     - bank: 0x39
     - bank: 0x3A
     - bank: 0x3B
+      splits:
+      - [0]
+      - [0x1a82, CraneFever_Splash_Tiles]
+      - [0x1c20]
     - bank: 0x3C
     - bank: 0x3D
+    #  splits:
+    #  - [0]
+    #  - [0xaf2, IntroTilemap]
+    #  - [0xb5c, TitleTilemap]
+    #  - [0xd94]
     - bank: 0x3E
     - bank: 0x3F
   chr:

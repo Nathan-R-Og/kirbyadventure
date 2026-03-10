@@ -1,6 +1,7 @@
 #!/bin/bash
+rm -rf kirby_rebuilt.nes
 ca65 -o example.o -g src/main.asm -t nes
-ld65 -Ln linked.txt -C linker.cfg -o kirby_rebuilt.nes example.o
+ld65 -Ln linked.txt -C linker.cfg -o kirby_rebuilt.nes --dbgfile linked_m.dbg example.o
 rm -rf example.o
 rm -rf kirby_rebuilt.nes.deb
 

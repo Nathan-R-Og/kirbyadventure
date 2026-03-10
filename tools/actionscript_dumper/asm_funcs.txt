@@ -1,3 +1,6 @@
+; List of 6502 assembly functions called from Actionscript.
+; Important for linking asm calls.
+
 ; IMPORTANT NOTE:
 ;   Be sure to use appropriate datatypes with the "PARAMS" option, as using inappropriate
 ;   datatypes will cause the dumper to not work properly, since the parameters would be read wrong
@@ -21,13 +24,13 @@ ASM_FUNCTION 00C086
   COMMENT = Write 0xFF to $37 and wait a frame
 
 ASM_FUNCTION 00C94C
-  COMMENT = Palette fade (in?) step
+  COMMENT = Palette fade dark in step
 
 ASM_FUNCTION 00C996
   COMMENT = Palette fade (out?) step
 
 ASM_FUNCTION 00DE45
-  COMMENT = Unknown ASM $DE45
+  COMMENT = Play music
   PARAMS = imm_8
 
 ASM_FUNCTION 00DE4B
@@ -78,7 +81,7 @@ ASM_FUNCTION 00DF55
   PARAMS = imm_8
 
 ASM_FUNCTION 00DF61
-  COMMENT = Unknown ASM $DF61
+  COMMENT = Load_Palette, palette, start_index, entries
   PARAMS = imm_16, imm_8, imm_8
 
 ASM_FUNCTION 00DF7D
@@ -607,3 +610,8 @@ ASM_FUNCTION 38B113
 ASM_FUNCTION 38B13B
   COMMENT = Tricky graphics stuff
 
+ASM_FUNCTION 3BA3C2
+  COMMENT = immediate rts
+
+ASM_FUNCTION 3BA51A
+  COMMENT = delete 17 objects

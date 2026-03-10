@@ -325,16 +325,16 @@ NesPrgRom:7CABE-7CAC5:All_Bits:from 01 to 80
 NesPrgRom:7CAC6-7CACD:All_Bits_Reverse:from 80 to 01
 NesPrgRom:7CB23::Modify STA $xxxx to STA $0120
 NesPrgRom:7CB62:SetIrqHandler:A  = line counter\nXY = code pointer
-NesPrgRom:7CB71:InitializeObjects_GLOBAL:Global version of InitializeObjects\n
-NesPrgRom:7CB78:InitNewObject
-NesPrgRom:7CBA2:InitNewObject2
-NesPrgRom:7CCA7:TryReplaceObjectScript:YA = script pointer\n\nFails silently if current object is not running a script\n
-NesPrgRom:7CCB2:ReplaceObjectScript:YA = script pointer\n
-NesPrgRom:7CCC4:InitializeScript:YA = script pointer\n
-NesPrgRom:7CCE5:ProcessObjects
-NesPrgRom:7CD76:TickObject
-NesPrgRom:7CDAD:RunActionScript
-NesPrgRom:7CE13:AS_RunNextInstruction
+NesPrgRom:7CB71:OBJ_InitModule:Global version of InitializeObjects\n
+NesPrgRom:7CB78:OBJ_NewFresh
+NesPrgRom:7CBA2:OBJ_New
+NesPrgRom:7CCA7:OBJ_TryReplaceScriptPc:YA = script pointer\n\nFails silently if current object is not running a script\n
+NesPrgRom:7CCB2:OBJ_ReplaceScriptPc:YA = script pointer\n
+NesPrgRom:7CCC4:OBJ_SetScriptPc:YA = script pointer\n
+NesPrgRom:7CCE5:OBJ_Main
+NesPrgRom:7CD76:OBJ_DoTick
+NesPrgRom:7CDAD:SCR_Interpret
+NesPrgRom:7CE13:SCR_NextInstruction
 NesPrgRom:7CEC1:AS_End:Instruction 00\n
 NesPrgRom:7CED3:AS_LoopImm:Instruction 01\n
 NesPrgRom:7CEFC:AS_LoopReg:Instruction 22\n
@@ -356,10 +356,10 @@ NesPrgRom:7D081:AS_SetZVel:Instruction 3C\n
 NesPrgRom:7D095:AS_AddXVel:Instruction 2E\n
 NesPrgRom:7D0B0:AS_AddYVel:Instruction 2F\n
 NesPrgRom:7D0CB:AS_AddZVel:Instruction 3D\n
-NesPrgRom:7D0E6:AS_Instr_30:Instruction 30\n
-NesPrgRom:7D0FA:AS_Instr_31:Instruction 31\n
-NesPrgRom:7D10E:AS_Instr_32:Instruction 32\n
-NesPrgRom:7D11E:AS_Instr_33:Instruction 33\n
+NesPrgRom:7D0E6:AS_SetCameraX:Instruction 30\n
+NesPrgRom:7D0FA:AS_SetCameraY:Instruction 31\n
+NesPrgRom:7D10E:AS_SetCameraXVel:Instruction 32\n
+NesPrgRom:7D11E:AS_SetCameraYVel:Instruction 33\n
 NesPrgRom:7D12E:AS_Instr_34:Instruction 34\n
 NesPrgRom:7D143:AS_Instr_35:Instruction 35\n
 NesPrgRom:7D158:AS_AddXPos:Instruction 2C\n
@@ -407,17 +407,17 @@ NesPrgRom:7D5D5:AS_OnDraw:Instruction 20\n
 NesPrgRom:7D5E9:AS_OnPosition:Instruction 21\n
 NesPrgRom:7D5FD:AS_OnMove:Instruction 23\n
 NesPrgRom:7D611:AS_SetBank:Instruction 28\n
-NesPrgRom:7D622:AllocateObjectSlot
-NesPrgRom:7D655:DeinitObject
-NesPrgRom:7D672:LinkObject
+NesPrgRom:7D622:OBJ_GetFreeSlot
+NesPrgRom:7D655:OBJ_Destroy
+NesPrgRom:7D672:OBJ_Link
 NesPrgRom:7D694:UnlinkObject
-NesPrgRom:7D6B9:UnlinkScript
-NesPrgRom:7D6EE:AllocateScriptSlot
-NesPrgRom:7D777:NopObjectTick
+NesPrgRom:7D6B9:SCR_Unlink
+NesPrgRom:7D6EE:SCR_GetFreeSlot
+NesPrgRom:7D777:OBJ_EndTick
 NesPrgRom:7D787:LowerBankswitch
 NesPrgRom:7D796:UpperBankswitch
-NesPrgRom:7D7A5:IndirectJmp_YA
-NesPrgRom:7D7AB:CallFromScriptJmpAddr
+NesPrgRom:7D7A5:CallFromYA
+NesPrgRom:7D7AB:CallFromJmpPtr
 NesPrgRom:7D7AE:CallFrom603B
 NesPrgRom:7D7B1:Script_ReadByte
 NesPrgRom:7D7BC:AdvanceScriptPtr
@@ -664,12 +664,12 @@ NesSaveRam:002B:new_object_x_hi
 NesSaveRam:002C:new_object_y_hi
 NesSaveRam:002D:new_object_z_lo
 NesSaveRam:002E:new_object_z_hi
-NesSaveRam:002F:obj_alloc_min_slot
-NesSaveRam:0030:obj_alloc_max_slot
+NesSaveRam:002F:OBJ_min_slot
+NesSaveRam:0030:OBJ_max_slot
 NesSaveRam:0031:script_bank
 NesSaveRam:0032:first_obj
 NesSaveRam:0035:OBJ_first_draw
-NesSaveRam:0036:next_obj
+NesSaveRam:0036:OBJ_next_slot
 NesSaveRam:0037:next_script
 NesSaveRam:0038-0039:script_jmp_addr
 NesSaveRam:003D:frame_counter
@@ -717,8 +717,8 @@ NesSaveRam:030E-031F:OBJ_lower_prg
 NesSaveRam:0320-033F:SCR_next
 NesSaveRam:0340:SCR_stack_pointer
 NesSaveRam:0360:SCR_sleep_timer
-NesSaveRam:0380-039F:SCR_ip_lo
-NesSaveRam:03A0-03BF:SCR_ip_hi
+NesSaveRam:0380-039F:SCR_pc_lo
+NesSaveRam:03A0-03BF:SCR_pc_hi
 NesSaveRam:03C0-03DF:SCR_bank
 NesSaveRam:03E0-03FF:SCR_work_register
 NesSaveRam:06D5-06DC:mul_10_lut
@@ -732,7 +732,7 @@ NesSaveRam:07EF:map_height
 NesSaveRam:07F0:map_chr_index
 NesSaveRam:07F1:map_palette_index
 NesSaveRam:07F4:map_music
-NesSaveRam:08C8-14C7:map_data
+NesSaveRam:08C8-14C7:map_screen_0
 NesSaveRam:18D0:wind_type:FF = NONE\n00 = UP_0\n01 = UP_1\n02 = UP_2\n03 = RIGHT_0\n04 = RIGHT_1\n05 = RIGHT_2\n06 = DOWN_0\n07 = DOWN_1\n08 = DOWN_2\n09 = LEFT_0\n0A = LEFT_1\n0B = LEFT_2\n(number is intensity)
 NesSaveRam:18D1:has_boss_door_OR_oob_tile_attribute:1 when this map has a boss door?
 NesSaveRam:18D6:wind_smoke_timer

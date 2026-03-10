@@ -1,5 +1,16 @@
 ; Actionscript assembler in ca65 (Kirby's Adventure version)
 
+;check if input is constant.
+;if so, output the full 3 bytes
+;else, make top 8 bits the segment's bank.
+.macro _is_faraddr input
+    .if .const(input)
+        .faraddr input
+    .else
+        .faraddr (.BANK(input) << 16) | input
+    .endif
+.endmacro
+
 .define VAR0 0
 .define VAR1 1
 .define VAR2 2
@@ -34,6 +45,7 @@
 .define ENDLASTTASK _op_implied $12
 .define A_RTS     _op_implied $19
 .define ZEROVEL     _op_implied $38
+.define ZEROCAMERAVEL        _op_implied $39
 
 ;**** OP #imm8
 
@@ -46,7 +58,6 @@
 .endmacro
 
 .define SETBANK      _op_imm8 $28, ; #imm8
-.define UNK39        _op_imm8 $39, ; #imm8
 ; Treat TABLExxx as immediate
 .define TABLEJMP     _op_imm8 $0F,
 .define TABLEJSR     _op_imm8 $10,
@@ -79,7 +90,7 @@
 
 .macro _op_abs op, val
     .byte op
-    .addr .LOWORD(val)
+    .addr val
 .endmacro
 
 .define TASK        _op_abs $07, ; abs
@@ -97,7 +108,7 @@
 
 .macro _op_far op, val
     .byte op
-    .faraddr val
+    _is_faraddr val
 .endmacro
 
 .define JML         _op_far $03, ; far
@@ -118,10 +129,10 @@
     .endif
 .endmacro
 
-.define UNK30       _op_imm8_imm8 $30, ; #imm8, #imm8
-.define UNK31       _op_imm8_imm8 $31, ; #imm8, #imm8
-.define UNK32       _op_imm8_imm8 $32, ; #imm8, #imm8
-.define UNK33       _op_imm8_imm8 $33, ; #imm8, #imm8
+.define SETXCAMERA       _op_imm16 $30, ; #imm16
+.define SETYCAMERA       _op_imm16 $31, ; #imm16
+.define SETXCAMERAVEL    _op_imm16 $32, ; imm16
+.define SETYCAMERAVEL    _op_imm16 $33, ; imm16
 .define UNK34       _op_imm8_imm8 $34, ; #imm8, #imm8
 .define UNK35       _op_imm8_imm8 $35, ; #imm8, #imm8
 .define UNK36       _op_imm8_imm8 $36, ; #imm8, #imm8
@@ -199,7 +210,7 @@
         .byte $16
         _op_imm8 op, val
     .else
-        .byte $25
+        .byte $16 ;25????
         .word dest
         _op_imm8 op, val
     .endif
@@ -247,7 +258,7 @@
         w .set .right (.tcount ({wait})-2, {wait}) ; #
 
         .if w < 0 || w > 15
-        .assert 0, error, "mya only WAIT 0 to 15 frames"
+        .assert 0, error, "may only WAIT 0 to 15 frames"
         .endif
     .else
         .assert 0, error, "expected WAIT"
@@ -287,11 +298,11 @@
 ;direct bankwise
 .macro ASMCALL val, wait
     _op_waited $D0, wait
-    .addr .LOWORD(val)
+    .addr val
 .endmacro
 
 ;faraddr calling
 .macro ASMCALL_l val, wait
-    _op_waited $D0, wait
-    .faraddr val
+    _op_waited $26, wait
+    _is_faraddr val
 .endmacro

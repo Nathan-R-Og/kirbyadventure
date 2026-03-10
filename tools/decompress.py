@@ -23,19 +23,15 @@ if __name__ == "__main__":
         length = bytes[i] & 0b00011111
 
         if type == 7:
-            type = (length & 0b11100) >> 2
-            length = (length & 0b00011 << 6)
+            type = ((bytes[i] << 3) & 0b11100000) >> 5
+            length = (bytes[i] & 0b00000011) << 8
             i += 1
             length |= bytes[i]
 
         i += 1
         length += 1
 
-        if type == 0:
-            #copy to output verbatim
-            output += bytes[i:i+length]
-            i += length
-        elif type == 1:
+        if type == 1:
             #copy single byte over and over
             a = bytes[i]
             for x in range(length):
@@ -44,7 +40,7 @@ if __name__ == "__main__":
         elif type == 2:
             #copy double byte over and over
             a = bytes[i:i+2]
-            for l in range(length):
+            for x in range(length):
                 output += a
             i += 2
         elif type == 3:
@@ -53,6 +49,10 @@ if __name__ == "__main__":
             for x in range(length):
                 output.append(a + x)
             i += 1
+        elif type == 0:
+            #copy to output verbatim
+            output += bytes[i:i+length]
+            i += length
         elif type in [4, 7]:
             #lz copy backref
             offset = int.from_bytes(bytes[i:i+2], "big")

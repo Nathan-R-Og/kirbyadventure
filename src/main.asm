@@ -1,4 +1,6 @@
 .setcpu "6502"
+.feature force_range
+
 .include "hardware.asm"
 .include "macros.asm"
 .include "ca65-actionscript.asm"
@@ -36,10 +38,10 @@
 .include "prg/bank1a.asm"
 .include "prg/bank1b.asm"
 .include "prg/bank1c.asm"
-.include "prg/bank1d.asm"
-.include "prg/bank1e.asm"
-.include "prg/bank1f.asm"
-.include "prg/bank20.asm"
+.include "prg/music.asm"
+;.include "prg/bank1e.asm"
+;.include "prg/bank1f.asm"
+;.include "prg/bank20.asm"
 .include "prg/bank21.asm"
 .include "prg/bank22.asm"
 .include "prg/bank23.asm"
