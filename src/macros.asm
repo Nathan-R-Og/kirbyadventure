@@ -2,6 +2,33 @@
         .incbin path, start, end-start
 .endmacro
 
+; Like .lobytes and .hibytes, but for bank bytes.
+; Necessary because .BANK and .bankbyte are actually distinct concepts.
+; List of values must be passed in curly braces.
+.macro bankTable tbl
+    .repeat .tcount({tbl}), i
+        .if ((i .mod 2) = 0) ; Skip every second token, because those are commas
+            .define t .left(1, .right(.tcount({tbl})-i, {tbl})) ; Couldn't figure out how to get .mid to behave, so have this
+            .if .const(t) ; Is a constant, do regular bankbyte
+                .bankbytes t
+            .else ; Else label
+                .byte <.BANK (t)
+            .endif
+            .undefine t
+        .endif
+    .endrep
+.endmacro
+
+.macro STATE_TRANSITION_IF check, state
+.local skip
+    jsr check
+    bcc skip
+    ldx #state
+    jmp $8ce8 ; DoStateTransition
+
+skip:
+.endmacro
+
 .enum ObjectSlot
     CURSOR              = 0
     KIRBY               = 1
@@ -64,4 +91,11 @@
     GRABBED_ENEMY       = $0B
     TYPE_0C             = $0C
     STAR_ROD            = $0D
+.endenum
+
+.enum KState
+
+.endenum
+
+.enum SoundEffect
 .endenum

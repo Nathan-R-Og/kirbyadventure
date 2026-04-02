@@ -218,6 +218,9 @@ NesPrgRom:42B4E:MAYBE_KirbyGroundCollision
 NesPrgRom:42C7D:WillGrabOntoLadder
 NesPrgRom:42CE8:DoStateTransition
 NesPrgRom:42CEE:ChangeKirbyState:Too many states...\n
+NesPrgRom:42CFF:KirbyStateLookupLo:Low bytes for Kirby state ID -> Actionscript pointer
+NesPrgRom:42DEE:KirbyStateLookupHi:High bytes for Kirby state ID -> Actionscript pointer
+NesPrgRom:42EDD:KirbyStateLookupBank:Bank bytes for Kirby state ID -> Actionscript pointer
 NesPrgRom:42FCC:SetKirbyPoseDirection
 NesPrgRom:42FDC:AS_SetPoseWithFacing
 NesPrgRom:42FE6:SetPoseWithFacing:pose = a + (var1 >= 0x80);\n

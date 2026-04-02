@@ -1,0 +1,241 @@
+Known states:
+
+00 - Enter door
+01 - Discard copy ability
+02 - Land after jump
+03 - Come to a stop after walking/dashing
+04 - Begin walking
+05 - Slope change (walking)
+06 - Begin dashing
+07 - Slope change (dashing)
+08 - Change walking direction (skid)
+09 - Begin jump
+0A - Let go of jump button before the peak of the jump
+0B - Begin falling
+0C - Land head first on enemy
+0D - Land head first
+0E - Drop down from platform
+0F - Crouch
+10 - Slide attack
+11 - Climbing
+12 - Begin flying
+13 - Fly up
+14 - Flying enter water
+15 - Flying leave water
+16 - Exhale air (stop flying)
+17 - Entering water
+18 - Underwater come to a stop
+19 - Underwater walking
+1A - Swimming
+1B - Swimming attack
+1C - Swimming attack change direction
+1D - Stop swimming (get out of water)
+1E - Copy land after jump
+1F - Copy come to a stop
+20 - Copy begin walking
+21 - Copy slope change (walking)
+22 - Copy begin dashing
+23 - Copy slope change (dashing)
+24 - Copy change walking direction (skid)
+25 - Copy begin jump
+26 - Copy stop jump before peak
+27 - Copy begin falling
+28 - Copy land head first on enemy
+29 - Copy land head first
+2A - Copy drop down from platform
+2B - Copy crouch
+2C - Copy slide attack
+2D - Copy climbing
+2E - Copy begin flying
+2F - Copy fly up
+30 - Copy flying enter water
+31 - Copy flying leave water
+32 - Copy exhale air (stop flying)
+33 - Copy entering water
+34 - Copy underwater come to a stop
+35 - Copy underwater walking
+36 - Copy swimming
+37 - Copy swimming attack
+38 - Copy swimming attack change direction
+39 - Copy get out of water
+3A - Use copy ability
+3B - Enter water while breathing fire
+3C - ???
+3D - Grab ladder mid hi-jump?
+3E - ???
+3F - Fireball bonk wall
+40 - Fireball into slope
+41 - Cancel hi-jump
+42 - Stop spark ability
+43 - Mike end
+44 - Stop needle ability
+45 - Wheel land after falling
+46 - Wheel begin falling
+47 - Wheel change direction
+48 - Stop wheel ability
+49 - Wheel bonk wall
+4A - Stop freeze ability
+4B - Begin inhaling
+4C - Stop inhaling
+4D - Inhaled something
+4E - Mouthful come to a stop
+4F - Mouthful begin walking
+50 - Mouthful slope change (walking)
+51 - Mouthful begin dashing
+52 - Mouthful slope change (dashing)
+53 - Mouthful change walking direction (skid)
+54 - Mouthful begin jump
+55 - Mouthful stop jump before peak
+56 - Mouthful begin falling
+57 - Mouthful land after jump
+58 - Mouthful spit
+59 - Digest
+5A - Mouthful enter water
+5B - Mouthful underwater come to a stop
+5C - Mouthful underwater walking
+5D - Mouthful swimming
+5E - Mouthful underwater land
+5F - Mouthful get out of water
+60 - Sword land after jump
+61 - Sword come to a stop
+62 - Sword begin walking
+63 - Sword slope change (walking)
+64 - Sword begin dashing
+65 - Sword slope change (dashing)
+66 - Sword change walking direction (skid)
+67 - Sword begin jump
+68 - Sword stop jump before peak
+69 - Sword begin falling
+6A - Sword land head first on enemy
+6B - Sword land head first
+6C - Sword drop down from platform
+6D - Sword crouch
+6E - Sword slide attack
+6F - Sword climbing
+70 - Sword slash
+71 - Sword air slash
+72 - Sword begin flying
+73 - Sword fly up
+74 - Sword flying enter water
+75 - Sword flying exit water
+76 - Sword exhale air (stop flying)
+77 - Sword enter water
+78 - Sword underwater come to a stop
+79 - Sword underwater walking
+7A - Sword swimming
+7B - Sword get out of water
+7C - Star rod land after jump
+7D - Star rod come to a stop
+7E - Star rod begin walking
+7F - Star rod slope change (walking)??
+80 - Star rod begin dashing
+81 - Star rod slope change (dashing)??
+82 - Star rod change walking direction (skid)
+83 - Star rod begin jump
+84 - Star rod stop jump before peak
+85 - Star rod begin falling??
+86 - Star rod land head first on enemy??
+87 - Star rod land head first
+88 - Star rod drop down from platform??
+89 - Star rod crouch
+8A - Star rod slide attack
+8B - Star rod climbing??
+8C - Star rod attack
+8D - Star rod begin flying
+8E - Star rod fly up
+8F - Star rod flying enter water
+90 - Star rod flying exit water
+91 - Star rod exhale air (stop flying)
+92 - Star rod enter water
+93 - Star rod underwater come to a stop
+94 - Star rod underwater walking
+95 - Star rod swimming
+96 - Star rod get out of water
+97 - Hammer land after jump
+98 - Hammer come to a stop
+99 - Hammer begin walking
+9A - Hammer slope change (walking)
+9B - Hammer begin dashing
+9C - Hammer slope change (dashing)
+9D - Hammer change walking direction (skid)
+9E - Hammer begin jump
+9F - Hammer stop jump before peak
+A0 - Hammer begin falling
+A1 - Hammer land head first on enemy
+A2 - Hammer land head first
+A3 - Hammer drop down from platform
+A4 - Hammer crouch
+A5 - Hammer slide attack
+A6 - Hammer climbing
+A7 - Hammer attack
+A8 - Hammer air attack
+A9 - Hammer begin flying
+AA - Hammer fly up
+AB - Hammer flying enter water
+AC - Hammer flying exit water
+AD - Hammer exhale air (stop flying)
+AE - Hammer enter water
+AF - Hammer underwater come to a stop
+B0 - Hammer underwater walking
+B1 - Hammer swimming
+B2 - Hammer get out of water
+B3 - Parasol land after jump
+B4 - Parasol come to a stop
+B5 - Parasol begin walking
+B6 - Parasol slope change (walking)
+B7 - Parasol begin dashing
+B8 - Parasol slop change (dashing)
+B9 - Parasol change walking direction (skid)
+BA - Parasol begin jump
+BB - Parasol stop jump before peak
+BC - Parasol begin falling
+BD - Parasol begin gliding
+BE - Parasol cancel gliding
+BF - Parasol land head first on enemy
+C0 - Parasol land head first
+C1 - Parasol drop down from platform
+C2 - Parasol crouch
+C3 - Parasol slide attack
+C4 - Parasol climbing
+C5 - Parasol attack
+C6 - Parasol begin flying
+C7 - Parasol fly up
+C8 - Parasol flying enter water
+C9 - Parasol flying exit water
+CA - Parasol exhale air (stop flying)
+CB - Parasol entering water
+CC - Parasol underwater come to a stop
+CD - Parasol underwater walking
+CE - Parasol swimming
+CF - Parasol get out of water
+D0 - Stone landing
+D1 - Stop stone ability
+D2 - Ball come to a stop
+D3 - Ball moving
+D4 - Ball change direction (skid)
+D5 - Ball begin jump
+D6 - Ball stop jump before peak
+D7 - Ball begin falling
+D8 - Ball bounce (landing)
+D9 - Stop ball ability
+DA - UFO come to a stop
+DB - UFO moving
+DC - UFO charging
+DD - UFO shoot
+DE - Star rod shoot (flying)
+DF - Throw/backdrop stop inhaling
+E0 - Throw/backdrop grabbed something
+E1 - Backdrop into water
+E2 - Backdrop forward impact
+E3 - Backdrop backward impact
+E4 - Backdrop down impact
+E5 - Backdrop up impact
+E6 - Backdrop jump falling impact
+E7 - Backdrop jump ceiling impact
+E8 - Charred knockback end
+E9 - Charred knockback bounce
+EA - Ice knockback
+EB - ??? Fire/electric knockback?
+EC - ??? Eletric/fire knockback?
+ED - Hit spikes
+EE - Death

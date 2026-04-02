@@ -225,7 +225,7 @@ L_14A1BB:
     .word       -$240                       ; 14A1C3/C0FD
     A_JMP       L_14A0A3                    ; 14A1C5/17A3A0
 
-KirbyStateED:
+KSTED_SpikeDamage:
     ASMCALL     $E2D9                       ; 14A1C8/D0D9E2 // Unknown ASM $E2D9 (Set $05A0 and $05A1)
     .byte       $06                         ; 14A1CB/06
     ASMCALL     $9952                       ; 14A1CC/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -265,7 +265,7 @@ L_14A1F6:
     TABLEJSR    #2                          ; 14A20B/1002
     .word       L_14A214                    ; 14A20D/14A2
     .word       L_14A222                    ; 14A20F/22A2
-    A_JMP       KirbyStateE8                ; 14A211/17BCA4
+    A_JMP       KSTE8_SpecialDamageEnd                ; 14A211/17BCA4
 
 L_14A214:
     ASMCALL     $8FDC                       ; 14A214/D0DC8F // Set pose (respect facing)
@@ -295,13 +295,13 @@ TASK_14A226:
     .word       $0000                       ; 14A23D/0000
     ENDTASK                                 ; 14A23F/0C
 
-KirbyStateEB:
+KSTEB_Unknown:
     ASMCALL     $9952                       ; 14A240/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 14A243/00
     .byte       $F8                         ; 14A244/F8
     .byte       $04                         ; 14A245/04
     .byte       $00                         ; 14A246/00
-    A_JMP       KirbyStateE8                ; 14A247/17BCA4
+    A_JMP       KSTE8_SpecialDamageEnd                ; 14A247/17BCA4
 
 B14_a24a:
     ldx $05f7
@@ -311,11 +311,7 @@ B14_a24a:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $89d9
-    bcc B14_a269
-    ldx #$eb
-    jmp $8ce8
-B14_a269:
+    STATE_TRANSITION_IF $89d9, $eb
     jmp $805b
 B14_a26c:
     .byte $00,$02
@@ -386,7 +382,7 @@ L_14A2C5:
     .word       $0100                       ; 14A2E8/0001
     ASMCALL     B14_a26e                    ; 14A2EA/D06EA2 // Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
     .word       $0000                       ; 14A2ED/0000
-    A_JMP       KirbyStateE8                ; 14A2EF/17BCA4
+    A_JMP       KSTE8_SpecialDamageEnd                ; 14A2EF/17BCA4
 
 B14_a2f2:
     jsr LongCall
@@ -406,7 +402,7 @@ L_14A304:
     TABLEJSR    #2                          ; 14A316/1002
     .word       L_14A31F                    ; 14A318/1FA3
     .word       L_14A32D                    ; 14A31A/2DA3
-    A_JMP       KirbyStateE8                ; 14A31C/17BCA4
+    A_JMP       KSTE8_SpecialDamageEnd                ; 14A31C/17BCA4
 
 L_14A31F:
     ASMCALL     $8FDC                       ; 14A31F/D0DC8F // Set pose (respect facing)
@@ -467,7 +463,7 @@ L_14A372:
     INC2POSE    WAIT #2                     ; 14A377/92
     A_JMP       L_14A372                    ; 14A378/1772A3
 
-KirbyStateE9:
+KSTE9_CharredKnockbackBounce:
     MOV         VAR0,#$78                   ; 14A37B/0D0078
     TASK        TASK_14A3A8                 ; 14A37E/07A8A3
     ASMCALL     $DF61                       ; 14A381/D061DF // Load_Palette, palette, start_index, entries
@@ -507,22 +503,10 @@ B14_a3b2:
     jsr $87ba
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_a3cb
-    ldx #$e9
-    jmp $8ce8
-B14_a3cb:
+    STATE_TRANSITION_IF $8bab, $e9
     jsr $904a
-    jsr $a41c
-    bcc B14_a3d8
-    ldx #$e8
-    jmp $8ce8
-B14_a3d8:
-    jsr $89d9
-    bcc B14_a3e2
-    ldx #$eb
-    jmp $8ce8
-B14_a3e2:
+    STATE_TRANSITION_IF $a41c, $e8
+    STATE_TRANSITION_IF $89d9, $eb
     jmp $805b
 B14_a3e5:
     .byte $09,$0A
@@ -532,22 +516,10 @@ B14_a3e7:
     jsr $87ba
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_a400
-    ldx #$e8
-    jmp $8ce8
-B14_a400:
+    STATE_TRANSITION_IF $8bab, $e8
     jsr $904a
-    jsr $a41c
-    bcc B14_a40d
-    ldx #$e8
-    jmp $8ce8
-B14_a40d:
-    jsr $89d9
-    bcc B14_a417
-    ldx #$eb
-    jmp $8ce8
-B14_a417:
+    STATE_TRANSITION_IF $a41c, $e8
+    STATE_TRANSITION_IF $89d9, $eb
     jmp $805b
 B14_a41a:
     .byte $00,$02
@@ -634,14 +606,14 @@ L_14A4A9:
 L_14A4AE:
     .byte $FF,$30,$21,$01
 
-KirbyStateEA:
+KSTEA_IceDamageLand:
     ASMCALL     $86FB                       ; 14A4B2/D0FB86 // Zero Kirby's X velocity
     WAIT        #6                          ; 14A4B5/0606
     INC2POSE    WAIT #2                     ; 14A4B7/92
     INC2POSE    WAIT #2                     ; 14A4B8/92
     INC2POSE    WAIT #2                     ; 14A4B9/92
     ADDPOSE     #-6, WAIT #15               ; 14A4BA/6FFA
-KirbyStateE8:
+KSTE8_SpecialDamageEnd:
     MOV         $05F9,#$60                  ; 14A4BC/11F90560
     A_JMP       L_14A099                    ; 14A4C0/1799A0
 
@@ -650,29 +622,17 @@ B14_a4c3:
     ldy B14_a4f6,x
     jsr $87ba
     jsr $95cd
-    jsr $9016
-    bcc B14_a4d9
-    ldx #$ea
-    jmp $8ce8
-B14_a4d9:
+    STATE_TRANSITION_IF $9016, $ea
     jsr $904a
     jsr $9021
-    jsr $a41c
-    bcc B14_a4e9
-    ldx #$e8
-    jmp $8ce8
-B14_a4e9:
-    jsr $89d9
-    bcc B14_a4f3
-    ldx #$eb
-    jmp $8ce8
-B14_a4f3:
+    STATE_TRANSITION_IF $a41c, $e8
+    STATE_TRANSITION_IF $89d9, $eb
     jmp $805b
 
 B14_a4f6:
     .byte $09,$0a
 
-KirbyStateEE:
+KSTEE_Miss:
     ZEROVEL                                 ; 14A4F8/38
     ENDTICK                                 ; 14A4F9/0E
     MOV         kirby_05E0,#$00                  ; 14A4FA/11E00500
@@ -1028,9 +988,9 @@ KST02_Land:
     .word       KST04_BeginWalk             ; 14A755/16A8
     .word       KST07_Dash                  ; 14A757/45A9
     .word       KST0B_Fall                  ; 14A759/BCAA
-    .word       KirbyState18                ; 14A75B/E3AF
-    .word       KirbyState19                ; 14A75D/42B0
-    .word       KirbyState1A                ; 14A75F/EEB0
+    .word       KST18_WaterIdle             ; 14A75B/E3AF
+    .word       KST19_WaterWalk             ; 14A75D/42B0
+    .word       KST1A_WaterSwim             ; 14A75F/EEB0
     .word       L_14AEDA                    ; 14A761/DAAE
 L_14A763:
     MOV         kirby_05E0,#$00             ; 14A763/11E00500
@@ -1069,51 +1029,15 @@ B14_a79b:
     jsr $8fcc
     jsr $95cd
     jsr $9021
-    jsr $8b4e
-    bcc B14_a7b1
-    ldx #$0b
-    jmp $8ce8
-B14_a7b1:
-    jsr $8b1a
-    bcc B14_a7bb
-    ldx #$04
-    jmp $8ce8
-B14_a7bb:
-    jsr $8c7d
-    bcc B14_a7c5
-    ldx #$11
-    jmp $8ce8
-B14_a7c5:
-    jsr $8b10
-    bcc B14_a7cf
-    ldx #$0f
-    jmp $8ce8
-B14_a7cf:
-    jsr $8ae8
-    bcc B14_a7d9
-    ldx #$09
-    jmp $8ce8
-B14_a7d9:
-    jsr $8af2
-    bcc B14_a7e3
-    ldx #$4b
-    jmp $8ce8
-B14_a7e3:
-    jsr $8a15
-    bcc B14_a7ed
-    ldx #$00
-    jmp $8ce8
-B14_a7ed:
-    jsr $8b06
-    bcc B14_a7f7
-    ldx #$12
-    jmp $8ce8
-B14_a7f7:
-    jsr $8a5d
-    bcc B14_a801
-    ldx #$03
-    jmp $8ce8
-B14_a801:
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8b1a, $04
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8b10, $0f
+    STATE_TRANSITION_IF $8ae8, $09
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $8a5d, $03
     jmp $805b
 B14_a804:
     jsr $8ffb
@@ -1239,66 +1163,18 @@ L_14A8B2:
 B14_a8b9:
     jsr $8765
     jsr $95cd
-    jsr $8bfa
-    bcc B14_a8c9
-    ldx #$03
-    jmp $8ce8
-B14_a8c9:
-    jsr $8b4e
-    bcc B14_a8d3
-    ldx #$0b
-    jmp $8ce8
-B14_a8d3:
-    jsr $8a6c
-    bcc B14_a8dd
-    ldx #$03
-    jmp $8ce8
-B14_a8dd:
-    jsr $8a78
-    bcc B14_a8e7
-    ldx #$08
-    jmp $8ce8
-B14_a8e7:
-    jsr $8a86
-    bcc B14_a8f1
-    ldx #$06
-    jmp $8ce8
-B14_a8f1:
-    jsr $8c7d
-    bcc B14_a8fb
-    ldx #$11
-    jmp $8ce8
-B14_a8fb:
-    jsr $8b10
-    bcc B14_a905
-    ldx #$0f
-    jmp $8ce8
-B14_a905:
-    jsr $8ae8
-    bcc B14_a90f
-    ldx #$09
-    jmp $8ce8
-B14_a90f:
-    jsr $8af2
-    bcc B14_a919
-    ldx #$4b
-    jmp $8ce8
-B14_a919:
-    jsr $8a15
-    bcc B14_a923
-    ldx #$00
-    jmp $8ce8
-B14_a923:
-    jsr $8b06
-    bcc B14_a92d
-    ldx #$12
-    jmp $8ce8
-B14_a92d:
-    jsr $8a5d
-    bcc B14_a937
-    ldx #$05
-    jmp $8ce8
-B14_a937:
+    STATE_TRANSITION_IF $8bfa, $03
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8a6c, $03
+    STATE_TRANSITION_IF $8a78, $08
+    STATE_TRANSITION_IF $8a86, $06
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8b10, $0f
+    STATE_TRANSITION_IF $8ae8, $09
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $8a5d, $05
     jmp $805b
 
 KST06_BeginDash:
@@ -1325,61 +1201,17 @@ L_14A95B:
 B14_a961:
     jsr $8781
     jsr $95cd
-    jsr $8bfa
-    bcc B14_a971
-    ldx #$03
-    jmp $8ce8
-B14_a971:
-    jsr $8b4e
-    bcc B14_a97b
-    ldx #$0b
-    jmp $8ce8
-B14_a97b:
-    jsr $8a78
-    bcc B14_a985
-    ldx #$08
-    jmp $8ce8
-B14_a985:
-    jsr $8a4a
-    bcc B14_a98f
-    ldx #$04
-    jmp $8ce8
-B14_a98f:
-    jsr $8c7d
-    bcc B14_a999
-    ldx #$11
-    jmp $8ce8
-B14_a999:
-    jsr $8b10
-    bcc B14_a9a3
-    ldx #$0f
-    jmp $8ce8
-B14_a9a3:
-    jsr $8ae8
-    bcc B14_a9ad
-    ldx #$09
-    jmp $8ce8
-B14_a9ad:
-    jsr $8af2
-    bcc B14_a9b7
-    ldx #$4b
-    jmp $8ce8
-B14_a9b7:
-    jsr $8a15
-    bcc B14_a9c1
-    ldx #$00
-    jmp $8ce8
-B14_a9c1:
-    jsr $8b06
-    bcc B14_a9cb
-    ldx #$12
-    jmp $8ce8
-B14_a9cb:
-    jsr $8a5d
-    bcc B14_a9d5
-    ldx #$07
-    jmp $8ce8
-B14_a9d5:
+    STATE_TRANSITION_IF $8bfa, $03
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8a78, $08
+    STATE_TRANSITION_IF $8a4a, $04
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8b10, $0f
+    STATE_TRANSITION_IF $8ae8, $09
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $8a5d, $07
     jmp $805b
 
 KST08_Skid:
@@ -1399,31 +1231,11 @@ KST08_Skid:
 B14_a9f0:
     jsr $879d
     jsr $95cd
-    jsr $8bfa
-    bcc B14_aa00
-    ldx #$03
-    jmp $8ce8
-B14_aa00:
-    jsr $8b4e
-    bcc B14_aa0a
-    ldx #$0b
-    jmp $8ce8
-B14_aa0a:
-    jsr $8a6c
-    bcc B14_aa14
-    ldx #$03
-    jmp $8ce8
-B14_aa14:
-    jsr $8ae8
-    bcc B14_aa1e
-    ldx #$09
-    jmp $8ce8
-B14_aa1e:
-    jsr $8af2
-    bcc B14_aa28
-    ldx #$4b
-    jmp $8ce8
-B14_aa28:
+    STATE_TRANSITION_IF $8bfa, $03
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8a6c, $03
+    STATE_TRANSITION_IF $8ae8, $09
+    STATE_TRANSITION_IF $8af2, $4b
     jmp $805b
 
 KST09_Jump:
@@ -1449,11 +1261,7 @@ KST0A_JumpPeak:
     A_JMP       L_14AABF                    ; 14AA59/17BFAA
 
 B14_aa5c:
-    jsr $8a40
-    bcc B14_aa66
-    ldx #$0a
-    jmp $8ce8
-B14_aa66:
+    STATE_TRANSITION_IF $8a40, $0a
     ldy #$00
     jsr $87ba
     jsr $9c5a
@@ -1462,36 +1270,12 @@ B14_aa66:
     jsr $873e
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_aa87
-    ldx #$02
-    jmp $8ce8
-B14_aa87:
-    jsr $8bd3
-    bcc B14_aa91
-    ldx #$0b
-    jmp $8ce8
-B14_aa91:
-    jsr $8c61
-    bcc B14_aa9b
-    ldx #$0b
-    jmp $8ce8
-B14_aa9b:
-    jsr $8c7d
-    bcc B14_aaa5
-    ldx #$11
-    jmp $8ce8
-B14_aaa5:
-    jsr $8af2
-    bcc B14_aaaf
-    ldx #$4b
-    jmp $8ce8
-B14_aaaf:
-    jsr $8a15
-    bcc B14_aab9
-    ldx #$00
-    jmp $8ce8
-B14_aab9:
+    STATE_TRANSITION_IF $8bab, $02
+    STATE_TRANSITION_IF $8bd3, $0b
+    STATE_TRANSITION_IF $8c61, $0b
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
 KST0B_Fall:
@@ -1522,46 +1306,14 @@ B14_aae2:
     jsr $873e
     jsr $95cd
     jsr $9034
-    jsr $8bab
-    bcc B14_ab03
-    ldx #$02
-    jmp $8ce8
-B14_ab03:
-    jsr $8bd3
-    bcc B14_ab0d
-    ldx #$0b
-    jmp $8ce8
-B14_ab0d:
-    jsr $88d5
-    bcc B14_ab17
-    ldx #$0b
-    jmp $8ce8
-B14_ab17:
-    jsr $8c7d
-    bcc B14_ab21
-    ldx #$11
-    jmp $8ce8
-B14_ab21:
-    jsr $8af2
-    bcc B14_ab2b
-    ldx #$4b
-    jmp $8ce8
-B14_ab2b:
-    jsr $8b06
-    bcc B14_ab35
-    ldx #$12
-    jmp $8ce8
-B14_ab35:
-    jsr $89d9
-    bcc B14_ab3f
-    ldx #$17
-    jmp $8ce8
-B14_ab3f:
-    jsr $8a15
-    bcc B14_ab49
-    ldx #$00
-    jmp $8ce8
-B14_ab49:
+    STATE_TRANSITION_IF $8bab, $02
+    STATE_TRANSITION_IF $8bd3, $0b
+    STATE_TRANSITION_IF $88d5, $0b
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $89d9, $17
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
 L_14AB4C:
@@ -1580,46 +1332,14 @@ B14_ab5a:
     jsr $abc5
     jsr $940e
     jsr $9021
-    jsr $8bab
-    bcc B14_ab7c
-    ldx #$0d
-    jmp $8ce8
-B14_ab7c:
-    jsr $8bd3
-    bcc B14_ab86
-    ldx #$0b
-    jmp $8ce8
-B14_ab86:
-    jsr $88ca
-    bcc B14_ab90
-    ldx #$0c
-    jmp $8ce8
-B14_ab90:
-    jsr $8c7d
-    bcc B14_ab9a
-    ldx #$11
-    jmp $8ce8
-B14_ab9a:
-    jsr $8af2
-    bcc B14_aba4
-    ldx #$4b
-    jmp $8ce8
-B14_aba4:
-    jsr $8b06
-    bcc B14_abae
-    ldx #$12
-    jmp $8ce8
-B14_abae:
-    jsr $89d9
-    bcc B14_abb8
-    ldx #$17
-    jmp $8ce8
-B14_abb8:
-    jsr $8a15
-    bcc B14_abc2
-    ldx #$00
-    jmp $8ce8
-B14_abc2:
+    STATE_TRANSITION_IF $8bab, $0d
+    STATE_TRANSITION_IF $8bd3, $0b
+    STATE_TRANSITION_IF $88ca, $0c
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $89d9, $17
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 B14_abc5:
     lda #$ce
@@ -1646,46 +1366,14 @@ B14_abe1:
     jsr $873e
     jsr $95cd
     jsr $9034
-    jsr $8bab
-    bcc B14_ac02
-    ldx #$02
-    jmp $8ce8
-B14_ac02:
-    jsr $8bd3
-    bcc B14_ac0c
-    ldx #$0b
-    jmp $8ce8
-B14_ac0c:
-    jsr $88c1
-    bcc B14_ac16
-    ldx #$0b
-    jmp $8ce8
-B14_ac16:
-    jsr $8c7d
-    bcc B14_ac20
-    ldx #$11
-    jmp $8ce8
-B14_ac20:
-    jsr $8af2
-    bcc B14_ac2a
-    ldx #$4b
-    jmp $8ce8
-B14_ac2a:
-    jsr $8b06
-    bcc B14_ac34
-    ldx #$12
-    jmp $8ce8
-B14_ac34:
-    jsr $89d9
-    bcc B14_ac3e
-    ldx #$17
-    jmp $8ce8
-B14_ac3e:
-    jsr $8a15
-    bcc B14_ac48
-    ldx #$00
-    jmp $8ce8
-B14_ac48:
+    STATE_TRANSITION_IF $8bab, $02
+    STATE_TRANSITION_IF $8bd3, $0b
+    STATE_TRANSITION_IF $88c1, $0b
+    STATE_TRANSITION_IF $8c7d, $11
+    STATE_TRANSITION_IF $8af2, $4b
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $89d9, $17
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
 KST0D_LandHead:
@@ -1710,24 +1398,12 @@ B14_ac6c:
     jsr $87ba
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_ac81
-    ldx #$02
-    jmp $8ce8
-B14_ac81:
-    jsr $8b06
-    bcc B14_ac8b
-    ldx #$12
-    jmp $8ce8
-B14_ac8b:
-    jsr $89d9
-    bcc B14_ac95
-    ldx #$17
-    jmp $8ce8
-B14_ac95:
+    STATE_TRANSITION_IF $8bab, $02
+    STATE_TRANSITION_IF $8b06, $12
+    STATE_TRANSITION_IF $89d9, $17
     jmp $805b
 
-KST0E_Unknown:
+KST0E_DropThrough:
     MOV         $05E1,#$05                  ; 14AC98/11E10505
     ONTICK      $14ACA9                     ; 14AC9C/08A9AC14
     ASMCALL     $8FDC                       ; 14ACA0/D0DC8F // Set pose (respect facing)
@@ -1756,26 +1432,10 @@ B14_acc4:
     jsr $8597
     jsr $95cd
     jsr $9021
-    jsr $8b4e
-    bcc B14_acdf
-    ldx #$0b
-    jmp $8ce8
-B14_acdf:
-    jsr $8ade
-    bcc B14_ace9
-    ldx #$10
-    jmp $8ce8
-B14_ace9:
-    jsr $8980
-    bcc B14_acf3
-    ldx #$0e
-    jmp $8ce8
-B14_acf3:
-    jsr $8a36
-    bcc B14_acfd
-    ldx #$02
-    jmp $8ce8
-B14_acfd:
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8ade, $10
+    STATE_TRANSITION_IF $8980, $0e
+    STATE_TRANSITION_IF $8a36, $02
     jsr $ad03
     jmp $805b
 B14_ad03:
@@ -1784,7 +1444,7 @@ B14_ad03:
     adc #$2e
     jmp $8fe6
 
-KirbyState10:
+KST10_SlideAttack:
     MOV         $05E1,#$07                  ; 14AD0C/11E10507
     ASMCALL     $DE4B                       ; 14AD10/D04BDE // Play sound effect
     .byte       $38                         ; 14AD13/38
@@ -1808,21 +1468,9 @@ B14_ad29:
     jsr $95cd
     jsr $ad5e
     jsr $9420
-    jsr $8bfa
-    bcc B14_ad47
-    ldx #$03
-    jmp $8ce8
-B14_ad47:
-    jsr $8b4e
-    bcc B14_ad51
-    ldx #$0b
-    jmp $8ce8
-B14_ad51:
-    jsr $8a23
-    bcc B14_ad5b
-    ldx #$03
-    jmp $8ce8
-B14_ad5b:
+    STATE_TRANSITION_IF $8bfa, $03
+    STATE_TRANSITION_IF $8b4e, $0b
+    STATE_TRANSITION_IF $8a23, $03
     jmp $805b
 B14_ad5e:
     lda $62c7
@@ -1844,7 +1492,7 @@ B14_ad74:
 .byte $00,$04,$02,$01,$FA,$FF,$05,$00
 .byte $04,$02
 
-KirbyState11:
+KST11_Ladder:
     MOV         $05E1,#$08                  ; 14AD82/11E10508
     ONTICK      $14AD96                     ; 14AD86/0896AD14
     ASMCALL     $86FB                       ; 14AD8A/D0FB86 // Zero Kirby's X velocity
@@ -1949,7 +1597,7 @@ B14_ae4c:
 B14_ae4e:
 .byte $00,$00
 
-KirbyState12:
+KST12_HoverBegin:
     ASMCALL     $DE4B                       ; 14AE50/D04BDE // Play sound effect
     .byte       $30                         ; 14AE53/30
     ONTICK      $14AE60                     ; 14AE54/0860AE14
@@ -1969,14 +1617,10 @@ B14_ae60:
     jsr $9021
     jsr $904a
     jsr $9016
-    jsr $8a15
-    bcc B14_ae85
-    ldx #$00
-    jmp $8ce8
-B14_ae85:
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState13:
+KST13_HoverRise:
     MOV         $05E1,#$0D                  ; 14AE88/11E1050D
     ONTICK      $14AE9C                     ; 14AE8C/089CAE14
 L_14AE90:
@@ -1997,24 +1641,12 @@ B14_ae9c:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $8af2
-    bcc B14_aec3
-    ldx #$16
-    jmp $8ce8
-B14_aec3:
-    jsr $89d9
-    bcc B14_aecd
-    ldx #$14
-    jmp $8ce8
-B14_aecd:
-    jsr $8a15
-    bcc B14_aed7
-    ldx #$00
-    jmp $8ce8
-B14_aed7:
+    STATE_TRANSITION_IF $8af2, $16
+    STATE_TRANSITION_IF $89d9, $14
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-L_14AEDA:
+L_14AEDA: ; Leaving the water? Not in state table
     MOV         $05E1,#$0D                  ; 14AEDA/11E1050D
     ONTICK      $14AEEC                     ; 14AEDE/08ECAE14
 L_14AEE2:
@@ -2035,36 +1667,20 @@ B14_aeec:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $894d
-    bcc B14_af13
-    ldx #$13
-    jmp $8ce8
-B14_af13:
-    jsr $8af2
-    bcc B14_af1d
-    ldx #$16
-    jmp $8ce8
-B14_af1d:
-    jsr $89d9
-    bcc B14_af27
-    ldx #$14
-    jmp $8ce8
-B14_af27:
-    jsr $8a15
-    bcc B14_af31
-    ldx #$00
-    jmp $8ce8
-B14_af31:
+    STATE_TRANSITION_IF $894d, $13
+    STATE_TRANSITION_IF $8af2, $16
+    STATE_TRANSITION_IF $89d9, $14
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState14:
+KST14_HoverUnderwater:
     MOV         $05E1,#$0D                  ; 14AF34/11E1050D
     ASMCALL     $988D                       ; 14AF38/D08D98 // Set Kirby's underwater flag
     ONTICK      $14AF48                     ; 14AF3B/0848AF14
     SETPOSE     #$54                        ; 14AF3F/5054
     HALT                                    ; 14AF41/09
 
-KirbyState15:
+KST15_HoverWaterSurface:
     ASMCALL     $9893                       ; 14AF42/D09398 // Clear Kirby's underwater flag
     A_JMP       L_14AEDA                    ; 14AF45/17DAAE
 
@@ -2079,24 +1695,12 @@ B14_af48:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $8af2
-    bcc B14_af6f
-    ldx #$16
-    jmp $8ce8
-B14_af6f:
-    jsr $89e6
-    bcc B14_af79
-    ldx #$15
-    jmp $8ce8
-B14_af79:
-    jsr $8a15
-    bcc B14_af83
-    ldx #$00
-    jmp $8ce8
-B14_af83:
+    STATE_TRANSITION_IF $8af2, $16
+    STATE_TRANSITION_IF $89e6, $15
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState16:
+KST16_HoverSpit:
     MOV         $05E1,#$0A                  ; 14AF86/11E1050A
     ONTICK      $14AFA9                     ; 14AF8A/08A9AF14
     ASMCALL     $99EA                       ; 14AF8E/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -2112,7 +1716,7 @@ KirbyState16:
     DEC2POSE    WAIT #4                     ; 14AF9E/A4
     DEC2POSE    WAIT #4                     ; 14AF9F/A4
     ASMCALL     $9D72                       ; 14AFA0/D0729D // Is holding Up outside water
-    JNE         KirbyState12                ; 14AFA3/0B50AE
+    JNE         KST12_HoverBegin               ; 14AFA3/0B50AE
     A_JMP       KST02_Land                  ; 14AFA6/174EA7
 
 B14_afa9:
@@ -2126,14 +1730,10 @@ B14_afa9:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $89d9
-    bcc B14_afd0
-    ldx #$17
-    jmp $8ce8
-B14_afd0:
+    STATE_TRANSITION_IF $89d9, $17
     jmp $805b
 
-KirbyState17:
+KST17_WaterEnter:
     A_JSR       L_14A763                    ; 14AFD3/1863A7
     ASMCALL     $9883                       ; 14AFD6/D08398 // Set swimming flag??
     ASMCALL     $9952                       ; 14AFD9/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -2143,7 +1743,7 @@ KirbyState17:
     .byte       $00                         ; 14AFDF/00
     A_JMP       KST02_Land                  ; 14AFE0/174EA7
 
-KirbyState18:
+KST18_WaterIdle:
     MOV         $05E1,#$00                  ; 14AFE3/11E10500
     MOV         $05E4,#$FF                  ; 14AFE7/11E405FF
     ONTICK      $14B001                     ; 14AFEB/0801B014
@@ -2166,34 +1766,14 @@ B14_b001:
     jsr $8fcc
     jsr $95cd
     jsr $9021
-    jsr $8b4e
-    bcc B14_b017
-    ldx #$1a
-    jmp $8ce8
-B14_b017:
-    jsr $89f7
-    bcc B14_b021
-    ldx #$1a
-    jmp $8ce8
-B14_b021:
-    jsr $8b1a
-    bcc B14_b02b
-    ldx #$19
-    jmp $8ce8
-B14_b02b:
-    jsr $8af2
-    bcc B14_b035
-    ldx #$1b
-    jmp $8ce8
-B14_b035:
-    jsr $8a15
-    bcc B14_b03f
-    ldx #$00
-    jmp $8ce8
-B14_b03f:
+    STATE_TRANSITION_IF $8b4e, $1a
+    STATE_TRANSITION_IF $89f7, $1a
+    STATE_TRANSITION_IF $8b1a, $19
+    STATE_TRANSITION_IF $8af2, $1b
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState19:
+KST19_WaterWalk:
     MOV         $05E1,#$01                  ; 14B042/11E10501
     MOV         $05E4,#$FF                  ; 14B046/11E405FF
     ONTICK      $14B082                     ; 14B04A/0882B014
@@ -2246,49 +1826,17 @@ B14_b082:
     and $8000,x
     jsr $8597
     jsr $95cd
-    jsr $8bfa
-    bcc B14_b0a5
-    ldx #$18
-    jmp $8ce8
-B14_b0a5:
-    jsr $8b4e
-    bcc B14_b0af
-    ldx #$1a
-    jmp $8ce8
-B14_b0af:
-    jsr $8a6c
-    bcc B14_b0b9
-    ldx #$18
-    jmp $8ce8
-B14_b0b9:
-    jsr $89f7
-    bcc B14_b0c3
-    ldx #$1a
-    jmp $8ce8
-B14_b0c3:
-    jsr $8a15
-    bcc B14_b0cd
-    ldx #$00
-    jmp $8ce8
-B14_b0cd:
-    jsr $8a5d
-    bcc B14_b0d7
-    ldx #$19
-    jmp $8ce8
-B14_b0d7:
-    jsr $8af2
-    bcc B14_b0e1
-    ldx #$1b
-    jmp $8ce8
-B14_b0e1:
-    jsr $89e6
-    bcc B14_b0eb
-    ldx #$1d
-    jmp $8ce8
-B14_b0eb:
+    STATE_TRANSITION_IF $8bfa, $18
+    STATE_TRANSITION_IF $8b4e, $1a
+    STATE_TRANSITION_IF $8a6c, $18
+    STATE_TRANSITION_IF $89f7, $1a
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8a5d, $19
+    STATE_TRANSITION_IF $8af2, $1b
+    STATE_TRANSITION_IF $89e6, $1d
     jmp $805b
 
-KirbyState1A:
+KST1A_WaterSwim:
     MOV         $05E1,#$05                  ; 14B0EE/11E10505
     MOV         $05E4,#$FF                  ; 14B0F2/11E405FF
     ONTICK      $14B126                     ; 14B0F6/0826B114
@@ -2332,35 +1880,15 @@ B14_b126:
     jsr $874b
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_b145
-    ldx #$02
-    jmp $8ce8
-B14_b145:
+    STATE_TRANSITION_IF $8bab, $02
     jsr $904a
-    jsr $8a06
-    bcc B14_b152
-    ldx #$1a
-    jmp $8ce8
-B14_b152:
-    jsr $8af2
-    bcc B14_b15c
-    ldx #$1b
-    jmp $8ce8
-B14_b15c:
-    jsr $89e6
-    bcc B14_b166
-    ldx #$1d
-    jmp $8ce8
-B14_b166:
-    jsr $8a15
-    bcc B14_b170
-    ldx #$00
-    jmp $8ce8
-B14_b170:
+    STATE_TRANSITION_IF $8a06, $1a
+    STATE_TRANSITION_IF $8af2, $1b
+    STATE_TRANSITION_IF $89e6, $1d
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState1B:
+KST1B_WaterGun:
     MOV         $05E1,#$0C                  ; 14B173/11E1050C
     ONTICK      $14B222                     ; 14B177/0822B214
     ASMCALL     $9DCD                       ; 14B17B/D0CD9D
@@ -2372,7 +1900,7 @@ KirbyState1B:
     .word       L_14B1C4                    ; 14B188/C4B1
     .word       L_14B1CC                    ; 14B18A/CCB1
     .word       L_14B1D0                    ; 14B18C/D0B1
-KirbyState1C:
+KST1C_WaterGunChangeDir:
     ASMCALL     $DE4B                       ; 14B18E/D04BDE // Play sound effect
     .byte       $15                         ; 14B191/15
     ONTICK      $14B218                     ; 14B192/0818B214
@@ -2472,17 +2000,9 @@ L_14B213:
     A_RTS                                   ; 14B217/19
 
 B14_b218:
-    jsr $88de
-    bcc B14_b222
-    ldx #$1c
-    jmp $8ce8
-B14_b222:
+    STATE_TRANSITION_IF $88de, $1c
     jsr $8049
-    jsr $89e6
-    bcc B14_b22f
-    ldx #$1d
-    jmp $8ce8
-B14_b22f:
+    STATE_TRANSITION_IF $89e6, $1d
     jsr $b238
     jsr $9420
     jmp $805b
@@ -2533,7 +2053,7 @@ B14_b298:
 .byte $FF,$05,$08,$04,$00,$00,$10,$00
 .byte $05,$08
 
-KirbyState1D:
+KST1D_WaterSurface:
     ASMCALL     $9893                       ; 14B2CC/D09398 // Clear Kirby's underwater flag
     ASMCALL     $9952                       ; 14B2CF/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 14B2D2/00
@@ -2544,16 +2064,16 @@ KirbyState1D:
 
 L_14B2D9:
     A_JSR       L_14B2F1                    ; 14B2D9/18F1B2
-KirbyState1E:
+KST1E_CopyLand:
     ASMCALL     $9BF7                       ; 14B2DC/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
     TABLEJMP    #8                          ; 14B2DF/0F08
-    .word       KirbyState1F                ; 14B2E1/00B3
-    .word       KirbyState20                ; 14B2E3/D0B3
-    .word       KirbyState23                ; 14B2E5/09B5
-    .word       KirbyState27                ; 14B2E7/83B7
-    .word       KirbyState34                ; 14B2E9/BEBC
-    .word       KirbyState35                ; 14B2EB/19BD
-    .word       KirbyState36                ; 14B2ED/CFBD
+    .word       KST1F_CopyIdle                ; 14B2E1/00B3
+    .word       KST20_CopyBeginWalk                ; 14B2E3/D0B3
+    .word       KST23_CopyDash                ; 14B2E5/09B5
+    .word       KST27_CopyFall                ; 14B2E7/83B7
+    .word       KST34_CopyWaterIdle                ; 14B2E9/BEBC
+    .word       KST35_CopyWaterWalk                ; 14B2EB/19BD
+    .word       KST36_CopyWaterSwim                ; 14B2ED/CFBD
     .word       L_14BBB5                    ; 14B2EF/B5BB
 L_14B2F1:
     MOV         kirby_05E0,#$02                  ; 14B2F1/11E00502
@@ -2562,7 +2082,7 @@ L_14B2F1:
     SETZPOS     #$00C0                      ; 14B2FC/3AC000
     A_RTS                                   ; 14B2FF/19
 
-KirbyState1F:
+KST1F_CopyIdle:
     MOV         $05E1,#$00                  ; 14B300/11E10500
     ONTICK      $14B31A                     ; 14B304/081AB314
     ASMCALL     $8015                       ; 14B308/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -2580,56 +2100,16 @@ B14_b31a:
     jsr $8fcc
     jsr $95cd
     jsr $9021
-    jsr $8b4e
-    bcc B14_b330
-    ldx #$27
-    jmp $8ce8
-B14_b330:
-    jsr $b38d
-    bcc B14_b33a
-    ldx #$3a
-    jmp $8ce8
-B14_b33a:
-    jsr $8b1a
-    bcc B14_b344
-    ldx #$20
-    jmp $8ce8
-B14_b344:
-    jsr $8c7d
-    bcc B14_b34e
-    ldx #$2d
-    jmp $8ce8
-B14_b34e:
-    jsr $8b10
-    bcc B14_b358
-    ldx #$2b
-    jmp $8ce8
-B14_b358:
-    jsr $8ae8
-    bcc B14_b362
-    ldx #$25
-    jmp $8ce8
-B14_b362:
-    jsr $8a15
-    bcc B14_b36c
-    ldx #$00
-    jmp $8ce8
-B14_b36c:
-    jsr $8b06
-    bcc B14_b376
-    ldx #$2e
-    jmp $8ce8
-B14_b376:
-    jsr $8a5d
-    bcc B14_b380
-    ldx #$1f
-    jmp $8ce8
-B14_b380:
-    jsr $8957
-    bcc B14_b38a
-    ldx #$01
-    jmp $8ce8
-B14_b38a:
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8b1a, $20
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $8b10, $2b
+    STATE_TRANSITION_IF $8ae8, $25
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8a5d, $1f
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
 B14_b38d:
@@ -2673,12 +2153,12 @@ B14_b3bc:
 B14_b3cb:
     .byte $00,$04,$06,$08,$0A
 
-KirbyState20:
+KST20_CopyBeginWalk:
     MOV         REG,$05F8                   ; 14B3D0/1CF805
-    JEQ         KirbyState21                ; 14B3D3/0ADAB3
+    JEQ         KST21_CopyWalk                ; 14B3D3/0ADAB3
     ASMCALL     $DE4B                       ; 14B3D6/D04BDE // Play sound effect
     .byte       $31                         ; 14B3D9/31
-KirbyState21:
+KST21_CopyWalk:
     MOV         $05E1,#$01                  ; 14B3DA/11E10501
     MOV         $05BF,#$00                  ; 14B3DE/11BF0500
     ONTICK      $14B473                     ; 14B3E2/0873B414
@@ -2786,74 +2266,22 @@ L_14B46C:
 B14_b473:
     jsr $8765
     jsr $95cd
-    jsr $8bfa
-    bcc B14_b483
-    ldx #$1f
-    jmp $8ce8
-B14_b483:
-    jsr $8b4e
-    bcc B14_b48d
-    ldx #$27
-    jmp $8ce8
-B14_b48d:
-    jsr $b38d
-    bcc B14_b497
-    ldx #$3a
-    jmp $8ce8
-B14_b497:
-    jsr $8a6c
-    bcc B14_b4a1
-    ldx #$1f
-    jmp $8ce8
-B14_b4a1:
-    jsr $8a78
-    bcc B14_b4ab
-    ldx #$24
-    jmp $8ce8
-B14_b4ab:
-    jsr $8a86
-    bcc B14_b4b5
-    ldx #$22
-    jmp $8ce8
-B14_b4b5:
-    jsr $8c7d
-    bcc B14_b4bf
-    ldx #$2d
-    jmp $8ce8
-B14_b4bf:
-    jsr $8b10
-    bcc B14_b4c9
-    ldx #$2b
-    jmp $8ce8
-B14_b4c9:
-    jsr $8ae8
-    bcc B14_b4d3
-    ldx #$25
-    jmp $8ce8
-B14_b4d3:
-    jsr $8a5d
-    bcc B14_b4dd
-    ldx #$21
-    jmp $8ce8
-B14_b4dd:
-    jsr $8a15
-    bcc B14_b4e7
-    ldx #$00
-    jmp $8ce8
-B14_b4e7:
-    jsr $8b06
-    bcc B14_b4f1
-    ldx #$2e
-    jmp $8ce8
-B14_b4f1:
-    jsr $8957
-    bcc B14_b4fb
-    ldx #$01
-    jmp $8ce8
-B14_b4fb:
+    STATE_TRANSITION_IF $8bfa, $1f
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8a6c, $1f
+    STATE_TRANSITION_IF $8a78, $24
+    STATE_TRANSITION_IF $8a86, $22
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $8b10, $2b
+    STATE_TRANSITION_IF $8ae8, $25
+    STATE_TRANSITION_IF $8a5d, $21
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState22:
+KST22_CopyBeginDash:
     ASMCALL     $DE4B                       ; 14B4FE/D04BDE // Play sound effect
     .byte       $37                         ; 14B501/37
     ASMCALL     $9952                       ; 14B502/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -2861,7 +2289,7 @@ KirbyState22:
     .byte       $00                         ; 14B506/00
     .byte       $01                         ; 14B507/01
     .byte       $00                         ; 14B508/00
-KirbyState23:
+KST23_CopyDash:
     MOV         $05E1,#$02                  ; 14B509/11E10502
     ONTICK      $14B525                     ; 14B50D/0825B514
     ASMCALL     $8015                       ; 14B511/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -2877,69 +2305,21 @@ L_14B51F:
 B14_b525:
     jsr $8781
     jsr $95cd
-    jsr $8bfa
-    bcc B14_b535
-    ldx #$1f
-    jmp $8ce8
-B14_b535:
-    jsr $8b4e
-    bcc B14_b53f
-    ldx #$27
-    jmp $8ce8
-B14_b53f:
-    jsr $b38d
-    bcc B14_b549
-    ldx #$3a
-    jmp $8ce8
-B14_b549:
-    jsr $8a78
-    bcc B14_b553
-    ldx #$24
-    jmp $8ce8
-B14_b553:
-    jsr $8a4a
-    bcc B14_b55d
-    ldx #$20
-    jmp $8ce8
-B14_b55d:
-    jsr $8c7d
-    bcc B14_b567
-    ldx #$2d
-    jmp $8ce8
-B14_b567:
-    jsr $8b10
-    bcc B14_b571
-    ldx #$2b
-    jmp $8ce8
-B14_b571:
-    jsr $8ae8
-    bcc B14_b57b
-    ldx #$25
-    jmp $8ce8
-B14_b57b:
-    jsr $8a5d
-    bcc B14_b585
-    ldx #$23
-    jmp $8ce8
-B14_b585:
-    jsr $8a15
-    bcc B14_b58f
-    ldx #$00
-    jmp $8ce8
-B14_b58f:
-    jsr $8b06
-    bcc B14_b599
-    ldx #$2e
-    jmp $8ce8
-B14_b599:
-    jsr $8957
-    bcc B14_b5a3
-    ldx #$01
-    jmp $8ce8
-B14_b5a3:
+    STATE_TRANSITION_IF $8bfa, $1f
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8a78, $24
+    STATE_TRANSITION_IF $8a4a, $20
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $8b10, $2b
+    STATE_TRANSITION_IF $8ae8, $25
+    STATE_TRANSITION_IF $8a5d, $23
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState24:
+KST24_CopySkid:
     MOV         $05E1,#$03                  ; 14B5A6/11E10503
     ASMCALL     $DE4B                       ; 14B5AA/D04BDE // Play sound effect
     .byte       $31                         ; 14B5AD/31
@@ -2956,34 +2336,14 @@ KirbyState24:
 B14_b5be:
     jsr $879d
     jsr $95cd
-    jsr $8bfa
-    bcc B14_b5ce
-    ldx #$1f
-    jmp $8ce8
-B14_b5ce:
-    jsr $8b4e
-    bcc B14_b5d8
-    ldx #$27
-    jmp $8ce8
-B14_b5d8:
-    jsr $b38d
-    bcc B14_b5e2
-    ldx #$3a
-    jmp $8ce8
-B14_b5e2:
-    jsr $8a6c
-    bcc B14_b5ec
-    ldx #$1f
-    jmp $8ce8
-B14_b5ec:
-    jsr $8ae8
-    bcc B14_b5f6
-    ldx #$25
-    jmp $8ce8
-B14_b5f6:
+    STATE_TRANSITION_IF $8bfa, $1f
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8a6c, $1f
+    STATE_TRANSITION_IF $8ae8, $25
     jmp $805b
 
-KirbyState25:
+KST25_CopyJump:
     MOV         $05E1,#$04                  ; 14B5F9/11E10504
     ONTICK      $14B62C                     ; 14B5FD/082CB614
     ASMCALL     $885C                       ; 14B601/D05C88 // Set Kirby's Y velocity
@@ -2992,7 +2352,7 @@ KirbyState25:
     .byte       $04                         ; 14B609/04
     SETPOSE     #$22                        ; 14B60A/5022
     WAIT        #23                         ; 14B60C/0617
-KirbyState26:
+KST26_CopyJumpPeak:
     ONTICK      $14B636                     ; 14B60E/0836B614
 L_14B612:
     MOV         $05E1,#$05                  ; 14B612/11E10505
@@ -3007,11 +2367,7 @@ L_14B612:
     A_JMP       L_14B786                    ; 14B629/1786B7
 
 B14_b62c:
-    jsr $8a40
-    bcc B14_b636
-    ldx #$26
-    jmp $8ce8
-B14_b636:
+    STATE_TRANSITION_IF $8a40, $26
     ldy #$00
     jsr $87ba
     jsr $9c5a
@@ -3020,36 +2376,12 @@ B14_b636:
     jsr $873e
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_b657
-    ldx #$1e
-    jmp $8ce8
-B14_b657:
-    jsr $8bd3
-    bcc B14_b661
-    ldx #$27
-    jmp $8ce8
-B14_b661:
-    jsr $8c61
-    bcc B14_b66b
-    ldx #$27
-    jmp $8ce8
-B14_b66b:
-    jsr $b38d
-    bcc B14_b675
-    ldx #$3a
-    jmp $8ce8
-B14_b675:
-    jsr $8c7d
-    bcc B14_b67f
-    ldx #$2d
-    jmp $8ce8
-B14_b67f:
-    jsr $8a15
-    bcc B14_b689
-    ldx #$00
-    jmp $8ce8
-B14_b689:
+    STATE_TRANSITION_IF $8bab, $1e
+    STATE_TRANSITION_IF $8bd3, $27
+    STATE_TRANSITION_IF $8c61, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
 L_14B68C:
@@ -3060,7 +2392,7 @@ L_14B68C:
     .word       $0000                       ; 14B699/0000
     ASMCALL     $DE4B                       ; 14B69B/D04BDE // Play sound effect
     .byte       $45                         ; 14B69E/45
-    ONTICK      $14B6C6                     ; 14B69F/08C6B614
+    ONTICK      B14_b6c6                     ; 14B69F/08C6B614
     ASMCALL     $885C                       ; 14B6A3/D05C88 // Set Kirby's Y velocity
     .word       $FC00                       ; 14B6A6/00FC
     LOOP        #5                          ; 14B6A8/0105
@@ -3070,27 +2402,21 @@ L_14B68C:
         .byte       $13                         ; 14B6AF/13
         .byte       $00                         ; 14B6B0/00
     ENDLOOP                                 ; 14B6B1/02
-    ONTICK      $14B6D3                     ; 14B6B2/08D3B614
+    ONTICK      B14_b6d3                     ; 14B6B2/08D3B614
     ASMCALL     $885C                       ; 14B6B6/D05C88 // Set Kirby's Y velocity
     .word       $FC70                       ; 14B6B9/70FC
     SETPOSE     #$22                        ; 14B6BB/5022
     WAIT        #23                         ; 14B6BD/0617
-KirbyState41:
-    ONTICK      $14B6DD                     ; 14B6BF/08DDB614
+KST41_HiJumpCancel:
+    ONTICK      B14_b6dd                     ; 14B6BF/08DDB614
     A_JMP       L_14B612                    ; 14B6C3/1712B6
 
 B14_b6c6:
-    jsr $8af2
-    bcc B14_b6d0
-    ldx #$41
-    jmp $8ce8
-B14_b6d0:
+    STATE_TRANSITION_IF $8af2, $41
     jmp $b6e2
 B14_b6d3:
-    jsr $8af2
-    bcc B14_b6dd
-    ldx #$41
-    jmp $8ce8
+    STATE_TRANSITION_IF $8af2, $41
+
 B14_b6dd:
     ldy #$00
     jsr $87ba
@@ -3103,26 +2429,10 @@ B14_b6e2:
     jsr $b765
     jsr $9420
     jsr $9021
-    jsr $8bab
-    bcc B14_b704
-    ldx #$1e
-    jmp $8ce8
-B14_b704:
-    jsr $8bd3
-    bcc B14_b70e
-    ldx #$27
-    jmp $8ce8
-B14_b70e:
-    jsr $8c61
-    bcc B14_b718
-    ldx #$27
-    jmp $8ce8
-B14_b718:
-    jsr $8c7d
-    bcc B14_b722
-    ldx #$3d
-    jmp $8ce8
-B14_b722:
+    STATE_TRANSITION_IF $8bab, $1e
+    STATE_TRANSITION_IF $8bd3, $27
+    STATE_TRANSITION_IF $8c61, $27
+    STATE_TRANSITION_IF $8c7d, $3d
     jmp $805b
 B14_b725:
     lda temp_pad1_hold
@@ -3180,7 +2490,7 @@ B14_b773:
 B14_b77c:
 .byte $05,$00,$00,$00,$00,$07,$08
 
-KirbyState27:
+KST27_CopyFall:
     MOV         VAR0,#$1C                   ; 14B783/0D001C
 L_14B786:
     MOV         $05E1,#$05                  ; 14B786/11E10505
@@ -3208,51 +2518,15 @@ B14_b7a9:
     jsr $873e
     jsr $95cd
     jsr $9034
-    jsr $8bab
-    bcc B14_b7ca
-    ldx #$1e
-    jmp $8ce8
-B14_b7ca:
-    jsr $8bd3
-    bcc B14_b7d4
-    ldx #$27
-    jmp $8ce8
-B14_b7d4:
-    jsr $88d5
-    bcc B14_b7de
-    ldx #$27
-    jmp $8ce8
-B14_b7de:
-    jsr $b38d
-    bcc B14_b7e8
-    ldx #$3a
-    jmp $8ce8
-B14_b7e8:
-    jsr $8c7d
-    bcc B14_b7f2
-    ldx #$2d
-    jmp $8ce8
-B14_b7f2:
-    jsr $89d9
-    bcc B14_b7fc
-    ldx #$33
-    jmp $8ce8
-B14_b7fc:
-    jsr $8a15
-    bcc B14_b806
-    ldx #$00
-    jmp $8ce8
-B14_b806:
-    jsr $8b06
-    bcc B14_b810
-    ldx #$2e
-    jmp $8ce8
-B14_b810:
-    jsr $8957
-    bcc B14_b81a
-    ldx #$01
-    jmp $8ce8
-B14_b81a:
+    STATE_TRANSITION_IF $8bab, $1e
+    STATE_TRANSITION_IF $8bd3, $27
+    STATE_TRANSITION_IF $88d5, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $89d9, $33
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
 L_14B81D:
@@ -3271,46 +2545,14 @@ B14_b82b:
     jsr $b896
     jsr $940e
     jsr $9021
-    jsr $8bab
-    bcc B14_b84d
-    ldx #$29
-    jmp $8ce8
-B14_b84d:
-    jsr $8bd3
-    bcc B14_b857
-    ldx #$27
-    jmp $8ce8
-B14_b857:
-    jsr $88ca
-    bcc B14_b861
-    ldx #$28
-    jmp $8ce8
-B14_b861:
-    jsr $b38d
-    bcc B14_b86b
-    ldx #$3a
-    jmp $8ce8
-B14_b86b:
-    jsr $8c7d
-    bcc B14_b875
-    ldx #$2d
-    jmp $8ce8
-B14_b875:
-    jsr $89d9
-    bcc B14_b87f
-    ldx #$33
-    jmp $8ce8
-B14_b87f:
-    jsr $8b06
-    bcc B14_b889
-    ldx #$2e
-    jmp $8ce8
-B14_b889:
-    jsr $8a15
-    bcc B14_b893
-    ldx #$00
-    jmp $8ce8
-B14_b893:
+    STATE_TRANSITION_IF $8bab, $29
+    STATE_TRANSITION_IF $8bd3, $27
+    STATE_TRANSITION_IF $88ca, $28
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $89d9, $33
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 B14_b896:
     lda #$9f
@@ -3321,7 +2563,7 @@ B14_b896:
 B14_b89f:
     .byte $06,$00,$00,$00,$00,$04,$08
 
-KirbyState28:
+KST28_CopyLandHeadEnemy:
     ASMCALL     $885C                       ; 14B8A6/D05C88 // Set Kirby's Y velocity
     .word       $FD40                       ; 14B8A9/40FD
     ONTICK      $14B8B2                     ; 14B8AB/08B2B814
@@ -3337,54 +2579,18 @@ B14_b8b2:
     jsr $873e
     jsr $95cd
     jsr $9034
-    jsr $8bab
-    bcc B14_b8d3
-    ldx #$1e
-    jmp $8ce8
-B14_b8d3:
-    jsr $8bd3
-    bcc B14_b8dd
-    ldx #$27
-    jmp $8ce8
-B14_b8dd:
-    jsr $88c1
-    bcc B14_b8e7
-    ldx #$27
-    jmp $8ce8
-B14_b8e7:
-    jsr $b38d
-    bcc B14_b8f1
-    ldx #$3a
-    jmp $8ce8
-B14_b8f1:
-    jsr $8c7d
-    bcc B14_b8fb
-    ldx #$2d
-    jmp $8ce8
-B14_b8fb:
-    jsr $89d9
-    bcc B14_b905
-    ldx #$33
-    jmp $8ce8
-B14_b905:
-    jsr $8a15
-    bcc B14_b90f
-    ldx #$00
-    jmp $8ce8
-B14_b90f:
-    jsr $8b06
-    bcc B14_b919
-    ldx #$2e
-    jmp $8ce8
-B14_b919:
-    jsr $8957
-    bcc B14_b923
-    ldx #$01
-    jmp $8ce8
-B14_b923:
+    STATE_TRANSITION_IF $8bab, $1e
+    STATE_TRANSITION_IF $8bd3, $27
+    STATE_TRANSITION_IF $88c1, $27
+    STATE_TRANSITION_IF $b38d, $3a
+    STATE_TRANSITION_IF $8c7d, $2d
+    STATE_TRANSITION_IF $89d9, $33
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState29:
+KST29_CopyLandHead:
     MOV         $05E1,#$05                  ; 14B926/11E10505
     MOV         $05E4,#$FF                  ; 14B92A/11E405FF
     ONTICK      $14B947                     ; 14B92E/0847B914
@@ -3406,30 +2612,18 @@ B14_b947:
     jsr $87ba
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_b95c
-    ldx #$1e
-    jmp $8ce8
-B14_b95c:
-    jsr $8b06
-    bcc B14_b966
-    ldx #$2e
-    jmp $8ce8
-B14_b966:
-    jsr $89d9
-    bcc B14_b970
-    ldx #$33
-    jmp $8ce8
-B14_b970:
+    STATE_TRANSITION_IF $8bab, $1e
+    STATE_TRANSITION_IF $8b06, $2e
+    STATE_TRANSITION_IF $89d9, $33
     jmp $805b
 
-KirbyState2A:
+KST2A_CopyDropThrough:
     MOV         $05E1,#$05                  ; 14B973/11E10505
     ONTICK      $14B984                     ; 14B977/0884B914
     ASMCALL     $8FDC                       ; 14B97B/D0DC8F // Set pose (respect facing)
     .byte       $2A                         ; 14B97E/2A
     WAIT        #16                         ; 14B97F/0610
-    A_JMP       KirbyState1E                ; 14B981/17DCB2
+    A_JMP       KST1E_CopyLand                ; 14B981/17DCB2
 
 B14_b984:
     ldy #$00
@@ -3438,7 +2632,7 @@ B14_b984:
     jsr $9021
     jmp $805b
 
-KirbyState2B:
+KST2B_Crouch:
     MOV         $05E1,#$06                  ; 14B992/11E10506
     ASMCALL     $DE4B                       ; 14B996/D04BDE // Play sound effect
     .byte       $0D                         ; 14B999/0D
@@ -3452,26 +2646,10 @@ B14_b99f:
     jsr $8597
     jsr $95cd
     jsr $9021
-    jsr $8ade
-    bcc B14_b9ba
-    ldx #$2c
-    jmp $8ce8
-B14_b9ba:
-    jsr $8980
-    bcc B14_b9c4
-    ldx #$2a
-    jmp $8ce8
-B14_b9c4:
-    jsr $8b4e
-    bcc B14_b9ce
-    ldx #$27
-    jmp $8ce8
-B14_b9ce:
-    jsr $8a36
-    bcc B14_b9d8
-    ldx #$1e
-    jmp $8ce8
-B14_b9d8:
+    STATE_TRANSITION_IF $8ade, $2c
+    STATE_TRANSITION_IF $8980, $2a
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $8a36, $1e
     jsr $b9de
     jmp $805b
 B14_b9de:
@@ -3480,7 +2658,7 @@ B14_b9de:
     adc #$2e
     jmp $8fe6
 
-KirbyState2C:
+KST2C_CopySlideAttack:
     MOV         $05E1,#$07                  ; 14B9E7/11E10507
     ASMCALL     $DE4B                       ; 14B9EB/D04BDE // Play sound effect
     .byte       $38                         ; 14B9EE/38
@@ -3504,21 +2682,9 @@ B14_ba04:
     jsr $95cd
     jsr $ba39
     jsr $9420
-    jsr $8bfa
-    bcc B14_ba22
-    ldx #$1f
-    jmp $8ce8
-B14_ba22:
-    jsr $8b4e
-    bcc B14_ba2c
-    ldx #$27
-    jmp $8ce8
-B14_ba2c:
-    jsr $8a23
-    bcc B14_ba36
-    ldx #$1f
-    jmp $8ce8
-B14_ba36:
+    STATE_TRANSITION_IF $8bfa, $1f
+    STATE_TRANSITION_IF $8b4e, $27
+    STATE_TRANSITION_IF $8a23, $1f
     jmp $805b
 B14_ba39:
     lda $62c7
@@ -3538,7 +2704,7 @@ B14_ba4f:
     .byte $01,$06,$00,$05,$00,$04,$02,$01
     .byte $FA,$FF,$05,$00,$04,$02
 
-KirbyState2D:
+KST2D_Ladder:
     MOV         $05E1,#$08                  ; 14BA5D/11E10508
     ONTICK      $14BA71                     ; 14BA61/0871BA14
     ASMCALL     $86FB                       ; 14BA65/D0FB86 // Zero Kirby's X velocity
@@ -3643,7 +2809,7 @@ B14_bb27:
 B14_bb29:
     .byte $00,$00
 
-KirbyState2E:
+KST2E_CopyHoverBegin:
     ASMCALL     $DE4B                       ; 14BB2B/D04BDE // Play sound effect
     .byte       $30                         ; 14BB2E/30
     ONTICK      $14BB3B                     ; 14BB2F/083BBB14
@@ -3663,14 +2829,10 @@ B14_bb3b:
     jsr $9021
     jsr $904a
     jsr $9016
-    jsr $8a15
-    bcc B14_bb60
-    ldx #$00
-    jmp $8ce8
-B14_bb60:
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState2F:
+KST2F_CopyHoverRise:
     MOV         $05E1,#$0D                  ; 14BB63/11E1050D
     ONTICK      $14BB77                     ; 14BB67/0877BB14
 L_14BB6B:
@@ -3691,21 +2853,9 @@ B14_bb77:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $8af2
-    bcc B14_bb9e
-    ldx #$32
-    jmp $8ce8
-B14_bb9e:
-    jsr $89d9
-    bcc B14_bba8
-    ldx #$30
-    jmp $8ce8
-B14_bba8:
-    jsr $8a15
-    bcc B14_bbb2
-    ldx #$00
-    jmp $8ce8
-B14_bbb2:
+    STATE_TRANSITION_IF $8af2, $32
+    STATE_TRANSITION_IF $89d9, $30
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
 L_14BBB5:
@@ -3729,36 +2879,20 @@ B14_bbc7:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $894d
-    bcc B14_bbee
-    ldx #$2f
-    jmp $8ce8
-B14_bbee:
-    jsr $8af2
-    bcc B14_bbf8
-    ldx #$32
-    jmp $8ce8
-B14_bbf8:
-    jsr $89d9
-    bcc B14_bc02
-    ldx #$30
-    jmp $8ce8
-B14_bc02:
-    jsr $8a15
-    bcc B14_bc0c
-    ldx #$00
-    jmp $8ce8
-B14_bc0c:
+    STATE_TRANSITION_IF $894d, $2f
+    STATE_TRANSITION_IF $8af2, $32
+    STATE_TRANSITION_IF $89d9, $30
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState30:
+KST30_CopyHoverUnderwater:
     MOV         $05E1,#$0D                  ; 14BC0F/11E1050D
     ASMCALL     $988D                       ; 14BC13/D08D98 // Set Kirby's underwater flag
     ONTICK      $14BC23                     ; 14BC16/0823BC14
     SETPOSE     #$54                        ; 14BC1A/5054
     HALT                                    ; 14BC1C/09
 
-KirbyState31:
+KST31_CopyHoverWaterSurface:
     ASMCALL     $9893                       ; 14BC1D/D09398 // Clear Kirby's underwater flag
     A_JMP       L_14BBB5                    ; 14BC20/17B5BB
 
@@ -3773,24 +2907,12 @@ B14_bc23:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $8af2
-    bcc B14_bc4a
-    ldx #$32
-    jmp $8ce8
-B14_bc4a:
-    jsr $89e6
-    bcc B14_bc54
-    ldx #$31
-    jmp $8ce8
-B14_bc54:
-    jsr $8a15
-    bcc B14_bc5e
-    ldx #$00
-    jmp $8ce8
-B14_bc5e:
+    STATE_TRANSITION_IF $8af2, $32
+    STATE_TRANSITION_IF $89e6, $31
+    STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-KirbyState32:
+KST32_CopyHoverSpit:
     MOV         $05E1,#$0A                  ; 14BC61/11E1050A
     ONTICK      $14BC84                     ; 14BC65/0884BC14
     ASMCALL     $99EA                       ; 14BC69/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3806,8 +2928,8 @@ KirbyState32:
     DEC2POSE    WAIT #4                     ; 14BC79/A4
     DEC2POSE    WAIT #4                     ; 14BC7A/A4
     ASMCALL     $9D72                       ; 14BC7B/D0729D // Is holding Up outside water
-    JNE         KirbyState2E                ; 14BC7E/0B2BBB
-    A_JMP       KirbyState1E                ; 14BC81/17DCB2
+    JNE         KST2E_CopyHoverBegin                ; 14BC7E/0B2BBB
+    A_JMP       KST1E_CopyLand                ; 14BC81/17DCB2
 
 B14_bc84:
     ldy #$01
@@ -3820,14 +2942,10 @@ B14_bc84:
     jsr $9021
     jsr $9016
     jsr $904a
-    jsr $89d9
-    bcc B14_bcab
-    ldx #$33
-    jmp $8ce8
-B14_bcab:
+    STATE_TRANSITION_IF $89d9, $33
     jmp $805b
 
-KirbyState33:
+KST33_CopyWaterEnter:
     A_JSR       L_14B2F1                    ; 14BCAE/18F1B2
     ASMCALL     $9883                       ; 14BCB1/D08398 // Set swimming flag??
     ASMCALL     $9952                       ; 14BCB4/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3835,9 +2953,9 @@ KirbyState33:
     .byte       $F8                         ; 14BCB8/F8
     .byte       $04                         ; 14BCB9/04
     .byte       $00                         ; 14BCBA/00
-    A_JMP       KirbyState1E                ; 14BCBB/17DCB2
+    A_JMP       KST1E_CopyLand                ; 14BCBB/17DCB2
 
-KirbyState34:
+KST34_CopyWaterIdle:
     MOV         $05E1,#$00                  ; 14BCBE/11E10500
     MOV         $05E4,#$FF                  ; 14BCC2/11E405FF
     ONTICK      $14BCCE                     ; 14BCC6/08CEBC14
@@ -3849,39 +2967,15 @@ B14_bcce:
     jsr $8fcc
     jsr $95cd
     jsr $9021
-    jsr $8b4e
-    bcc B14_bce4
-    ldx #$36
-    jmp $8ce8
-B14_bce4:
-    jsr $89f7
-    bcc B14_bcee
-    ldx #$36
-    jmp $8ce8
-B14_bcee:
-    jsr $8b1a
-    bcc B14_bcf8
-    ldx #$35
-    jmp $8ce8
-B14_bcf8:
-    jsr $8af2
-    bcc B14_bd02
-    ldx #$37
-    jmp $8ce8
-B14_bd02:
-    jsr $8a15
-    bcc B14_bd0c
-    ldx #$00
-    jmp $8ce8
-B14_bd0c:
-    jsr $8957
-    bcc B14_bd16
-    ldx #$01
-    jmp $8ce8
-B14_bd16:
+    STATE_TRANSITION_IF $8b4e, $36
+    STATE_TRANSITION_IF $89f7, $36
+    STATE_TRANSITION_IF $8b1a, $35
+    STATE_TRANSITION_IF $8af2, $37
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState35:
+KST35_CopyWaterWalk:
     MOV         $05E1,#$01                  ; 14BD19/11E10501
     MOV         $05E4,#$FF                  ; 14BD1D/11E405FF
     ONTICK      $14BD59                     ; 14BD21/0859BD14
@@ -3934,54 +3028,18 @@ B14_bd59:
     and $8000,x
     jsr $8597
     jsr $95cd
-    jsr $8bfa
-    bcc B14_bd7c
-    ldx #$34
-    jmp $8ce8
-B14_bd7c:
-    jsr $8b4e
-    bcc B14_bd86
-    ldx #$36
-    jmp $8ce8
-B14_bd86:
-    jsr $8a6c
-    bcc B14_bd90
-    ldx #$34
-    jmp $8ce8
-B14_bd90:
-    jsr $89f7
-    bcc B14_bd9a
-    ldx #$36
-    jmp $8ce8
-B14_bd9a:
-    jsr $8af2
-    bcc B14_bda4
-    ldx #$37
-    jmp $8ce8
-B14_bda4:
-    jsr $8a15
-    bcc B14_bdae
-    ldx #$00
-    jmp $8ce8
-B14_bdae:
-    jsr $8a5d
-    bcc B14_bdb8
-    ldx #$35
-    jmp $8ce8
-B14_bdb8:
-    jsr $89e6
-    bcc B14_bdc2
-    ldx #$39
-    jmp $8ce8
-B14_bdc2:
-    jsr $8957
-    bcc B14_bdcc
-    ldx #$01
-    jmp $8ce8
-B14_bdcc:
+    STATE_TRANSITION_IF $8bfa, $34
+    STATE_TRANSITION_IF $8b4e, $36
+    STATE_TRANSITION_IF $8a6c, $34
+    STATE_TRANSITION_IF $89f7, $36
+    STATE_TRANSITION_IF $8af2, $37
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8a5d, $35
+    STATE_TRANSITION_IF $89e6, $39
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState36:
+KST36_CopyWaterSwim:
     MOV         $05E1,#$05                  ; 14BDCF/11E10505
     MOV         $05E4,#$FF                  ; 14BDD3/11E405FF
     ONTICK      $14BE07                     ; 14BDD7/0807BE14
@@ -4025,40 +3083,16 @@ B14_be07:
     jsr $874b
     jsr $95cd
     jsr $9021
-    jsr $8bab
-    bcc B14_be26
-    ldx #$1e
-    jmp $8ce8
-B14_be26:
+    STATE_TRANSITION_IF $8bab, $1e
     jsr $904a
-    jsr $8a06
-    bcc B14_be33
-    ldx #$36
-    jmp $8ce8
-B14_be33:
-    jsr $89e6
-    bcc B14_be3d
-    ldx #$39
-    jmp $8ce8
-B14_be3d:
-    jsr $8af2
-    bcc B14_be47
-    ldx #$37
-    jmp $8ce8
-B14_be47:
-    jsr $8a15
-    bcc B14_be51
-    ldx #$00
-    jmp $8ce8
-B14_be51:
-    jsr $8957
-    bcc B14_be5b
-    ldx #$01
-    jmp $8ce8
-B14_be5b:
+    STATE_TRANSITION_IF $8a06, $36
+    STATE_TRANSITION_IF $89e6, $39
+    STATE_TRANSITION_IF $8af2, $37
+    STATE_TRANSITION_IF $8a15, $00
+    STATE_TRANSITION_IF $8957, $01
     jmp $805b
 
-KirbyState37:
+KST37_CopyWaterGun:
     MOV         $05E1,#$0C                  ; 14BE5E/11E1050C
     ONTICK      $14BF0D                     ; 14BE62/080DBF14
     ASMCALL     $9DCD                       ; 14BE66/D0CD9D
@@ -4070,7 +3104,7 @@ KirbyState37:
     .word       L_14BEAF                    ; 14BE73/AFBE
     .word       L_14BEB7                    ; 14BE75/B7BE
     .word       L_14BEBB                    ; 14BE77/BBBE
-KirbyState38:
+KST38_CopyWaterGunChangeDir:
     ASMCALL     $DE4B                       ; 14BE79/D04BDE // Play sound effect
     .byte       $15                         ; 14BE7C/15
     ONTICK      $14BF03                     ; 14BE7D/0803BF14
@@ -4091,7 +3125,7 @@ KirbyState38:
     .word       L_14BEF2                    ; 14BE9F/F2BE
     .word       L_14BEF9                    ; 14BEA1/F9BE
     .word       L_14BEFE                    ; 14BEA3/FEBE
-    A_JMP       KirbyState1E                ; 14BEA5/17DCB2
+    A_JMP       KST1E_CopyLand                ; 14BEA5/17DCB2
 
 L_14BEA8:
     ASMCALL     $8FDC, WAIT #4              ; 14BEA8/D4DC8F // Set pose (respect facing)
@@ -4170,17 +3204,9 @@ L_14BEFE:
     A_RTS                                   ; 14BF02/19
 
 B14_bf03:
-    jsr $88de
-    bcc B14_bf0d
-    ldx #$38
-    jmp $8ce8
-B14_bf0d:
+    STATE_TRANSITION_IF $88de, $38
     jsr $8049
-    jsr $89e6
-    bcc B14_bf1a
-    ldx #$39
-    jmp $8ce8
-B14_bf1a:
+    STATE_TRANSITION_IF $89e6, $39
     jsr $bf23
     jsr $9420
     jmp $805b
@@ -4228,14 +3254,14 @@ B14_bf83:
 .byte $FF,$05,$08,$04,$00,$00,$10,$00
 .byte $05,$08
 
-KirbyState39:
+KST39_CopyWaterSurface:
     ASMCALL     $9893                       ; 14BFB7/D09398 // Clear Kirby's underwater flag
     ASMCALL     $9952                       ; 14BFBA/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 14BFBD/00
     .byte       $F8                         ; 14BFBE/F8
     .byte       $05                         ; 14BFBF/05
     .byte       $00                         ; 14BFC0/00
-    A_JMP       KirbyState25                ; 14BFC1/17F9B5
+    A_JMP       KST25_CopyJump                ; 14BFC1/17F9B5
 
 B14_bfc4:
 .byte $05,$00,$00,$00,$72,$00,$0B,$41

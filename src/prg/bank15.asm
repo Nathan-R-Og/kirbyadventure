@@ -3,18 +3,18 @@
         MOV         $05E0,#$03                  ; 15A000/11E00503
         SPRITEMAP   $1B8000                     ; 15A004/1A00801B
         ASMCALL     $9CB3                       ; 15A008/D0B39C // Load some palette? (Kirby's palette?)
-    L_15A00B:
+    KST60_SwordLand: ; "Base" of sword stuff. Logic for the landing squish animation is in here somewhere...
         ASMCALL     $9BF7                       ; 15A00B/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
         TABLEJMP    #8                          ; 15A00E/0F08
-        .word       L_15A020                    ; 15A010/20A0
-        .word       L_15A0B9                    ; 15A012/B9A0
-        .word       L_15A1F2                    ; 15A014/F2A1
-        .word       L_15A36B                    ; 15A016/6BA3
-        .word       L_15AA5C                    ; 15A018/5CAA
-        .word       L_15AAB7                    ; 15A01A/B7AA
-        .word       L_15AB6D                    ; 15A01C/6DAB
+        .word       KST61_SwordIdle                    ; 15A010/20A0
+        .word       KST62_SwordBeginWalk                    ; 15A012/B9A0
+        .word       KST65_SwordDash                    ; 15A014/F2A1
+        .word       KST69_SwordFall                    ; 15A016/6BA3
+        .word       KST78_SwordWaterIdle                    ; 15A018/5CAA
+        .word       KST79_SwordWaterWalk                    ; 15A01A/B7AA
+        .word       KST7A_SwordWaterSwim                    ; 15A01C/6DAB
         .word       L_15A956                    ; 15A01E/56A9
-    L_15A020:
+    KST61_SwordIdle:
         MOV         $05E1,#$00                  ; 15A020/11E10500
         ONTICK      B15_KirbyTick_SwordIdle     ; 15A024/083AA015
         ASMCALL     $8015                       ; 15A028/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -33,56 +33,16 @@
        jsr $8fcc ; SetKirbyPoseDirection
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a050
-       ldx #$69                         ;Sword, falling
-       jmp $8ce8 ; DoStateTransition
-    B15_a050:
-       jsr $8b1a ; KirbyCheckDPadHorizontal
-       bcc B15_a05a
-       ldx #$62                         ;Sword, walking
-       jmp $8ce8 ; DoStateTransition
-    B15_a05a:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a064
-       ldx #$6f                         ;Sword, climbing
-       jmp $8ce8 ; DoStateTransition
-    B15_a064:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_a06e
-       ldx #$6d                         ;Sword, crouching
-       jmp $8ce8 ; DoStateTransition
-    B15_a06e:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_a078
-       ldx #$67                         ;Sword, jumping
-       jmp $8ce8 ; DoStateTransition
-    B15_a078:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a082
-       ldx #$70                         ;Sword slash
-       jmp $8ce8 ; DoStateTransition
-    B15_a082:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a08c
-       ldx #$00                         ;Entering door
-       jmp $8ce8 ; DoStateTransition
-    B15_a08c:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a096
-       ldx #$72                         ;Sword, begin flying
-       jmp $8ce8 ; DoStateTransition
-    B15_a096:
-       jsr $8a5d ; HasSlopeStateChanged
-       bcc B15_a0a0
-       ldx #$61                         ;Sword, idle
-       jmp $8ce8 ; DoStateTransition
-    B15_a0a0:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_a0aa
-       ldx #$01                         ;Discarding ability
-       jmp $8ce8 ; DoStateTransition
-    B15_a0aa:
+       STATE_TRANSITION_IF $8b4e, $69                         ;Sword, falling ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8b1a, $62                         ;Sword, walking ; KirbyCheckDPadHorizontal
+       STATE_TRANSITION_IF $8c7d, $6f                         ;Sword, climbing ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $6d                         ;Sword, crouching ; IsHoldingDown
+       STATE_TRANSITION_IF $8ae8, $67                         ;Sword, jumping ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $70                         ;Sword slash ; HasJustPressedB
+       STATE_TRANSITION_IF $8a15, $00                         ;Entering door ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $72                         ;Sword, begin flying ; IsHoldingUp
+       STATE_TRANSITION_IF $8a5d, $61                         ;Sword, idle ; HasSlopeStateChanged
+       STATE_TRANSITION_IF $8957, $01                         ;Discarding ability ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
     B15_SetSwordKirbyIdlePose:
        jsr $8ffb ; SlopeStateToIndex
@@ -93,12 +53,12 @@
        pla
        rts
 
-    L_15A0B9:
+    KST62_SwordBeginWalk:
         MOV         REG,$05F8                   ; 15A0B9/1CF805
-        JEQ         KirbyState63                ; 15A0BC/0AC3A0
+        JEQ         KST63_SwordWalk                ; 15A0BC/0AC3A0
         ASMCALL     $DE4B                       ; 15A0BF/D04BDE // Play sound effect
         .byte       $31                         ; 15A0C2/31
-    KirbyState63:
+    KST63_SwordWalk:
         MOV         $05E1,#$01                  ; 15A0C3/11E10501
         MOV         $05BF,#$00                  ; 15A0C7/11BF0500
         ONTICK      B15_a15c                    ; 15A0CB/085CA115
@@ -211,74 +171,22 @@
     B15_a15c:
        jsr $8765 ; $8765
        jsr $95cd ; SetKirbyPosition
-       jsr $8bfa ; $8bfa
-       bcc B15_a16c
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a16c:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a176
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a176:
-       jsr $8a6c ; IsKirbyVelXZero
-       bcc B15_a180
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a180:
-       jsr $8a78 ; $8a78
-       bcc B15_a18a
-       ldx #$66
-       jmp $8ce8 ; DoStateTransition
-    B15_a18a:
-       jsr $8a86 ; $8a86
-       bcc B15_a194
-       ldx #$64
-       jmp $8ce8 ; DoStateTransition
-    B15_a194:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a19e
-       ldx #$6f
-       jmp $8ce8 ; DoStateTransition
-    B15_a19e:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_a1a8
-       ldx #$6d
-       jmp $8ce8 ; DoStateTransition
-    B15_a1a8:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_a1b2
-       ldx #$67
-       jmp $8ce8 ; DoStateTransition
-    B15_a1b2:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a1bc
-       ldx #$70
-       jmp $8ce8 ; DoStateTransition
-    B15_a1bc:
-       jsr $8a5d ; HasSlopeStateChanged
-       bcc B15_a1c6
-       ldx #$63
-       jmp $8ce8 ; DoStateTransition
-    B15_a1c6:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a1d0
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a1d0:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a1da
-       ldx #$72
-       jmp $8ce8 ; DoStateTransition
-    B15_a1da:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_a1e4
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_a1e4:
+       STATE_TRANSITION_IF $8bfa, $61 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $69 ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a6c, $61 ; IsKirbyVelXZero
+       STATE_TRANSITION_IF $8a78, $66 ; $8a78
+       STATE_TRANSITION_IF $8a86, $64 ; $8a86
+       STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $6d ; IsHoldingDown
+       STATE_TRANSITION_IF $8ae8, $67 ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a5d, $63 ; HasSlopeStateChanged
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
 
-    L_15A1E7:
+    KST64_SwordBeginDash:
         ASMCALL     $DE4B                       ; 15A1E7/D04BDE // Play sound effect
         .byte       $37                         ; 15A1EA/37
         ASMCALL     $9952                       ; 15A1EB/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -286,7 +194,7 @@
         .byte       $00                         ; 15A1EF/00
         .byte       $01                         ; 15A1F0/01
         .byte       $00                         ; 15A1F1/00
-    L_15A1F2:
+    KST65_SwordDash:
         MOV         $05E1,#$02                  ; 15A1F2/11E10502
         ONTICK      B15_a20e                    ; 15A1F6/080EA215
         ASMCALL     $8015                       ; 15A1FA/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -302,70 +210,22 @@
     B15_a20e:
        jsr $8781 ; $8781
        jsr $95cd ; SetKirbyPosition
-       jsr $8bfa ; $8bfa
-       bcc B15_a21e
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a21e:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a228
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a228:
-       jsr $8a78 ; $8a78
-       bcc B15_a232
-       ldx #$66
-       jmp $8ce8 ; DoStateTransition
-    B15_a232:
-       jsr $8a4a ; $8a4a
-       bcc B15_a23c
-       ldx #$62
-       jmp $8ce8 ; DoStateTransition
-    B15_a23c:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a246
-       ldx #$6f
-       jmp $8ce8 ; DoStateTransition
-    B15_a246:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_a250
-       ldx #$6d
-       jmp $8ce8 ; DoStateTransition
-    B15_a250:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_a25a
-       ldx #$67
-       jmp $8ce8 ; DoStateTransition
-    B15_a25a:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a264
-       ldx #$70
-       jmp $8ce8 ; DoStateTransition
-    B15_a264:
-       jsr $8a5d ; HasSlopeStateChanged
-       bcc B15_a26e
-       ldx #$65
-       jmp $8ce8 ; DoStateTransition
-    B15_a26e:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a278
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a278:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a282
-       ldx #$72
-       jmp $8ce8 ; DoStateTransition
-    B15_a282:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_a28c
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_a28c:
+       STATE_TRANSITION_IF $8bfa, $61 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $69 ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a78, $66 ; $8a78
+       STATE_TRANSITION_IF $8a4a, $62 ; $8a4a
+       STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $6d ; IsHoldingDown
+       STATE_TRANSITION_IF $8ae8, $67 ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a5d, $65 ; HasSlopeStateChanged
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
 
 
-    L_15A28F:
+    KST66_SwordSkid:
         MOV         $05E1,#$03                  ; 15A28F/11E10503
         ASMCALL     $DE4B                       ; 15A293/D04BDE // Play sound effect
         .byte       $31                         ; 15A296/31
@@ -382,35 +242,15 @@
     B15_a2a7:
        jsr $879d ; $879d
        jsr $95cd ; SetKirbyPosition
-       jsr $8bfa ; $8bfa
-       bcc B15_a2b7
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a2b7:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a2c1
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a2c1:
-       jsr $8a6c ; IsKirbyVelXZero
-       bcc B15_a2cb
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a2cb:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_a2d5
-       ldx #$67
-       jmp $8ce8 ; DoStateTransition
-    B15_a2d5:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a2df
-       ldx #$70
-       jmp $8ce8 ; DoStateTransition
-    B15_a2df:
+       STATE_TRANSITION_IF $8bfa, $61 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $69 ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a6c, $61 ; IsKirbyVelXZero
+       STATE_TRANSITION_IF $8ae8, $67 ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
        jmp $805b ; KirbyFinalize
 
 
-    L_15A2E2:
+    KST67_SwordJump:
         MOV         $05E1,#$04                  ; 15A2E2/11E10504
         ONTICK      B15_a30b                    ; 15A2E6/080BA315
         ASMCALL     $885C                       ; 15A2EA/D05C88 // Set Kirby's Y velocity
@@ -419,7 +259,7 @@
         .byte       $04                         ; 15A2F2/04
         SETPOSE     #$28                        ; 15A2F3/5028
         WAIT        #23                         ; 15A2F5/0617
-    L_15A2F7:
+    KST68_SwordJumpPeak:
         ASMCALL     $885C                       ; 15A2F7/D05C88 // Set Kirby's Y velocity
         .word       $FF50                       ; 15A2FA/50FF
         ONTICK      B15_a315                    ; 15A2FC/0815A315
@@ -430,10 +270,8 @@
         A_JMP       L_15A36E                    ; 15A308/176EA3
 
     B15_a30b:
-       jsr $8a40 ; $8a40
-       bcc B15_a315
-       ldx #$68
-       jmp $8ce8 ; DoStateTransition
+       STATE_TRANSITION_IF $8a40, $68 ; $8a40
+
     B15_a315:
        ldy #$00
        jsr $87ba ; MAYBE_KirbyGravity
@@ -443,39 +281,15 @@
        jsr $873e ; $873e
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_a336
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_a336:
-       jsr $8bd3 ; $8bd3
-       bcc B15_a340
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a340:
-       jsr $8c61 ; $8c61
-       bcc B15_a34a
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a34a:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a354
-       ldx #$6f
-       jmp $8ce8 ; DoStateTransition
-    B15_a354:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a35e
-       ldx #$71
-       jmp $8ce8 ; DoStateTransition
-    B15_a35e:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a368
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a368:
+       STATE_TRANSITION_IF $8bab, $60 ; $8bab
+       STATE_TRANSITION_IF $8bd3, $69 ; $8bd3
+       STATE_TRANSITION_IF $8c61, $69 ; $8c61
+       STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $71 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
 
-    L_15A36B:
+    KST69_SwordFall: ; Maybe sword falling
         MOV         VAR0,#$1C                   ; 15A36B/0D001C
     L_15A36E:
         MOV         $05E1,#$05                  ; 15A36E/11E10505
@@ -505,51 +319,15 @@
        jsr $873e ; $873e
        jsr $95cd ; SetKirbyPosition
        jsr $9034 ; $9034
-       jsr $8bab ; $8bab
-       bcc B15_a3b2
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_a3b2:
-       jsr $8bd3 ; $8bd3
-       bcc B15_a3bc
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a3bc:
-       jsr $88d5 ; $88d5
-       bcc B15_a3c6
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a3c6:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a3d0
-       ldx #$6f
-       jmp $8ce8 ; DoStateTransition
-    B15_a3d0:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a3da
-       ldx #$71
-       jmp $8ce8 ; DoStateTransition
-    B15_a3da:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a3e4
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_a3e4:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a3ee
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a3ee:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a3f8
-       ldx #$72
-       jmp $8ce8 ; DoStateTransition
-    B15_a3f8:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_a402
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_a402:
+       STATE_TRANSITION_IF $8bab, $60 ; $8bab
+       STATE_TRANSITION_IF $8bd3, $69 ; $8bd3
+       STATE_TRANSITION_IF $88d5, $69 ; $88d5
+       STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $71 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
 
     L_15A405:
@@ -568,46 +346,14 @@
        jsr $a47e ; $a47e
        jsr $940e ; $940e
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_a435
-       ldx #$6b
-       jmp $8ce8 ; DoStateTransition
-    B15_a435:
-       jsr $8bd3 ; $8bd3
-       bcc B15_a43f
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a43f:
-       jsr $88ca ; HasLandedHeadFirstOnEnemy
-       bcc B15_a449
-       ldx #$6a
-       jmp $8ce8 ; DoStateTransition
-    B15_a449:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a453
-       ldx #$71
-       jmp $8ce8 ; DoStateTransition
-    B15_a453:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_a45d
-       ldx #$6f
-       jmp $8ce8 ; DoStateTransition
-    B15_a45d:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a467
-       ldx #$72
-       jmp $8ce8 ; DoStateTransition
-    B15_a467:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a471
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_a471:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a47b
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a47b:
+       STATE_TRANSITION_IF $8bab, $6b ; $8bab
+       STATE_TRANSITION_IF $8bd3, $69 ; $8bd3
+       STATE_TRANSITION_IF $88ca, $6a ; HasLandedHeadFirstOnEnemy
+       STATE_TRANSITION_IF $8af2, $71 ; HasJustPressedB
+       STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
     B15_a47e:
        lda #$87
@@ -616,7 +362,7 @@
        jmp $9c72 ; GetKirbyHitbox
        .byte $06,$00,$00,$00,$00,$04,$08
 
-    KirbyState6A:
+    KST6A_SwordLandHeadEnemy:
         ASMCALL     $885C                       ; 15A48E/D05C88 // Set Kirby's Y velocity
         .word       $FD40                       ; 15A491/40FD
         ONTICK      B15_149a                    ; 15A493/089AA415
@@ -632,54 +378,18 @@
         jsr $873e ; $873e
         jsr $95cd ; SetKirbyPosition
         jsr $9034 ; $9034
-        jsr $8bab ; $8bab
-        bcc B15_a4bb
-        ldx #$60
-        jmp $8ce8 ; DoStateTransition
-    B15_a4bb:
-        jsr $8bd3 ; $8bd3
-        bcc B15_a4c5
-        ldx #$69
-        jmp $8ce8 ; DoStateTransition
-    B15_a4c5:
-        jsr $88c1 ; IsKirbyNotFalling
-        bcc B15_a4cf
-        ldx #$69
-        jmp $8ce8 ; DoStateTransition
-    B15_a4cf:
-        jsr $8c7d ; WillGrabOntoLadder
-        bcc B15_a4d9
-        ldx #$6f
-        jmp $8ce8 ; DoStateTransition
-    B15_a4d9:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_a4e3
-        ldx #$71
-        jmp $8ce8 ; DoStateTransition
-    B15_a4e3:
-        jsr $89d9 ; HasJustEnteredWater
-        bcc B15_a4ed
-        ldx #$77
-        jmp $8ce8 ; DoStateTransition
-    B15_a4ed:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_a4f7
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_a4f7:
-        jsr $8b06 ; IsHoldingUp
-        bcc B15_a501
-        ldx #$72
-        jmp $8ce8 ; DoStateTransition
-    B15_a501:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_a50b
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_a50b:
+        STATE_TRANSITION_IF $8bab, $60 ; $8bab
+        STATE_TRANSITION_IF $8bd3, $69 ; $8bd3
+        STATE_TRANSITION_IF $88c1, $69 ; IsKirbyNotFalling
+        STATE_TRANSITION_IF $8c7d, $6f ; WillGrabOntoLadder
+        STATE_TRANSITION_IF $8af2, $71 ; HasJustPressedB
+        STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jmp $805b ; KirbyFinalize
 
-    L_15A50E:
+    KST6B_SwordLandHead:
         MOV         $05E1,#$05                  ; 15A50E/11E10505
         MOV         $05E4,#$FF                  ; 15A512/11E405FF
         ONTICK      B15_a52f                    ; 15A516/082FA515
@@ -701,30 +411,18 @@
        jsr $87ba ; MAYBE_KirbyGravity
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_a544
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_a544:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_a54e
-       ldx #$72
-       jmp $8ce8 ; DoStateTransition
-    B15_a54e:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a558
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_a558:
+       STATE_TRANSITION_IF $8bab, $60 ; $8bab
+       STATE_TRANSITION_IF $8b06, $72 ; IsHoldingUp
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
        jmp $805b ; KirbyFinalize
 
-    KirbyState6C:
+    KST6C_SwordDropThrough:
         MOV         $05E1,#$05                  ; 15A55B/11E10505
         ONTICK      B15_a56c                    ; 15A55F/086CA515
         ASMCALL     $8FDC                       ; 15A563/D0DC8F // Set pose (respect facing)
         .byte       $2A                         ; 15A566/2A
         WAIT        #16                         ; 15A567/0610
-        A_JMP       L_15A00B                    ; 15A569/170BA0
+        A_JMP       KST60_SwordLand                    ; 15A569/170BA0
 
     B15_a56c:
         ldy #$00
@@ -733,7 +431,7 @@
         jsr $9021 ; MAYBE_KirbyWallCollision
         jmp $805b ; KirbyFinalize
 
-    L_15A57A:
+    KST6D_SwordCrouch:
         MOV         $05E1,#$06                  ; 15A57A/11E10506
         ASMCALL     $DE4B                       ; 15A57E/D04BDE // Play sound effect
         .byte       $0D                         ; 15A581/0D
@@ -747,26 +445,10 @@
        jsr $8597 ; $8597
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a5a2
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a5a2:
-       jsr $8ade ; IsPressingAB
-       bcc B15_a5ac
-       ldx #$6e
-       jmp $8ce8 ; DoStateTransition
-    B15_a5ac:
-       jsr $8980 ; $8980
-       bcc B15_a5b6
-       ldx #$6c
-       jmp $8ce8 ; DoStateTransition
-    B15_a5b6:
-       jsr $8a36 ; IsNotHoldingDown
-       bcc B15_a5c0
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_a5c0:
+       STATE_TRANSITION_IF $8b4e, $69 ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8ade, $6e ; IsPressingAB
+       STATE_TRANSITION_IF $8980, $6c ; $8980
+       STATE_TRANSITION_IF $8a36, $60 ; IsNotHoldingDown
        jsr $a5c6 ; $a5c6
        jmp $805b ; KirbyFinalize
     B15_a5c6:
@@ -776,7 +458,7 @@
        jmp $8fe6 ; SetPoseWithFacing
 
 
-    L_15A5CF:
+    KST6E_SwordSlideAttack:
         MOV         $05E1,#$07                  ; 15A5CF/11E10507
         ASMCALL     $DE4B                       ; 15A5D3/D04BDE // Play sound effect
         .byte       $38                         ; 15A5D6/38
@@ -802,21 +484,9 @@
        jsr $95cd ; SetKirbyPosition
        jsr $a622 ; $a622
        jsr $9420 ; Kirby_DamageEnemyCollision
-       jsr $8bfa ; $8bfa
-       bcc B15_a60b
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a60b:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_a615
-       ldx #$69
-       jmp $8ce8 ; DoStateTransition
-    B15_a615:
-       jsr $8a23 ; IsDoneSliding
-       bcc B15_a61f
-       ldx #$61
-       jmp $8ce8 ; DoStateTransition
-    B15_a61f:
+       STATE_TRANSITION_IF $8bfa, $61 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $69 ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a23, $61 ; IsDoneSliding
        jmp $805b ; KirbyFinalize
     B15_a622:
        lda OBJ_pose+1
@@ -835,7 +505,7 @@
        .byte $0D,$0D,$01,$06,$00,$05,$00,$04
        .byte $02,$01,$FA,$FF,$05,$00,$04,$02
 
-    L_15A658:
+    KST6F_SwordLadder:
         MOV         $05E1,#$08                  ; 15A658/11E10508
         ONTICK      B15_a66c                    ; 15A65C/086CA615
         ASMCALL     $86FB                       ; 15A660/D0FB86 // Zero Kirby's X velocity
@@ -914,10 +584,10 @@
        cmp #$01
        beq B15_a70b
     B15_a6fa:
-       lda #.BANK (L_15A00B)
+       lda #.BANK (KST60_SwordLand)
        sta script_bank
-       lda #.lobyte (L_15A00B)
-       ldy #.hibyte (L_15A00B)
+       lda #.lobyte (KST60_SwordLand)
+       ldy #.hibyte (KST60_SwordLand)
        ldx #$01
        jsr $cca7 ; OBJ_TryReplaceScriptPc
        jmp $805b ; KirbyFinalize
@@ -940,7 +610,7 @@
     B15_a724:
        .byte $00,$00
 
-    L_15A726:
+    KST70_SwordSlash:
         MOV         $05E1,#$0C                  ; 15A726/11E1050C
         ASMCALL     $DE4B                       ; 15A72A/D04BDE // Play sound effect
         .byte       $3A                         ; 15A72D/3A
@@ -971,25 +641,15 @@
     L_15A744:
         ADDPOSE     #-4, WAIT #8                ; 15A744/68FC
     L_15A746:
-        A_JMP       L_15A00B                    ; 15A746/170BA0
+        A_JMP       KST60_SwordLand                    ; 15A746/170BA0
 
     B15_TICK_KirbySwordSlash:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a753
-       ldx #$70
-       jmp $8ce8 ; DoStateTransition
+       STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
+
     B15_a753:
        jsr $8049 ; KirbyPhysics
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a760
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_a760:
-       jsr $89e6 ; HasJustLeftWater
-       bcc B15_a76a
-       ldx #$7b
-       jmp $8ce8 ; DoStateTransition
-    B15_a76a:
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $89e6, $7b ; HasJustLeftWater
        jsr $a773 ; KirbySwordSlash_GetHitbox
        jsr $9420 ; Kirby_DamageEnemyCollision
        jmp $805b ; KirbyFinalize
@@ -1025,7 +685,7 @@
        .byte $0A,$06,$04,$F8,$FF,$F8,$FF,$05
        .byte $05,$04,$08,$00,$F8,$FF,$05,$05
 
-    L_15A808:
+    KST71_SwordSpin:
         MOV         $05E1,#$0C                  ; 15A808/11E1050C
         ASMCALL     $DE4B                       ; 15A80C/D04BDE // Play sound effect
         .byte       $3B                         ; 15A80F/3B
@@ -1038,7 +698,7 @@
     L_15A81B:
             ENDLOOP                                 ; 15A81B/02
         ENDLOOP                                 ; 15A81C/02
-        A_JMP       L_15A00B                    ; 15A81D/170BA0
+        A_JMP       KST60_SwordLand                    ; 15A81D/170BA0
 
     B15_a820:
        jsr $8874 ; KirbyAccelY
@@ -1048,22 +708,10 @@
        jsr $873e ; $873e
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_a83f
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_a83f:
+       STATE_TRANSITION_IF $8bab, $60 ; $8bab
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a84c
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_a84c:
-       jsr $89e6 ; HasJustLeftWater
-       bcc B15_a856
-       ldx #$7b
-       jmp $8ce8 ; DoStateTransition
-    B15_a856:
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $89e6, $7b ; HasJustLeftWater
        jsr $a85f ; $a85f
        jsr $9420 ; Kirby_DamageEnemyCollision
        jmp $805b ; KirbyFinalize
@@ -1094,7 +742,7 @@
        .byte $05,$05,$04,$F8,$FF,$08,$00,$05
        .byte $05,$04,$00,$00,$0A,$00,$06,$04
 
-    L_15A8CC:
+    KST72_SwordHoverBegin:
         ASMCALL     $DE4B                       ; 15A8CC/D04BDE // Play sound effect
         .byte       $30                         ; 15A8CF/30
         ONTICK      B15_a8dc                     ; 15A8D0/08DCA815
@@ -1118,14 +766,10 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a901
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a901:
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
 
-    L_15A904:
+    KST73_SwordHoverRise:
         MOV         $05E1,#$0D                  ; 15A904/11E1050D
         ONTICK      B15_a918                    ; 15A908/0818A915
     L_15A90C:
@@ -1148,24 +792,12 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a93f
-       ldx #$76
-       jmp $8ce8 ; DoStateTransition
-    B15_a93f:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a949
-       ldx #$74
-       jmp $8ce8 ; DoStateTransition
-    B15_a949:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a953
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a953:
+       STATE_TRANSITION_IF $8af2, $76 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $74 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
 
-    L_15A956:
+    L_15A956: ; Sword hovering, not floating up
         MOV         $05E1,#$0D                  ; 15A956/11E1050D
         ONTICK      B15_a968                    ; 15A95A/0868A915
     L_15A95E:
@@ -1188,36 +820,20 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $894d ; IsHoldingUpOrA
-       bcc B15_a98f
-       ldx #$73
-       jmp $8ce8 ; DoStateTransition
-    B15_a98f:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_a999
-       ldx #$76
-       jmp $8ce8 ; DoStateTransition
-    B15_a999:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_a9a3
-       ldx #$74
-       jmp $8ce8 ; DoStateTransition
-    B15_a9a3:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_a9ad
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_a9ad:
+       STATE_TRANSITION_IF $894d, $73 ; IsHoldingUpOrA
+       STATE_TRANSITION_IF $8af2, $76 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $74 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
 
-    KirbyState74:
+    KST74_SwordHoverUnderwater:
         MOV         $05E1,#$0D                  ; 15A9B0/11E1050D
         ASMCALL     $988D                       ; 15A9B4/D08D98 // Set Kirby's underwater flag
         ONTICK      B15_a9c4                    ; 15A9B7/08C4A915
         SETPOSE     #$7C                        ; 15A9BB/507C
         HALT                                    ; 15A9BD/09
 
-    KirbyState75:
+    KST75_SwordHoverWaterSurface:
         ASMCALL     $9893                       ; 15A9BE/D09398 // Clear Kirby's underwater flag
         A_JMP       L_15A956                    ; 15A9C1/1756A9
 
@@ -1232,24 +848,12 @@
         jsr $9021 ; MAYBE_KirbyWallCollision
         jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
         jsr $904a ; TODO_OtherKirbyMapCollision
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_a9eb
-        ldx #$76
-        jmp $8ce8 ; DoStateTransition
-    B15_a9eb:
-        jsr $89e6 ; HasJustLeftWater
-        bcc B15_a9f5
-        ldx #$75
-        jmp $8ce8 ; DoStateTransition
-    B15_a9f5:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_a9ff
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_a9ff:
+        STATE_TRANSITION_IF $8af2, $76 ; HasJustPressedB
+        STATE_TRANSITION_IF $89e6, $75 ; HasJustLeftWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
         jmp $805b ; KirbyFinalize
 
-    L_15AA02:
+    KST76_SwordHoverSpit:
         MOV         $05E1,#$0A                  ; 15AA02/11E1050A
         ONTICK      B15_aa25                    ; 15AA06/0825AA15
         ASMCALL     $99EA                       ; 15AA0A/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -1269,8 +873,8 @@
         DEC2POSE    WAIT #4                     ; 15AA1B/A4
     L_15AA1C:
         ASMCALL     $9D72                       ; 15AA1C/D0729D // Is holding Up outside water
-        JNE         L_15A8CC                    ; 15AA1F/0BCCA8
-        A_JMP       L_15A00B                    ; 15AA22/170BA0
+        JNE         KST72_SwordHoverBegin                    ; 15AA1F/0BCCA8
+        A_JMP       KST60_SwordLand                    ; 15AA22/170BA0
 
     B15_aa25:
        ldy #$01
@@ -1283,23 +887,19 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_aa4c
-       ldx #$77
-       jmp $8ce8 ; DoStateTransition
-    B15_aa4c:
+       STATE_TRANSITION_IF $89d9, $77 ; HasJustEnteredWater
        jmp $805b ; KirbyFinalize
 
-    L_15AA4F:
+    KST77_SwordWaterEnter:
         ASMCALL     $9883                       ; 15AA4F/D08398 // Set swimming flag??
         ASMCALL     $9952                       ; 15AA52/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
         .byte       $00                         ; 15AA55/00
         .byte       $F8                         ; 15AA56/F8
         .byte       $04                         ; 15AA57/04
         .byte       $00                         ; 15AA58/00
-        A_JMP       L_15A00B                    ; 15AA59/170BA0
+        A_JMP       KST60_SwordLand                    ; 15AA59/170BA0
 
-    L_15AA5C:
+    KST78_SwordWaterIdle: ; Maybe sword water walk
         MOV         $05E1,#$00                  ; 15AA5C/11E10500
         MOV         $05E4,#$FF                  ; 15AA60/11E405FF
         ONTICK      B15_aa6c                    ; 15AA64/086CAA15
@@ -1311,39 +911,15 @@
         jsr $8fcc ; SetKirbyPoseDirection
         jsr $95cd ; SetKirbyPosition
         jsr $9021 ; MAYBE_KirbyWallCollision
-        jsr $8b4e ; MAYBE_KirbyGroundCollision
-        bcc B15_aa82
-        ldx #$7a
-        jmp $8ce8 ; DoStateTransition
-    B15_aa82:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_aa8c
-        ldx #$70
-        jmp $8ce8 ; DoStateTransition
-    B15_aa8c:
-        jsr $89f7 ; $89f7
-        bcc B15_aa96
-        ldx #$7a
-        jmp $8ce8 ; DoStateTransition
-    B15_aa96:
-        jsr $8b1a ; KirbyCheckDPadHorizontal
-        bcc B15_aaa0
-        ldx #$79
-        jmp $8ce8 ; DoStateTransition
-    B15_aaa0:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_aaaa
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_aaaa:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_aab4
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_aab4:
+        STATE_TRANSITION_IF $8b4e, $7a ; MAYBE_KirbyGroundCollision
+        STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
+        STATE_TRANSITION_IF $89f7, $7a ; $89f7
+        STATE_TRANSITION_IF $8b1a, $79 ; KirbyCheckDPadHorizontal
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jmp $805b ; KirbyFinalize
 
-    L_15AAB7:
+    KST79_SwordWaterWalk:
         MOV         $05E1,#$01                  ; 15AAB7/11E10501
         MOV         $05E4,#$FF                  ; 15AABB/11E405FF
         ONTICK      B15_aaf7                    ; 15AABF/08F7AA15
@@ -1399,54 +975,18 @@
         and BANKSELECT,x ;??? that cant be right
         jsr $8597 ; $8597
         jsr $95cd ; SetKirbyPosition
-        jsr $8bfa ; $8bfa
-        bcc B15_ab1a
-        ldx #$78
-        jmp $8ce8 ; DoStateTransition
-    B15_ab1a:
-        jsr $8b4e ; MAYBE_KirbyGroundCollision
-        bcc B15_ab24
-        ldx #$7a
-        jmp $8ce8 ; DoStateTransition
-    B15_ab24:
-        jsr $8a6c ; IsKirbyVelXZero
-        bcc B15_ab2e
-        ldx #$78
-        jmp $8ce8 ; DoStateTransition
-    B15_ab2e:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_ab38
-        ldx #$70
-        jmp $8ce8 ; DoStateTransition
-    B15_ab38:
-        jsr $89f7 ; $89f7
-        bcc B15_ab42
-        ldx #$7a
-        jmp $8ce8 ; DoStateTransition
-    B15_ab42:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_ab4c
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_ab4c:
-        jsr $8a5d ; HasSlopeStateChanged
-        bcc B15_ab56
-        ldx #$79
-        jmp $8ce8 ; DoStateTransition
-    B15_ab56:
-        jsr $89e6 ; HasJustLeftWater
-        bcc B15_ab60
-        ldx #$7b
-        jmp $8ce8 ; DoStateTransition
-    B15_ab60:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_ab6a
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_ab6a:
+        STATE_TRANSITION_IF $8bfa, $78 ; $8bfa
+        STATE_TRANSITION_IF $8b4e, $7a ; MAYBE_KirbyGroundCollision
+        STATE_TRANSITION_IF $8a6c, $78 ; IsKirbyVelXZero
+        STATE_TRANSITION_IF $8af2, $70 ; HasJustPressedB
+        STATE_TRANSITION_IF $89f7, $7a ; $89f7
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8a5d, $79 ; HasSlopeStateChanged
+        STATE_TRANSITION_IF $89e6, $7b ; HasJustLeftWater
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jmp $805b ; KirbyFinalize
 
-    L_15AB6D:
+    KST7A_SwordWaterSwim:
         MOV         $05E1,#$05                  ; 15AB6D/11E10505
         MOV         $05E4,#$FF                  ; 15AB71/11E405FF
         ONTICK      B15_aba5                     ; 15AB75/08A5AB15
@@ -1497,67 +1037,43 @@
        jsr $874b ; $874b
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_abc4
-       ldx #$60
-       jmp $8ce8 ; DoStateTransition
-    B15_abc4:
+       STATE_TRANSITION_IF $8bab, $60 ; $8bab
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_abd1
-       ldx #$71
-       jmp $8ce8 ; DoStateTransition
-    B15_abd1:
-       jsr $8a06 ; $8a06
-       bcc B15_abdb
-       ldx #$7a
-       jmp $8ce8 ; DoStateTransition
-    B15_abdb:
-       jsr $89e6 ; HasJustLeftWater
-       bcc B15_abe5
-       ldx #$7b
-       jmp $8ce8 ; DoStateTransition
-    B15_abe5:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_abef
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_abef:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_abf9
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_abf9:
+       STATE_TRANSITION_IF $8af2, $71 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a06, $7a ; $8a06
+       STATE_TRANSITION_IF $89e6, $7b ; HasJustLeftWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
 
 
-    L_15ABFC:
+    KST7B_SwordWaterSurface:
         ASMCALL     $9893                       ; 15ABFC/D09398 // Clear Kirby's underwater flag
         ASMCALL     $9952                       ; 15ABFF/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
         .byte       $00                         ; 15AC02/00
         .byte       $F8                         ; 15AC03/F8
         .byte       $05                         ; 15AC04/05
         .byte       $00                         ; 15AC05/00
-        A_JMP       L_15A2E2                    ; 15AC06/17E2A2
+        A_JMP       KST67_SwordJump                    ; 15AC06/17E2A2
 
     L_15AC09:
         MOV         $05E0,#$05                  ; 15AC09/11E00505
         SPRITEMAP   $1B9320                     ; 15AC0D/1A20931B
         ASMCALL     $9CB3                       ; 15AC11/D0B39C // Load some palette? (Kirby's palette?)
-    L_15AC14:
+    KSTB3_ParasolUnknown: ; Probably base parasol
         ASMCALL     $9BF7                       ; 15AC14/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
         TABLEJMP    #8                          ; 15AC17/0F08
-        .word       L_15AC29                    ; 15AC19/29AC
-        .word       L_15ACC5                    ; 15AC1B/C5AC
-        .word       L_15AE01                    ; 15AC1D/01AE
-        .word       L_15AF91                    ; 15AC1F/91AF
-        .word       KirbyStateCC                ; 15AC21/FDB5
-        .word       KirbyStateCD                ; 15AC23/5BB6
-        .word       KirbyStateCE                ; 15AC25/14B7
+        .word       KSTB4_ParasolIdle                    ; 15AC19/29AC
+        .word       KSTB5_ParasolBeginWalk                    ; 15AC1B/C5AC
+        .word       KSTB8_ParasolDash                    ; 15AC1D/01AE
+        .word       KSTBC_ParasolFall                    ; 15AC1F/91AF
+        .word       KSTCC_ParasolWaterIdle                ; 15AC21/FDB5
+        .word       KSTCD_ParasolWaterWalk                ; 15AC23/5BB6
+        .word       KSTCE_ParasolWaterSwim                ; 15AC25/14B7
         .word       L_15B4EE                    ; 15AC27/EEB4
-    L_15AC29:
+    KSTB4_ParasolIdle:
         MOV         $05E1,#$00                  ; 15AC29/11E10500
-        ONTICK      $15AC43                     ; 15AC2D/0843AC15
+        ONTICK      B15_KirbyTick_ParasolIdle   ; 15AC2D/0843AC15
         ASMCALL     $8015                       ; 15AC31/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
         JEQ         L_15AC3F                    ; 15AC34/0A3FAC
         ASMCALL     $801F                       ; 15AC37/D01F80 // Maybe set sloped pose? (first = regular, second = slope)
@@ -1575,56 +1091,16 @@
        jsr $8fcc ; SetKirbyPoseDirection
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_ac59
-       ldx #$bc                         ;Parasol, falling
-       jmp $8ce8 ; DoStateTransition
-    B15_ac59:
-       jsr $8b1a ; KirbyCheckDPadHorizontal
-       bcc B15_ac63
-       ldx #$b5                         ;Parasol, walking
-       jmp $8ce8 ; DoStateTransition
-    B15_ac63:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_ac6d
-       ldx #$c4                         ;Parasol, climbing
-       jmp $8ce8 ; DoStateTransition
-    B15_ac6d:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_ac77
-       ldx #$c2                         ;Parasol, crouching
-       jmp $8ce8 ; DoStateTransition
-    B15_ac77:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_ac81
-       ldx #$ba                         ;Parasol, jumping
-       jmp $8ce8 ; DoStateTransition
-    B15_ac81:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_ac8b
-       ldx #$c5                         ;Parasol attack
-       jmp $8ce8 ; DoStateTransition
-    B15_ac8b:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_ac95
-       ldx #$00                         ;Entering door
-       jmp $8ce8 ; DoStateTransition
-    B15_ac95:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_ac9f
-       ldx #$c6                         ;Parasol, begin flying
-       jmp $8ce8 ; DoStateTransition
-    B15_ac9f:
-       jsr $8a5d ; HasSlopeStateChanged
-       bcc B15_aca9
-       ldx #$b4                         ;Parasol, idle
-       jmp $8ce8 ; DoStateTransition
-    B15_aca9:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_acb3
-       ldx #$01                         ;Discarding ability
-       jmp $8ce8 ; DoStateTransition
-    B15_acb3:
+       STATE_TRANSITION_IF $8b4e, $bc                         ;Parasol, falling ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8b1a, $b5                         ;Parasol, walking ; KirbyCheckDPadHorizontal
+       STATE_TRANSITION_IF $8c7d, $c4                         ;Parasol, climbing ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $c2                         ;Parasol, crouching ; IsHoldingDown
+       STATE_TRANSITION_IF $8ae8, $ba                         ;Parasol, jumping ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $c5                         ;Parasol attack ; HasJustPressedB
+       STATE_TRANSITION_IF $8a15, $00                         ;Entering door ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $c6                         ;Parasol, begin flying ; IsHoldingUp
+       STATE_TRANSITION_IF $8a5d, $b4                         ;Parasol, idle ; HasSlopeStateChanged
+       STATE_TRANSITION_IF $8957, $01                         ;Discarding ability ; TryDiscardCopyAbility
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
@@ -1637,12 +1113,12 @@
        pla
        rts
 
-    L_15ACC5:
+    KSTB5_ParasolBeginWalk:
         MOV         REG,$05F8                   ; 15ACC5/1CF805
-        JEQ         L_15ACCF                    ; 15ACC8/0ACFAC
+        JEQ         KSTB6_ParasolWalk                    ; 15ACC8/0ACFAC
         ASMCALL     $DE4B                       ; 15ACCB/D04BDE // Play sound effect
         .byte       $31                         ; 15ACCE/31
-    L_15ACCF:
+    KSTB6_ParasolWalk:
         MOV         $05E1,#$01                  ; 15ACCF/11E10501
         MOV         $05BF,#$00                  ; 15ACD3/11BF0500
         ONTICK      B15_ad68                    ; 15ACD7/0868AD15
@@ -1755,75 +1231,23 @@
     B15_ad68:
         jsr $8765 ; $8765
         jsr $95cd ; SetKirbyPosition
-        jsr $8bfa ; $8bfa
-        bcc B15_ad78
-        ldx #$b4
-        jmp $8ce8 ; DoStateTransition
-    B15_ad78:
-        jsr $8b4e ; MAYBE_KirbyGroundCollision
-        bcc B15_ad82
-        ldx #$bc
-        jmp $8ce8 ; DoStateTransition
-    B15_ad82:
-        jsr $8a6c ; IsKirbyVelXZero
-        bcc B15_ad8c
-        ldx #$b4
-        jmp $8ce8 ; DoStateTransition
-    B15_ad8c:
-        jsr $8a78 ; $8a78
-        bcc B15_ad96
-        ldx #$b9
-        jmp $8ce8 ; DoStateTransition
-    B15_ad96:
-        jsr $8a86 ; $8a86
-        bcc B15_ada0
-        ldx #$b7
-        jmp $8ce8 ; DoStateTransition
-    B15_ada0:
-        jsr $8c7d ; WillGrabOntoLadder
-        bcc B15_adaa
-        ldx #$c4
-        jmp $8ce8 ; DoStateTransition
-    B15_adaa:
-        jsr $8b10 ; IsHoldingDown
-        bcc B15_adb4
-        ldx #$c2
-        jmp $8ce8 ; DoStateTransition
-    B15_adb4:
-        jsr $8ae8 ; HasJustPressedA
-        bcc B15_adbe
-        ldx #$ba
-        jmp $8ce8 ; DoStateTransition
-    B15_adbe:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_adc8
-        ldx #$c5
-        jmp $8ce8 ; DoStateTransition
-    B15_adc8:
-        jsr $8a5d ; HasSlopeStateChanged
-        bcc B15_add2
-        ldx #$b6
-        jmp $8ce8 ; DoStateTransition
-    B15_add2:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_addc
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_addc:
-        jsr $8b06 ; IsHoldingUp
-        bcc B15_ade6
-        ldx #$c6
-        jmp $8ce8 ; DoStateTransition
-    B15_ade6:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_adf0
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_adf0:
+        STATE_TRANSITION_IF $8bfa, $b4 ; $8bfa
+        STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
+        STATE_TRANSITION_IF $8a6c, $b4 ; IsKirbyVelXZero
+        STATE_TRANSITION_IF $8a78, $b9 ; $8a78
+        STATE_TRANSITION_IF $8a86, $b7 ; $8a86
+        STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+        STATE_TRANSITION_IF $8b10, $c2 ; IsHoldingDown
+        STATE_TRANSITION_IF $8ae8, $ba ; HasJustPressedA
+        STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+        STATE_TRANSITION_IF $8a5d, $b6 ; HasSlopeStateChanged
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    L_15ADF6:
+    KSTB7_ParasolBeginDash:
         ASMCALL     $DE4B                       ; 15ADF6/D04BDE // Play sound effect
         .byte       $37                         ; 15ADF9/37
         ASMCALL     $9952                       ; 15ADFA/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -1831,7 +1255,7 @@
         .byte       $00                         ; 15ADFE/00
         .byte       $01                         ; 15ADFF/01
         .byte       $00                         ; 15AE00/00
-    L_15AE01:
+    KSTB8_ParasolDash:
         MOV         $05E1,#$02                  ; 15AE01/11E10502
         ONTICK      B15_ae1d                    ; 15AE05/081DAE15
         ASMCALL     $8015                       ; 15AE09/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -1847,70 +1271,22 @@
     B15_ae1d:
        jsr $8781 ; $8781
        jsr $95cd ; SetKirbyPosition
-       jsr $8bfa ; $8bfa
-       bcc B15_ae2d
-       ldx #$b4
-       jmp $8ce8 ; DoStateTransition
-    B15_ae2d:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_ae37
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_ae37:
-       jsr $8a78 ; $8a78
-       bcc B15_ae41
-       ldx #$b9
-       jmp $8ce8 ; DoStateTransition
-    B15_ae41:
-       jsr $8a4a ; $8a4a
-       bcc B15_ae4b
-       ldx #$b5
-       jmp $8ce8 ; DoStateTransition
-    B15_ae4b:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_ae55
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_ae55:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_ae5f
-       ldx #$c2
-       jmp $8ce8 ; DoStateTransition
-    B15_ae5f:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_ae69
-       ldx #$ba
-       jmp $8ce8 ; DoStateTransition
-    B15_ae69:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_ae73
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_ae73:
-       jsr $8a5d ; HasSlopeStateChanged
-       bcc B15_ae7d
-       ldx #$b8
-       jmp $8ce8 ; DoStateTransition
-    B15_ae7d:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_ae87
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_ae87:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_ae91
-       ldx #$c6
-       jmp $8ce8 ; DoStateTransition
-    B15_ae91:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_ae9b
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_ae9b:
+       STATE_TRANSITION_IF $8bfa, $b4 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a78, $b9 ; $8a78
+       STATE_TRANSITION_IF $8a4a, $b5 ; $8a4a
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $c2 ; IsHoldingDown
+       STATE_TRANSITION_IF $8ae8, $ba ; HasJustPressedA
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a5d, $b8 ; HasSlopeStateChanged
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
-    L_15AEA1:
+    KSTB9_ParasolSkid:
         MOV         $05E1,#$03                  ; 15AEA1/11E10503
         ASMCALL     $DE4B                       ; 15AEA5/D04BDE // Play sound effect
         .byte       $31                         ; 15AEA8/31
@@ -1927,49 +1303,17 @@
     B15_aeb9:
        jsr $879d ; $879d
        jsr $95cd ; SetKirbyPosition
-       jsr $8bfa ; $8bfa
-       bcc B15_aec9
-       ldx #$b4
-       jmp $8ce8 ; DoStateTransition
-    B15_aec9:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_aed3
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_aed3:
-       jsr $8a6c ; IsKirbyVelXZero
-       bcc B15_aedd
-       ldx #$b4
-       jmp $8ce8 ; DoStateTransition
-    B15_aedd:
-       jsr $8ae8 ; HasJustPressedA
-       bcc B15_aee7
-       ldx #$ba
-       jmp $8ce8 ; DoStateTransition
-    B15_aee7:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_aef1
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_aef1:
-       jsr $8b10 ; IsHoldingDown
-       bcc B15_aefb
-       ldx #$c2
-       jmp $8ce8 ; DoStateTransition
-    B15_aefb:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_af05
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_af05:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_af0f
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_af0f:
+       STATE_TRANSITION_IF $8bfa, $b4 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a6c, $b4 ; IsKirbyVelXZero
+       STATE_TRANSITION_IF $8ae8, $ba ; HasJustPressedA
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8b10, $c2 ; IsHoldingDown
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jmp $805b ; KirbyFinalize
 
-    L_15AF12:
+    KSTBA_ParasolJump:
         MOV         $05E1,#$04                  ; 15AF12/11E10504
         ONTICK      B15_af38                    ; 15AF16/0838AF15
         ASMCALL     $885C                       ; 15AF1A/D05C88 // Set Kirby's Y velocity
@@ -1978,20 +1322,18 @@
         .byte       $04                         ; 15AF22/04
         SETPOSE     #$2E                        ; 15AF23/502E
         WAIT        #23                         ; 15AF25/0617
-    L_15AF27:
+    KSTBB_ParasolJumpPeak:
         ASMCALL     $885C                       ; 15AF27/D05C88 // Set Kirby's Y velocity
         .word       $FF50                       ; 15AF2A/50FF
         ONTICK      B15_af42                    ; 15AF2C/0842AF15
         WAIT        #5                          ; 15AF30/0605
     L_15AF32:
         ASMCALL     $884D                       ; 15AF32/D04D88 // Zero Kirby's Y velocity
-        A_JMP       L_15AF91                    ; 15AF35/1791AF
+        A_JMP       KSTBC_ParasolFall                    ; 15AF35/1791AF
 
     B15_af38:
-       jsr $8a40 ; $8a40
-       bcc B15_af42
-       ldx #$bb
-       jmp $8ce8 ; DoStateTransition
+       STATE_TRANSITION_IF $8a40, $bb ; $8a40
+
     B15_af42:
        ldy #$00
        jsr $87ba ; MAYBE_KirbyGravity
@@ -2001,35 +1343,15 @@
        jsr $873e ; $873e
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_af63
-       ldx #$b3
-       jmp $8ce8 ; DoStateTransition
-    B15_af63:
-       jsr $8bd3 ; $8bd3
-       bcc B15_af6d
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_af6d:
-       jsr $8c61 ; $8c61
-       bcc B15_af77
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_af77:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_af81
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_af81:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_af8b
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_af8b:
+       STATE_TRANSITION_IF $8bab, $b3 ; $8bab
+       STATE_TRANSITION_IF $8bd3, $bc ; $8bd3
+       STATE_TRANSITION_IF $8c61, $bc ; $8c61
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
-    L_15AF91:
+    KSTBC_ParasolFall:
         MOV         $05E1,#$05                  ; 15AF91/11E10505
         ONTICK      B15_afaa                    ; 15AF95/08AAAF15
         ASMCALL     $8015                       ; 15AF99/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -2051,56 +1373,16 @@
        jsr $873e ; $873e
        jsr $95cd ; SetKirbyPosition
        jsr $9034 ; $9034
-       jsr $8bab ; $8bab
-       bcc B15_afcb
-       ldx #$b3
-       jmp $8ce8 ; DoStateTransition
-    B15_afcb:
-       jsr $8bd3 ; $8bd3
-       bcc B15_afd5
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_afd5:
-       jsr $88d5 ; $88d5
-       bcc B15_afdf
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_afdf:
-       jsr $b02b ; $b02b
-       bcc B15_afe9
-       ldx #$bd
-       jmp $8ce8 ; DoStateTransition
-    B15_afe9:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_aff3
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_aff3:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_affd
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_affd:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b007
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b007:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_b011
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_b011:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_b01b
-       ldx #$c6
-       jmp $8ce8 ; DoStateTransition
-    B15_b01b:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_b025
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_b025:
+       STATE_TRANSITION_IF $8bab, $b3 ; $8bab
+       STATE_TRANSITION_IF $8bd3, $bc ; $8bd3
+       STATE_TRANSITION_IF $88d5, $bc ; $88d5
+       STATE_TRANSITION_IF $b02b, $bd ; $b02b
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
     B15_b02b:
@@ -2122,7 +1404,7 @@
        bcc B15_b033
        rts
 
-    L_15B045:
+    KSTBD_ParasolGlide:
         MOV         $05E1,#$05                  ; 15B045/11E10505
     L_15B04A := * + 2 ; TABLECALL here at 25AA5D. Coincidentally an END
         MOV         VAR0,#$00                   ; 15B049/0D0000
@@ -2154,46 +1436,14 @@
        jsr $b0d9 ; $b0d9
        jsr $95d3 ; $95d3
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_b08d
-       ldx #$b3
-       jmp $8ce8 ; DoStateTransition
-    B15_b08d:
-       jsr $b119 ; $b119
-       bcc B15_b097
-       ldx #$be
-       jmp $8ce8 ; DoStateTransition
-    B15_b097:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_b0a1
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_b0a1:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_b0ab
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_b0ab:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b0b5
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b0b5:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_b0bf
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_b0bf:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_b0c9
-       ldx #$c6
-       jmp $8ce8 ; DoStateTransition
-    B15_b0c9:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_b0d3
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_b0d3:
+       STATE_TRANSITION_IF $8bab, $b3 ; $8bab
+       STATE_TRANSITION_IF $b119, $be ; $b119
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
@@ -2236,7 +1486,7 @@
        sec
        rts
 
-    L_15B123:
+    KSTBE_ParasolGlideCancel:
         MOV         $05E1,#$05                  ; 15B123/11E10505
         ASMCALL     $9EE1                       ; 15B127/D0E19E // Clear "landed head-first on enemy" flag
         ONTICK      B15_b131                    ; 15B12A/0831B115
@@ -2254,53 +1504,21 @@
        jsr $b1a1 ; $b1a1
        jsr $940e ; $940e
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_b158
-       ldx #$c0
-       jmp $8ce8 ; DoStateTransition
-    B15_b158:
-       jsr $88ca ; HasLandedHeadFirstOnEnemy
-       bcc B15_b162
-       ldx #$bf
-       jmp $8ce8 ; DoStateTransition
-    B15_b162:
-       jsr $8c7d ; WillGrabOntoLadder
-       bcc B15_b16c
-       ldx #$c4
-       jmp $8ce8 ; DoStateTransition
-    B15_b16c:
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_b176
-       ldx #$c5
-       jmp $8ce8 ; DoStateTransition
-    B15_b176:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b180
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b180:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_b18a
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_b18a:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_b194
-       ldx #$c6
-       jmp $8ce8 ; DoStateTransition
-    B15_b194:
-       jsr $8957 ; TryDiscardCopyAbility
-       bcc B15_b19e
-       ldx #$01
-       jmp $8ce8 ; DoStateTransition
-    B15_b19e:
+       STATE_TRANSITION_IF $8bab, $c0 ; $8bab
+       STATE_TRANSITION_IF $88ca, $bf ; HasLandedHeadFirstOnEnemy
+       STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+       STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+       STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+       STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
        jmp $805b ; KirbyFinalize
     B15_b1a1:
        jsr $b7be ; $b7be
        ldx #$02
        jmp $9c72 ; GetKirbyHitbox
 
-    L_15B1A9:
+    KSTBF_ParasolLandHeadEnemy:
         ASMCALL     $885C                       ; 15B1A9/D05C88 // Set Kirby's Y velocity
         .word       $FD40                       ; 15B1AC/40FD
         ONTICK      B15_b1b5                    ; 15B1AE/08B5B115
@@ -2316,55 +1534,19 @@
         jsr $873e ; $873e
         jsr $95cd ; SetKirbyPosition
         jsr $9034 ; $9034
-        jsr $8bab ; $8bab
-        bcc B15_b1d6
-        ldx #$b3
-        jmp $8ce8 ; DoStateTransition
-    B15_b1d6:
-        jsr $8bd3 ; $8bd3
-        bcc B15_b1e0
-        ldx #$bc
-        jmp $8ce8 ; DoStateTransition
-    B15_b1e0:
-        jsr $88c1 ; IsKirbyNotFalling
-        bcc B15_b1ea
-        ldx #$bc
-        jmp $8ce8 ; DoStateTransition
-    B15_b1ea:
-        jsr $8c7d ; WillGrabOntoLadder
-        bcc B15_b1f4
-        ldx #$c4
-        jmp $8ce8 ; DoStateTransition
-    B15_b1f4:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b1fe
-        ldx #$c5
-        jmp $8ce8 ; DoStateTransition
-    B15_b1fe:
-        jsr $89d9 ; HasJustEnteredWater
-        bcc B15_b208
-        ldx #$cb
-        jmp $8ce8 ; DoStateTransition
-    B15_b208:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b212
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b212:
-        jsr $8b06 ; IsHoldingUp
-        bcc B15_b21c
-        ldx #$c6
-        jmp $8ce8 ; DoStateTransition
-    B15_b21c:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_b226
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_b226:
+        STATE_TRANSITION_IF $8bab, $b3 ; $8bab
+        STATE_TRANSITION_IF $8bd3, $bc ; $8bd3
+        STATE_TRANSITION_IF $88c1, $bc ; IsKirbyNotFalling
+        STATE_TRANSITION_IF $8c7d, $c4 ; WillGrabOntoLadder
+        STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+        STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    L_15B22C:
+    KSTC0_ParasolLandHead:
         MOV         $05E1,#$05                  ; 15B22C/11E10505
         MOV         $05E4,#$FF                  ; 15B230/11E405FF
         ONTICK      B15_b24d                    ; 15B234/084DB215
@@ -2386,31 +1568,19 @@
        jsr $87ba ; MAYBE_KirbyGravity
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8bab ; $8bab
-       bcc B15_b262
-       ldx #$b3
-       jmp $8ce8 ; DoStateTransition
-    B15_b262:
-       jsr $8b06 ; IsHoldingUp
-       bcc B15_b26c
-       ldx #$c6
-       jmp $8ce8 ; DoStateTransition
-    B15_b26c:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b276
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b276:
+       STATE_TRANSITION_IF $8bab, $b3 ; $8bab
+       STATE_TRANSITION_IF $8b06, $c6 ; IsHoldingUp
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
        jmp $805b ; KirbyFinalize
 
-    L_15B279:
+    KSTC1_ParasolDropThrough:
         MOV         $05E1,#$05                  ; 15B279/11E10505
         ONTICK      B15_b28a                    ; 15B27D/088AB215
         ASMCALL     $8FDC                       ; 15B281/D0DC8F // Set pose (respect facing)
         .byte       $30                         ; 15B284/30
         WAIT        #16                         ; 15B285/0610
     L_15B287:
-        A_JMP       L_15AC14                    ; 15B287/1714AC
+        A_JMP       KSTB3_ParasolUnknown                    ; 15B287/1714AC
 
     B15_b28a:
         ldy #$00
@@ -2420,7 +1590,7 @@
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    L_15B29B:
+    KSTC2_ParasolCrouch:
         MOV         $05E1,#$06                  ; 15B29B/11E10506
         ASMCALL     $DE4B                       ; 15B29F/D04BDE // Play sound effect
         .byte       $0D                         ; 15B2A2/0D
@@ -2434,26 +1604,10 @@
        jsr $8597 ; $8597
        jsr $95cd ; SetKirbyPosition
        jsr $9021 ; MAYBE_KirbyWallCollision
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_b2c3
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_b2c3:
-       jsr $8ade ; IsPressingAB
-       bcc B15_b2cd
-       ldx #$c3
-       jmp $8ce8 ; DoStateTransition
-    B15_b2cd:
-       jsr $8980 ; $8980
-       bcc B15_b2d7
-       ldx #$c1
-       jmp $8ce8 ; DoStateTransition
-    B15_b2d7:
-       jsr $8a36 ; IsNotHoldingDown
-       bcc B15_b2e1
-       ldx #$b3
-       jmp $8ce8 ; DoStateTransition
-    B15_b2e1:
+       STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8ade, $c3 ; IsPressingAB
+       STATE_TRANSITION_IF $8980, $c1 ; $8980
+       STATE_TRANSITION_IF $8a36, $b3 ; IsNotHoldingDown
        jsr $b2ea ; $b2ea
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
@@ -2463,7 +1617,7 @@
        adc #$3a
        jmp $8fe6 ; SetPoseWithFacing
 
-    L_15B2F3:
+    KSTC3_ParasolSlideAttack:
         MOV         $05E1,#$07                  ; 15B2F3/11E10507
         ASMCALL     $DE4B                       ; 15B2F7/D04BDE // Play sound effect
         .byte       $38                         ; 15B2FA/38
@@ -2489,21 +1643,9 @@
        jsr $95cd ; SetKirbyPosition
        jsr $b346 ; $b346
        jsr $9420 ; Kirby_DamageEnemyCollision
-       jsr $8bfa ; $8bfa
-       bcc B15_b32f
-       ldx #$b4
-       jmp $8ce8 ; DoStateTransition
-    B15_b32f:
-       jsr $8b4e ; MAYBE_KirbyGroundCollision
-       bcc B15_b339
-       ldx #$bc
-       jmp $8ce8 ; DoStateTransition
-    B15_b339:
-       jsr $8a23 ; IsDoneSliding
-       bcc B15_b343
-       ldx #$b4
-       jmp $8ce8 ; DoStateTransition
-    B15_b343:
+       STATE_TRANSITION_IF $8bfa, $b4 ; $8bfa
+       STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
+       STATE_TRANSITION_IF $8a23, $b4 ; IsDoneSliding
        jmp $805b ; KirbyFinalize
     
     B15_b346:
@@ -2511,7 +1653,7 @@
        ldx #$02
        jmp $9c72 ; GetKirbyHitbox
 
-    L_15B34E:
+    KSTC4_ParasolLadder:
         MOV         $05E1,#$08                  ; 15B34E/11E10508
         ONTICK      B15_b362                    ; 15B352/0862B315
         ASMCALL     $86FB                       ; 15B356/D0FB86 // Zero Kirby's X velocity
@@ -2617,7 +1759,7 @@
     B15_b41d:
         .byte $00,$00
 
-    L_15B41F:
+    KSTC5_ParasolAttack:
         MOV         $05E1,#$0C                  ; 15B41F/11E1050C
         ONTICK      B15_b436                    ; 15B423/0836B415
         ASMCALL     $DE4B                       ; 15B427/D04BDE // Play sound effect
@@ -2633,20 +1775,12 @@
     L_15B432:
         INC2POSE    WAIT #3                     ; 15B432/93
     L_15B433:
-        A_JMP       L_15AC14                    ; 15B433/1714AC
+        A_JMP       KSTB3_ParasolUnknown                    ; 15B433/1714AC
 
     B15_b436:
        jsr $8049 ; KirbyPhysics
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b443
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b443:
-       jsr $89e6 ; HasJustLeftWater
-       bcc B15_b44d
-       ldx #$cf
-       jmp $8ce8 ; DoStateTransition
-    B15_b44d:
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
+       STATE_TRANSITION_IF $89e6, $cf ; HasJustLeftWater
        jsr $b456 ; $b456
        jsr $9420 ; Kirby_DamageEnemyCollision
        jmp $805b ; KirbyFinalize
@@ -2655,7 +1789,7 @@
        ldx #$06
        jmp $9c72 ; GetKirbyHitbox
 
-    L_15B45E:
+    KSTC6_ParasolHoverBegin:
         ASMCALL     $DE4B                       ; 15B45E/D04BDE // Play sound effect
         .byte       $30                         ; 15B461/30
         ONTICK      B15_b46e                    ; 15B462/086EB415
@@ -2679,15 +1813,11 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_b493
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_b493:
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
-    L_15B499:
+    KSTC7_ParasolHoverRise:
         MOV         $05E1,#$0D                  ; 15B499/11E1050D
         ONTICK      B15_b4ad                    ; 15B49D/08ADB415
     L_15B4A1:
@@ -2710,21 +1840,9 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $8af2 ; HasJustPressedB
-       bcc B15_b4d4
-       ldx #$ca
-       jmp $8ce8 ; DoStateTransition
-    B15_b4d4:
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b4de
-       ldx #$c8
-       jmp $8ce8 ; DoStateTransition
-    B15_b4de:
-       jsr $8a15 ; WillEnterDoor
-       bcc B15_b4e8
-       ldx #$00
-       jmp $8ce8 ; DoStateTransition
-    B15_b4e8:
+       STATE_TRANSITION_IF $8af2, $ca ; HasJustPressedB
+       STATE_TRANSITION_IF $89d9, $c8 ; HasJustEnteredWater
+       STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
@@ -2751,37 +1869,21 @@
         jsr $9021 ; MAYBE_KirbyWallCollision
         jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
         jsr $904a ; TODO_OtherKirbyMapCollision
-        jsr $894d ; IsHoldingUpOrA
-        bcc B15_b527
-        ldx #$c7
-        jmp $8ce8 ; DoStateTransition
-    B15_b527:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b531
-        ldx #$ca
-        jmp $8ce8 ; DoStateTransition
-    B15_b531:
-        jsr $89d9 ; HasJustEnteredWater
-        bcc B15_b53b
-        ldx #$c8
-        jmp $8ce8 ; DoStateTransition
-    B15_b53b:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b545
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b545:
+        STATE_TRANSITION_IF $894d, $c7 ; IsHoldingUpOrA
+        STATE_TRANSITION_IF $8af2, $ca ; HasJustPressedB
+        STATE_TRANSITION_IF $89d9, $c8 ; HasJustEnteredWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    KirbyStateC8:
+    KSTC8_ParasolHoverUnderwater:
         MOV         $05E1,#$0D                  ; 15B54B/11E1050D
         ASMCALL     $988D                       ; 15B54F/D08D98 // Set Kirby's underwater flag
         ONTICK      B15_b55f                    ; 15B552/085FB515
         SETPOSE     #$6C                        ; 15B556/506C
         HALT                                    ; 15B558/09
 
-    KirbyStateC9:
+    KSTC9_ParasolHoverWaterSurface:
         ASMCALL     $9893                       ; 15B559/D09398 // Clear Kirby's underwater flag
         A_JMP       L_15B4EE                    ; 15B55C/17EEB4
 
@@ -2796,25 +1898,13 @@
         jsr $9021 ; MAYBE_KirbyWallCollision
         jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
         jsr $904a ; TODO_OtherKirbyMapCollision
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b586
-        ldx #$ca
-        jmp $8ce8 ; DoStateTransition
-    B15_b586:
-        jsr $89e6 ; HasJustLeftWater
-        bcc B15_b590
-        ldx #$c9
-        jmp $8ce8 ; DoStateTransition
-    B15_b590:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b59a
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b59a:
+        STATE_TRANSITION_IF $8af2, $ca ; HasJustPressedB
+        STATE_TRANSITION_IF $89e6, $c9 ; HasJustLeftWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    L_15B5A0:
+    KSTCA_ParasolHoverSpit:
         MOV         $05E1,#$0A                  ; 15B5A0/11E1050A
         ONTICK      B15_b5c3                    ; 15B5A4/08C3B515
         ASMCALL     $99EA                       ; 15B5A8/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -2834,8 +1924,8 @@
         DEC2POSE    WAIT #4                     ; 15B5B9/A4
     L_15B5BA:
         ASMCALL     $9D72                       ; 15B5BA/D0729D // Is holding Up outside water
-        JNE         L_15B45E                    ; 15B5BD/0B5EB4
-        A_JMP       L_15AC14                    ; 15B5C0/1714AC
+        JNE         KSTC6_ParasolHoverBegin                    ; 15B5BD/0B5EB4
+        A_JMP       KSTB3_ParasolUnknown                    ; 15B5C0/1714AC
 
     B15_b5c3:
        ldy #$01
@@ -2848,24 +1938,20 @@
        jsr $9021 ; MAYBE_KirbyWallCollision
        jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
        jsr $904a ; TODO_OtherKirbyMapCollision
-       jsr $89d9 ; HasJustEnteredWater
-       bcc B15_b5ea
-       ldx #$cb
-       jmp $8ce8 ; DoStateTransition
-    B15_b5ea:
+       STATE_TRANSITION_IF $89d9, $cb ; HasJustEnteredWater
        jsr $b7b3 ; $b7b3
        jmp $805b ; KirbyFinalize
 
-    KirbyStateCB:
+    KSTCB_ParasolWaterEnter:
         ASMCALL     $9883                       ; 15B5F0/D08398 // Set swimming flag??
         ASMCALL     $9952                       ; 15B5F3/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
         .byte       $00                         ; 15B5F6/00
         .byte       $F8                         ; 15B5F7/F8
         .byte       $04                         ; 15B5F8/04
         .byte       $00                         ; 15B5F9/00
-        A_JMP       L_15AC14                    ; 15B5FA/1714AC
+        A_JMP       KSTB3_ParasolUnknown                    ; 15B5FA/1714AC
 
-    KirbyStateCC:
+    KSTCC_ParasolWaterIdle:
         MOV         $05E1,#$00                  ; 15B5FD/11E10500
         MOV         $05E4,#$FF                  ; 15B601/11E405FF
         ONTICK      B15_b60d                    ; 15B605/080DB615
@@ -2877,40 +1963,16 @@
         jsr $8fcc ; SetKirbyPoseDirection
         jsr $95cd ; SetKirbyPosition
         jsr $9021 ; MAYBE_KirbyWallCollision
-        jsr $8b4e ; MAYBE_KirbyGroundCollision
-        bcc B15_b623
-        ldx #$ce
-        jmp $8ce8 ; DoStateTransition
-    B15_b623:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b62d
-        ldx #$c5
-        jmp $8ce8 ; DoStateTransition
-    B15_b62d:
-        jsr $89f7 ; $89f7
-        bcc B15_b637
-        ldx #$ce
-        jmp $8ce8 ; DoStateTransition
-    B15_b637:
-        jsr $8b1a ; KirbyCheckDPadHorizontal
-        bcc B15_b641
-        ldx #$cd
-        jmp $8ce8 ; DoStateTransition
-    B15_b641:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b64b
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b64b:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_b655
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_b655:
+        STATE_TRANSITION_IF $8b4e, $ce ; MAYBE_KirbyGroundCollision
+        STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+        STATE_TRANSITION_IF $89f7, $ce ; $89f7
+        STATE_TRANSITION_IF $8b1a, $cd ; KirbyCheckDPadHorizontal
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    KirbyStateCD:
+    KSTCD_ParasolWaterWalk:
         MOV         $05E1,#$01                  ; 15B65B/11E10501
         MOV         $05E4,#$FF                  ; 15B65F/11E405FF
         ONTICK      B15_b69b                    ; 15B663/089BB615
@@ -2963,55 +2025,19 @@
         and BANKSELECT,x ; another one of these, whats with that
         jsr $8597 ; $8597
         jsr $95cd ; SetKirbyPosition
-        jsr $8bfa ; $8bfa
-        bcc B15_b6be
-        ldx #$cc
-        jmp $8ce8 ; DoStateTransition
-    B15_b6be:
-        jsr $8b4e ; MAYBE_KirbyGroundCollision
-        bcc B15_b6c8
-        ldx #$ce
-        jmp $8ce8 ; DoStateTransition
-    B15_b6c8:
-        jsr $8a6c ; IsKirbyVelXZero
-        bcc B15_b6d2
-        ldx #$cc
-        jmp $8ce8 ; DoStateTransition
-    B15_b6d2:
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b6dc
-        ldx #$c5
-        jmp $8ce8 ; DoStateTransition
-    B15_b6dc:
-        jsr $89f7 ; $89f7
-        bcc B15_b6e6
-        ldx #$ce
-        jmp $8ce8 ; DoStateTransition
-    B15_b6e6:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b6f0
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b6f0:
-        jsr $8a5d ; HasSlopeStateChanged
-        bcc B15_b6fa
-        ldx #$cd
-        jmp $8ce8 ; DoStateTransition
-    B15_b6fa:
-        jsr $89e6 ; HasJustLeftWater
-        bcc B15_b704
-        ldx #$cf
-        jmp $8ce8 ; DoStateTransition
-    B15_b704:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_b70e
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_b70e:
+        STATE_TRANSITION_IF $8bfa, $cc ; $8bfa
+        STATE_TRANSITION_IF $8b4e, $ce ; MAYBE_KirbyGroundCollision
+        STATE_TRANSITION_IF $8a6c, $cc ; IsKirbyVelXZero
+        STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+        STATE_TRANSITION_IF $89f7, $ce ; $89f7
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8a5d, $cd ; HasSlopeStateChanged
+        STATE_TRANSITION_IF $89e6, $cf ; HasJustLeftWater
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    KirbyStateCE:
+    KSTCE_ParasolWaterSwim:
         MOV         $05E1,#$05                  ; 15B714/11E10505
         MOV         $05E4,#$FF                  ; 15B718/11E405FF
         ONTICK      B15_b74c                    ; 15B71C/084CB715
@@ -3055,48 +2081,24 @@
         jsr $874b ; $874b
         jsr $95cd ; SetKirbyPosition
         jsr $9021 ; MAYBE_KirbyWallCollision
-        jsr $8bab ; $8bab
-        bcc B15_b76b
-        ldx #$b3
-        jmp $8ce8 ; DoStateTransition
-    B15_b76b:
+        STATE_TRANSITION_IF $8bab, $b3 ; $8bab
         jsr $904a ; TODO_OtherKirbyMapCollision
-        jsr $8af2 ; HasJustPressedB
-        bcc B15_b778
-        ldx #$c5
-        jmp $8ce8 ; DoStateTransition
-    B15_b778:
-        jsr $8a06 ; $8a06
-        bcc B15_b782
-        ldx #$ce
-        jmp $8ce8 ; DoStateTransition
-    B15_b782:
-        jsr $89e6 ; HasJustLeftWater
-        bcc B15_b78c
-        ldx #$cf
-        jmp $8ce8 ; DoStateTransition
-    B15_b78c:
-        jsr $8a15 ; WillEnterDoor
-        bcc B15_b796
-        ldx #$00
-        jmp $8ce8 ; DoStateTransition
-    B15_b796:
-        jsr $8957 ; TryDiscardCopyAbility
-        bcc B15_b7a0
-        ldx #$01
-        jmp $8ce8 ; DoStateTransition
-    B15_b7a0:
+        STATE_TRANSITION_IF $8af2, $c5 ; HasJustPressedB
+        STATE_TRANSITION_IF $8a06, $ce ; $8a06
+        STATE_TRANSITION_IF $89e6, $cf ; HasJustLeftWater
+        STATE_TRANSITION_IF $8a15, $00 ; WillEnterDoor
+        STATE_TRANSITION_IF $8957, $01 ; TryDiscardCopyAbility
         jsr $b7b3 ; $b7b3
         jmp $805b ; KirbyFinalize
 
-    KirbyStateCF:
+    KSTCF_ParasolWaterSurface:
         ASMCALL     $9893                       ; 15B7A6/D09398 // Clear Kirby's underwater flag
         ASMCALL     $9952                       ; 15B7A9/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
         .byte       $00                         ; 15B7AC/00
         .byte       $F8                         ; 15B7AD/F8
         .byte       $05                         ; 15B7AE/05
         .byte       $00                         ; 15B7AF/00
-        A_JMP       L_15AF12                    ; 15B7B0/1712AF
+        A_JMP       KSTBA_ParasolJump                    ; 15B7B0/1712AF
 
     B15_b7b3:
         jsr $b7be ; $b7be
