@@ -1060,7 +1060,7 @@
         MOV         $05E0,#$05                  ; 15AC09/11E00505
         SPRITEMAP   $1B9320                     ; 15AC0D/1A20931B
         ASMCALL     $9CB3                       ; 15AC11/D0B39C // Load some palette? (Kirby's palette?)
-    KSTB3_ParasolUnknown: ; Probably base parasol
+    KSTB3_ParasolLand: ; Probably base parasol
         ASMCALL     $9BF7                       ; 15AC14/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
         TABLEJMP    #8                          ; 15AC17/0F08
         .word       KSTB4_ParasolIdle                    ; 15AC19/29AC
@@ -1580,7 +1580,7 @@
         .byte       $30                         ; 15B284/30
         WAIT        #16                         ; 15B285/0610
     L_15B287:
-        A_JMP       KSTB3_ParasolUnknown                    ; 15B287/1714AC
+        A_JMP       KSTB3_ParasolLand                    ; 15B287/1714AC
 
     B15_b28a:
         ldy #$00
@@ -1641,7 +1641,7 @@
        lda #$00
        jsr $8597 ; $8597
        jsr $95cd ; SetKirbyPosition
-       jsr $b346 ; $b346
+       jsr B15_b346 ; $b346
        jsr $9420 ; Kirby_DamageEnemyCollision
        STATE_TRANSITION_IF $8bfa, $b4 ; $8bfa
        STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
@@ -1775,7 +1775,7 @@
     L_15B432:
         INC2POSE    WAIT #3                     ; 15B432/93
     L_15B433:
-        A_JMP       KSTB3_ParasolUnknown                    ; 15B433/1714AC
+        A_JMP       KSTB3_ParasolLand                    ; 15B433/1714AC
 
     B15_b436:
        jsr $8049 ; KirbyPhysics
@@ -1925,7 +1925,7 @@
     L_15B5BA:
         ASMCALL     $9D72                       ; 15B5BA/D0729D // Is holding Up outside water
         JNE         KSTC6_ParasolHoverBegin                    ; 15B5BD/0B5EB4
-        A_JMP       KSTB3_ParasolUnknown                    ; 15B5C0/1714AC
+        A_JMP       KSTB3_ParasolLand                    ; 15B5C0/1714AC
 
     B15_b5c3:
        ldy #$01
@@ -1949,7 +1949,7 @@
         .byte       $F8                         ; 15B5F7/F8
         .byte       $04                         ; 15B5F8/04
         .byte       $00                         ; 15B5F9/00
-        A_JMP       KSTB3_ParasolUnknown                    ; 15B5FA/1714AC
+        A_JMP       KSTB3_ParasolLand                    ; 15B5FA/1714AC
 
     KSTCC_ParasolWaterIdle:
         MOV         $05E1,#$00                  ; 15B5FD/11E10500

@@ -727,7 +727,7 @@ KST64_SwordBeginDash: L_KST64_SwordBeginDash
 15ABA1: L_15ABA1
 15ABA2: L_15ABA2
 15ABFC: KST7B_SwordWaterSurface
-15AC14: KSTB3_ParasolUnknown
+15AC14: KSTB3_ParasolLand
 15AC29: KSTB4_ParasolIdle
 15AC42: L_15AC42
 15ACC5: KSTB5_ParasolBeginWalk

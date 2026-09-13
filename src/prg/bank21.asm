@@ -183,7 +183,7 @@
         $17B69A,\
         $17B751,\
         $17B7E0,\
-        KSTB3_ParasolUnknown,\
+        KSTB3_ParasolLand,\
         KSTB4_ParasolIdle,\
         KSTB5_ParasolBeginWalk,\
         KSTB6_ParasolWalk,\
