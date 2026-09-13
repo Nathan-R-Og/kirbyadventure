@@ -209,7 +209,7 @@ class Disassembler(object):
         l.sort()
 
         self.bad_asmcall = set()
-        for start in l:
+        for i, start in enumerate(l):
             #gets the rom address of the bank:ram combo
             pcstart = (start >> 16) * 0x2000 + (start & 0x1FFF)
             self.rom_file.seek(pcstart + INES_SIZE)
@@ -219,6 +219,7 @@ class Disassembler(object):
                 self.traversed.remove(self.nes_pc)
 
                 was_label = self.try_add_label()
+                if was_label: i += 1
                 self.was_linebreak = was_label or self.was_linebreak
                 self.force_label = False
 
@@ -234,9 +235,29 @@ class Disassembler(object):
 
                 self.pc = self.rom_file.tell()
                 if self.force_label:
-                    #write a comment to denote if there are breaks
-                    to_write = 'L_{:06X}'.format(self.nes_pc)
-                    self.out_file.write(f"\n;{to_write}!!!\n")
+                    #write a comment to denote if there are breaks                    
+                    if i < len(l):
+                        if self.nes_pc != l[i]:
+                            to_write_1 = '${:06X}'.format(self.nes_pc)
+                            if self.nes_pc > l[i]:
+                                self.out_file.write(f"\nCOULDNT FIND THE END FOR THE INCBIN STARTING AT {to_write_1}\n")
+                                print(f"WARNING: COULDN'T HANDLE AN INCBIN STARTING AT {to_write_1}")
+                                break
+                            to_write_2 = '${:06X}'.format(l[i])
+                            self.out_file.write(f"\n; CODE OR DATA -- {to_write_1} .. {to_write_2}\n")
+                            bank_byte_1 = hex(self.nes_pc >> 16)[2:]
+                            bank_byte_2 = hex(l[i] >> 16)[2:]
+                            rom_addr_1 = self.nes_pc & 0x1FFF
+                            rom_addr_2 = l[i] & 0x1FFF
+                            if bank_byte_1 == bank_byte_2:
+                                self.out_file.write(f'incbinRange "../split/prg/bank{bank_byte_1}.bin", ' + '${:04X}, '.format(rom_addr_1) + '${:04X}\n'.format(rom_addr_2))
+                            else:
+                                if not rom_addr_1 & 0x1FFF == 0x1FFF:
+                                    self.out_file.write(f'incbinRange "../split/prg/bank{bank_byte_1}.bin", ' + '${:04X}, '.format(rom_addr_1) + '$2000\n')
+                                self.out_file.write(f'; --- START OF BANK {bank_byte_2.upper()} ---\n')
+                                if not rom_addr_2 & 0x1FFF == 0x0000:
+                                    self.out_file.write(f'incbinRange "../split/prg/bank{bank_byte_2}.bin", ' + '$0000, ' + '${:04X}\n'.format(rom_addr_2))
+                    
                     break
 
         l = list(self.bad_asmcall)
