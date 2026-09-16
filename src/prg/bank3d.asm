@@ -1,4 +1,3 @@
-L_36AA8D := $36AA8D
 L_3DB11F := $3DB11F
 
 .segment "PRG3D": absolute
@@ -94,7 +93,7 @@ L_3DA013:
     WAIT        #6                          ; 3DA0A9/0606
     SETPOSE     #$FF                        ; 3DA0AB/50FF
     ENDTICK                                 ; 3DA0AD/0E
-    ASMCALL     $DE51, WAIT #1              ; 3DA0AE/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51, WAIT #1              ; 3DA0AE/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $68                         ; 3DA0B1/68
     .byte       $00                         ; 3DA0B2/00
     .byte       $00                         ; 3DA0B3/00
@@ -106,7 +105,7 @@ L_3DA013:
     HALT                                    ; 3DA0BD/09
 
 L_3DA0BE:
-    ASMCALL     $DE51                       ; 3DA0BE/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51                       ; 3DA0BE/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $68                         ; 3DA0C1/68
     .byte       $00                         ; 3DA0C2/00
     .byte       $00                         ; 3DA0C3/00
@@ -185,7 +184,7 @@ L_3DA0d0:
     SETPOSE     #$FF                        ; 3DA182/50FF
     ZEROVEL                                 ; 3DA184/38
     ENDTICK                                 ; 3DA185/0E
-    ASMCALL     $DE51, WAIT #1              ; 3DA186/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51, WAIT #1              ; 3DA186/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $68                         ; 3DA189/68
     .byte       $00                         ; 3DA18A/00
     .byte       $00                         ; 3DA18B/00
@@ -194,24 +193,24 @@ L_3DA0d0:
     .byte       $00                         ; 3DA18E/00
     MOV         VAR7,REG                    ; 3DA18F/1D07
     WAIT        #2                          ; 3DA191/0602
-    ONTICK      $3DA499                     ; 3DA193/0899A43D
+    ONTICK      B3D_a499                     ; 3DA193/0899A43D
     HALT                                    ; 3DA197/09
 
 L_3DA198:
-    ASMCALL     $A35A                       ; 3DA198/D05AA3
-    ASMCALL     $DF61                       ; 3DA19B/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     B3D_a35a                       ; 3DA198/D05AA3
+    ASMCALL     Load_Palette                       ; 3DA19B/D061DF // Load_Palette, palette, start_index, entries
     .word       Intro_Palette_insert1       ; 3DA19E/A4AD
     .byte       $14                         ; 3DA1A0/14
     .byte       $04                         ; 3DA1A1/04
-    ASMCALL     $DF61, WAIT #1              ; 3DA1A2/D161DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette, WAIT #1              ; 3DA1A2/D161DF // Load_Palette, palette, start_index, entries
     .word       Intro_Palette_insert2       ; 3DA1A5/B4AD
     .byte       $04                         ; 3DA1A7/04
     .byte       $04                         ; 3DA1A8/04
-    ONTICK      $3DA4F1                     ; 3DA1A9/08F1A43D
+    ONTICK      B3D_a4f1                     ; 3DA1A9/08F1A43D
     HALT                                    ; 3DA1AD/09
 
 L_3DA1AE:
-    ASMCALL     $DF06                       ; 3DA1AE/D006DF // Destroy object in slot `arg`
+    ASMCALL     B3E_df06                       ; 3DA1AE/D006DF // Destroy object in slot `arg`
     .byte       $01                         ; 3DA1B1/01
     ONTICK      $3DA80B                     ; 3DA1B2/080BA83D
     SETYCAMERAVEL#$0100                     ; 3DA1B6/330001
@@ -506,7 +505,7 @@ B3D_a3fc:
     ldx #$3f
 B3D_a411:
     lda map_screen_5, x
-    sta UNK_66EC+1, x
+    sta attr_buffer, x
     dex
     bpl B3D_a411
     lda #.LOBYTE(B3D_a453)
@@ -1032,7 +1031,7 @@ L_3DAA35:
     ZEROCAMERAVEL                           ; 3DAA3F/39
     SETXCAMERA  #$0000                      ; 3DAA40/300000
     SETYCAMERA  #$0100                      ; 3DAA43/310001
-    ASMCALL     $DF61                       ; 3DAA46/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 3DAA46/D061DF // Load_Palette, palette, start_index, entries
     .word       $ADB8                       ; 3DAA49/B8AD
     .byte       $00                         ; 3DAA4B/00
     .byte       $20                         ; 3DAA4C/20
@@ -1351,7 +1350,7 @@ B3D_af9d:
     stx current_room+1
     stx room_0562+1
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda $9215
     sta room_055A
     lda $9216
@@ -1680,7 +1679,7 @@ L_3DB259:
     MOV         REG,$79E8                   ; 3DB259/1CE879
     MOV         VAR7,REG                    ; 3DB25C/1D07
     MOV         VAR9,#$02                   ; 3DB25E/0D0902
-    ASMCALL     $DF61                       ; 3DB261/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 3DB261/D061DF // Load_Palette, palette, start_index, entries
     .word       $B270                       ; 3DB264/70B2
     .byte       $05                         ; 3DB266/05
     .byte       $01                         ; 3DB267/01
@@ -1719,7 +1718,7 @@ L_3DB298:
     .byte       $02                         ; 3DB29E/02
     .byte       $B8                         ; 3DB29F/B8
     ASMCALL     $B49F                       ; 3DB2A0/D09FB4
-    ASMCALL     $DF61                       ; 3DB2A3/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 3DB2A3/D061DF // Load_Palette, palette, start_index, entries
     .word       $B2B2                       ; 3DB2A6/B2B2
     .byte       $05                         ; 3DB2A8/05
     .byte       $01                         ; 3DB2A9/01

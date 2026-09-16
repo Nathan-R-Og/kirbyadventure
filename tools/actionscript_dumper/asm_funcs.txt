@@ -17,6 +17,7 @@
 ;   COMMENT=some comment                     (optional)
 ;
 
+;;CONSTANT.ASM
 ASM_FUNCTION 00C082
   COMMENT = Write 0x00 to $37 and wait a frame
 
@@ -83,6 +84,7 @@ ASM_FUNCTION 00DF55
 ASM_FUNCTION 00DF61
   COMMENT = Load_Palette, palette, start_index, entries
   PARAMS = imm_16, imm_8, imm_8
+  NAME = Load_Palette
 
 ASM_FUNCTION 00DF7D
   COMMENT = Wait until (`arg1`) == #`arg2`
@@ -133,6 +135,8 @@ ASM_FUNCTION 00E2F1
   COMMENT = Unknown ASM $E2F1
   PARAMS = addr_24
 
+
+;;BANK14.ASM
 ASM_FUNCTION 14A0D5
   COMMENT = Initialize Kirby variables
   NAME = InitVariables
@@ -161,12 +165,23 @@ ASM_FUNCTION 14A1E8
 ASM_FUNCTION 14A26E
   COMMENT = Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
   PARAMS = imm_16
+  NAME = B14_a26e
+
+ASM_FUNCTION 14A2A5
+  COMMENT = ?
+  NAME = B14_a2a5
+
+ASM_FUNCTION 14A331
+  COMMENT = ?
+  NAME = B14_a331
 
 ASM_FUNCTION 14A58A
   COMMENT = Destroy all objects in slots 3, 4 and 5 (Kirby particles)
+  NAME = B14_a58a
 
 ASM_FUNCTION 14A595
   COMMENT = Store Kirby's position
+  NAME = B14_a595
 
 ASM_FUNCTION 14A804
   COMMENT = Set Kirby's idle pose
@@ -565,6 +580,14 @@ ASM_FUNCTION 25A930
 
 ASM_FUNCTION 26BC37
   COMMENT = Check if Y distance from Kirby is less than 4
+
+ASM_FUNCTION 27BCD5
+  COMMENT = UNK
+  PARAMS = imm_8, imm_8, imm_8, imm_8
+
+ASM_FUNCTION 29AEB9
+  COMMENT = UNK
+  PARAMS = imm_8, imm_8
 
 ASM_FUNCTION 2BAC4D
   COMMENT = Set on-screen position to (0xE4, 0x30)

@@ -35,6 +35,7 @@ locals = [
     "bcs",
     "bcc",
     "bpl",
+    "bvs"
 ]
 
 

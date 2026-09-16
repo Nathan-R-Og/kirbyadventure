@@ -106,7 +106,7 @@ oam_extra_attribute: .res 1 ; $1A7
 UNK_1A8: .res $58
 oam1: .res $100 ; $200 - $2FF
 oam2: .res $100 ; $300 - $3FF
-UNK_400: .res $100 ; some kind of buffer
+vram_update_queue: .res $100 ; some kind of buffer
 palette_update_something: .res 1 ; $500
 hitbox1_flags_0501: .res 1 ; $501
 hitbox1_x: .res 2 ; $502 - $503
@@ -240,7 +240,11 @@ UNK_672: .res 1
 music_data_ptr_hi_0673: .res 9 ; $673 - $67B
 UNK_67C: .res 1
 music_timer_067D: .res 9 ; $67D - $685
-UNK_686: .res $fe
+UNK_686: .res 1
+music_unk: .res 9 ; $687 - $68F
+UNK_690: .res 1
+music_unk2: .res 9 ; $691 - $699
+UNK_69A: .res $ea
 
 OBJ_0784: .res $12 ; $784 - $795
 UNK_796: .res $3c
@@ -341,7 +345,8 @@ UNK_66E7: .res 1
 unknown_extra_lives_66E8: .res 1 ; $66E8
 UNK_66E9: .res 2
 MAYBE_copy_ability_icon: .res 1 ; $66EB
-UNK_66EC: .res $81
+UNK_66EC: .res 1
+attr_buffer: .res $80 ; $66ED
 map_width_multiply_lut: .res 1 ; $676D
 UNK_676E: .res $80
 

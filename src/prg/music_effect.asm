@@ -914,7 +914,7 @@ Pitch_Table_END:
     .byte $F4, arg1
 .endmacro
 
-.macro MUS_UNK_F5 arg1
+.macro PAT_TRANSPOSE arg1
     .byte $F5, arg1
 .endmacro
 
@@ -951,24 +951,24 @@ MUS_PLAY $A16E
 MUS_PLAY $A1BB
 MUS_PLAY $A16E
 MUS_PLAY $A1D4
-MUS_UNK_F5 $11
+PAT_TRANSPOSE $11
 MUS_PLAY $A2D7
-MUS_UNK_F5 $14
+PAT_TRANSPOSE $14
 MUS_PLAY $A2D7
-MUS_UNK_F5 $11
+PAT_TRANSPOSE $11
 MUS_PLAY $A2D7
 MUS_PLAY $A1FD
-MUS_UNK_F5 $11
+PAT_TRANSPOSE $11
 MUS_PLAY $A0ED
 MUS_UNK_F0 $0D
 MUS_PLAY $A154
 MUS_PLAY $A0ED
 MUS_PLAY $A12F
-MUS_UNK_F5 $11
+PAT_TRANSPOSE $11
 MUS_PLAY $A258
-MUS_UNK_F5 $14
+PAT_TRANSPOSE $14
 MUS_PLAY $A258
-MUS_UNK_F5 $11
+PAT_TRANSPOSE $11
 MUS_PLAY $A258
 MUS_PLAY $A29D
 MUS_LOOP @loop
@@ -1110,19 +1110,19 @@ PulseNote 4, 1, 2 ;
 PulseNote 4, 1, 1 ;
 PulseNote 4, 1, 0 ;
 
-;$c0-$e0 exclusive
+;$c0-$e0 exclusive (6)
 ;whole notes 6
-;$a0-$c0 exclusive
+;$a0-$c0 exclusive (5)
 ;half notes 5
-;$80-$a0 exclusive
+;$80-$a0 exclusive (4)
 ;quarter notes 4
-;$60-$80 exclusive
+;$60-$80 exclusive (3)
 ;eighth notes 3
-;$40-$60 exclusive
+;$40-$60 exclusive (2)
 ;sixteenth 2
-;$20-$40 exclusive
+;$20-$40 exclusive (1)
 ;thirty second 1
-;$00-$20 exclusive
+;$00-$20 exclusive (0)
 ;sixty fourth 0
 
 ;$20 = D6

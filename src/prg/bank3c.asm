@@ -36,7 +36,7 @@ Script65_QuickDraw:
 L_3CA040:
     ASMCALL     $A0F2                       ; 3CA040/D0F2A0
     ASMCALL     $A104                       ; 3CA043/D004A1
-    ASMCALL     $DF61                       ; 3CA046/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 3CA046/D061DF // Load_Palette, palette, start_index, entries
     .word       $A9CC                       ; 3CA049/CCA9
     .byte       $00                         ; 3CA04B/00
     .byte       $20                         ; 3CA04C/20
@@ -238,7 +238,7 @@ B3C_a1e4:
     ldx #$3f
 B3C_a1f9:
     lda map_screen_5, x
-    sta UNK_66EC+1, x
+    sta attr_buffer, x
     dex
     bpl B3C_a1f9
     lda #.LOBYTE(B3C_a240)
@@ -267,7 +267,7 @@ B3C_a21b:
     ldx #$3f
 B3C_a230:
     lda map_screen_5, x
-    sta UNK_66EC+1, x
+    sta attr_buffer, x
     dex
     bpl B3C_a230
     lda #.LOBYTE(B3C_a24e)
@@ -430,7 +430,7 @@ L_3CAAF4:
     MOV         REG,VAR6                    ; 3CAAF4/1E06
     JEQ         L_3CAAF2                    ; 3CAAF6/0AF2AA
     MOV         VAR6,#$00                   ; 3CAAF9/0D0600
-    ASMCALL     $DF06                       ; 3CAAFC/D006DF // Destroy object in slot `arg`
+    ASMCALL     B3E_df06                       ; 3CAAFC/D006DF // Destroy object in slot `arg`
     .byte       $09                         ; 3CAAFF/09
     ONTICK      $3CAC3F                     ; 3CAB00/083FAC3C
     HALT                                    ; 3CAB04/09
@@ -1590,7 +1590,7 @@ L_3CB48A:
     .word       L_3CB4A8                    ; 3CB496/A8B4
     .word       L_3CB4A8                    ; 3CB498/A8B4
     .word       L_3CB4A8                    ; 3CB49A/A8B4
-    ASMCALL     $DE51, WAIT #1              ; 3CB49C/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51, WAIT #1              ; 3CB49C/D151DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $65                         ; 3CB49F/65
     .byte       $08                         ; 3CB4A0/08
     .byte       $00                         ; 3CB4A1/00
@@ -2031,7 +2031,7 @@ L_3CB861:
     MOV         VAR3,#$00                   ; 3CB861/0D0300
     ASMCALL     $A213                       ; 3CB864/D013A2
     MOV         VAR1,#$09                   ; 3CB867/0D0109
-    ASMCALL     $DE51                       ; 3CB86A/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51                       ; 3CB86A/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $65                         ; 3CB86D/65
     .byte       $00                         ; 3CB86E/00
     .byte       $00                         ; 3CB86F/00
@@ -2090,7 +2090,7 @@ L_3CB8CB:
     JEQ         L_3CB8E4                    ; 3CB8CF/0AE4B8
     ASMCALL     PlayMusic                       ; 3CB8D2/D045DE // Play music
     .byte       $16                         ; 3CB8D5/16
-    ASMCALL     $DE51                       ; 3CB8D6/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51                       ; 3CB8D6/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $65                         ; 3CB8D9/65
     .byte       $00                         ; 3CB8DA/00
     .byte       $00                         ; 3CB8DB/00
@@ -2105,7 +2105,7 @@ L_3CB8E6:
     MOV         $07CC,#$00                  ; 3CB8E6/11CC0700
     ASMCALL     PlayMusic                       ; 3CB8EA/D045DE // Play music
     .byte       $30                         ; 3CB8ED/30
-    ASMCALL     $DE51                       ; 3CB8EE/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51                       ; 3CB8EE/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $65                         ; 3CB8F1/65
     .byte       $00                         ; 3CB8F2/00
     .byte       $00                         ; 3CB8F3/00
@@ -2122,7 +2122,7 @@ L_3CB8E6:
 L_3CB909:
     ASMCALL     $A0F2                       ; 3CB909/D0F2A0
     SETPOSE     #$FF                        ; 3CB90C/50FF
-    ASMCALL     $DF61                       ; 3CB90E/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 3CB90E/D061DF // Load_Palette, palette, start_index, entries
     .word       $AA0C                       ; 3CB911/0CAA
     .byte       $00                         ; 3CB913/00
     .byte       $20                         ; 3CB914/20
@@ -2210,7 +2210,7 @@ L_3CB979:
     ENDLOOP                                 ; 3CB9AB/02
     SETPOSE     VAR2                        ; 3CB9AC/2402
     MOV         VAR1,#$00                   ; 3CB9AE/0D0100
-    ASMCALL     $DE51                       ; 3CB9B1/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+    ASMCALL     B3E_de51                       ; 3CB9B1/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $65                         ; 3CB9B4/65
     .byte       $00                         ; 3CB9B5/00
     .byte       $00                         ; 3CB9B6/00
@@ -2226,7 +2226,7 @@ L_3CB979:
     MOV         $07CC,#$00                  ; 3CB9C7/11CC0700
     MOV         VAR1,#$09                   ; 3CB9CB/0D0109
     LOOP        #8                          ; 3CB9CE/0108
-        ASMCALL     $DE51                       ; 3CB9D0/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
+        ASMCALL     B3E_de51                       ; 3CB9D0/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
         .byte       $65                         ; 3CB9D3/65
         .byte       $00                         ; 3CB9D4/00
         .byte       $D0                         ; 3CB9D5/D0
@@ -2697,7 +2697,7 @@ B3C_bd58:
     lda #$03
     sta UNK_1
     jsr $bdb1
-    jsr B3E_c175
+    jsr AddToPPUQueue
     lda UNK_796+33
     lsr a
     bcs B3C_bd9e

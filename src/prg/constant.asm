@@ -94,18 +94,18 @@ B3E_c08d:
     and #$1f
     sta UNK_0
     lda #$00
-    sta UNK_0+1
+    sta UNK_1
     tya
     asl a
     asl a
     asl a
     asl a
-    rol UNK_0+1
+    rol UNK_1
     asl a
-    rol UNK_0+1
+    rol UNK_1
     adc UNK_0
     pha
-    lda UNK_0+1
+    lda UNK_1
     cpx #$20
     bcs B3E_c0b1
     cpy #$20
@@ -154,13 +154,13 @@ B3E_c0da:
     sta UNK_0
     iny
     lda (ptr0),y
-    sta UNK_0+2
+    sta UNK_2
     iny
     lda (ptr0),y
-    sta UNK_0+3
+    sta UNK_3
     iny
     lda (ptr0),y
-    sta UNK_0+1
+    sta UNK_1
     iny
     lda (ptr0),y
     sta UNK_0+4
@@ -194,85 +194,100 @@ B3E_c115:
 B3E_c125:
     sta UNK_0
 B3E_c127:
-    jsr B3E_c175
+    jsr AddToPPUQueue
     dec UNK_0+4
     beq B3E_c174
     lda UNK_0
     bne B3E_c13d
     lda ptr0
     clc
-    adc UNK_0+1
+    adc UNK_1
     sta ptr0
     bcc B3E_c13d
     inc ptr0+1
 B3E_c13d:
-    lda UNK_0+2
+    lda UNK_2
     clc
     adc #$20
-    sta UNK_0+2
+    sta UNK_2
     bcc B3E_c127
-    inc UNK_0+3
+    inc UNK_3
     jmp B3E_c127
 B3E_c14b:
-    lda UNK_0+1
+    lda UNK_1
     ldx UNK_0+4
     sta UNK_0+4
-    stx UNK_0+1
-    lda UNK_0+3
+    stx UNK_1
+    lda UNK_3
     ora #$80
-    sta UNK_0+3
+    sta UNK_3
     lda #$00
     sta UNK_0
 B3E_c15d:
-    jsr B3E_c175
+    jsr AddToPPUQueue
     dec UNK_0+4
     beq B3E_c174
     lda ptr0
     clc
-    adc UNK_0+1
+    adc UNK_1
     sta ptr0
     bcc B3E_c16f
     inc ptr0+1
 B3E_c16f:
-    inc UNK_0+2
+    inc UNK_2
     jmp B3E_c15d
 B3E_c174:
     rts
-B3E_c175:
-    lda UNK_0+3
+
+;args(?)
+;UNK_3:UNK_2 ppuaddr pointer
+;UNK_0 == ??? flag
+;UNK_1 == copy count
+;ptr0 == read pointer to write bytes to vram_update_queue
+AddToPPUQueue:
+    ;if top half of pointer somehow oob of ppu
+    ;if UNK_3 < 0x3F, branch
+    ;is this not effectively a bne
+    lda UNK_3
     and #$3f
     cmp #$3f
     bcc B3E_c1a9
-    lda UNK_0+1
+    ;if UNK_3 == 0x3f,
+
+    lda UNK_1
     pha
-    ldx UNK_0+2
+    ldx UNK_2
     ldy #$00
 B3E_c184:
     lda (ptr0),y
-    cmp $6000,x
+    cmp palette_buffer, x
     beq B3E_c195
-    sta $6000,x
+    sta palette_buffer, x
     txa
-    ora $0500
-    sta $0500
+    ora palette_update_something
+    sta palette_update_something
 B3E_c195:
     lda UNK_0
     bne B3E_c19a
     iny
 B3E_c19a:
     inx
-    dec UNK_0+1
+    dec UNK_1
     bne B3E_c184
     pla
-    sta UNK_0+1
+    sta UNK_1
     lda screen_on
     bne B3E_c1d5
     jmp B3E_c282
+
 B3E_c1a9:
+    ;if screen on, branch
     lda screen_on
     bne B3E_c1e3
+    ;else,
+
     lda ram_PPUCTRL
-    ldy UNK_0+3
+    ldy UNK_3
     bpl B3E_c1b7
     ora #$04
     bne B3E_c1b9
@@ -281,12 +296,12 @@ B3E_c1b7:
 B3E_c1b9:
     sta PPUCTRL
     sty PPUADDR
-    lda UNK_0+2
+    lda UNK_2
     sta PPUADDR
     lda UNK_0
     bne B3E_c1d6
     ldy #$00
-    ldx UNK_0+1
+    ldx UNK_1
 B3E_c1cc:
     lda (ptr0),y
     sta PPUDATA
@@ -297,62 +312,77 @@ B3E_c1d5:
     rts
 B3E_c1d6:
     ldy #$00
-    ldx UNK_0+1
+    ldx UNK_1
     lda (ptr0),y
 B3E_c1dc:
     sta PPUDATA
     dex
     bne B3E_c1dc
     rts
+
 B3E_c1e3:
+    ;check if has room
+    ;a = (vram_update_queue_end - vram_update_queue_begin) - 1
     lda vram_update_queue_end
     clc
     sbc vram_update_queue_begin
+    ;a -= UNK_1 copy count
     sec
-    sbc UNK_0+1
+    sbc UNK_1
+    ;if a just went negative, branch
     bcc B3E_c1f1
-    sbc #$03
+    ;else,
+
+    ;this operation will take 3 bytes (?)
+    ;a -= 3
+    sbc #3
+    ;if a is still positive, branch
     bcs B3E_c1f7
 B3E_c1f1:
     jsr B3E_c067
     jmp B3E_c1e3
 B3E_c1f7:
     ldx vram_update_queue_begin
-    lda UNK_0+1
-    sta $0400,x
+    ;write UNK_1, UNK_3:UNK_2 to vram queue
+    lda UNK_1
+    sta vram_update_queue, x
     inx
-    lda UNK_0+3
-    sta $0400,x
+    lda UNK_3
+    sta vram_update_queue, x
     inx
-    lda UNK_0+2
-    sta $0400,x
+    lda UNK_2
+    sta vram_update_queue, x
     inx
+    ;if UNK_0 == 0, branch
     lda UNK_0
     beq B3E_c21f
     ldy #$00
     lda (ptr0),y
-    ldy UNK_0+1
+    ldy UNK_1
 B3E_c215:
-    sta $0400,x
+    sta vram_update_queue, x
     inx
     dey
     bne B3E_c215
     stx vram_update_queue_begin
     rts
 B3E_c21f:
-    ldy #$00
-B3E_c221:
+    ;write loop
+    ldy #0
+    @loop:
     lda (ptr0),y
-B3E_c223:
-    sta $0400,x
+    sta vram_update_queue, x
     inx
     iny
-    cpy UNK_0+1
-    bcc B3E_c221
+    cpy UNK_1
+    bcc @loop
+
+    ;write back new beginning
     stx vram_update_queue_begin
     rts
+
 B3E_c22f:
-    ldy $0500
+    ldy palette_update_something
     beq B3E_c23e
     sta tmp1+1
     jsr B3E_c282
@@ -365,28 +395,28 @@ B3E_c23e:
     beq B3E_c27f
 B3E_c244:
     sec
-    sbc $0400,x
+    sbc vram_update_queue, x
     bcc B3E_c27f
     sbc #$05
     bcc B3E_c27f
     sta tmp1+1
-    lda $0400,x
+    lda vram_update_queue, x
     sta tmp2
     inx
     lda ram_PPUCTRL
-    ldy $0400,x
+    ldy vram_update_queue, x
     bpl B3E_c25f
     ora #$04
 B3E_c25f:
     sta PPUCTRL
     sty PPUADDR
     inx
-    lda $0400,x
+    lda vram_update_queue, x
     sta PPUADDR
     inx
     ldy tmp2
 B3E_c26f:
-    lda $0400,x
+    lda vram_update_queue, x
     sta PPUDATA
     inx
     dey
@@ -424,7 +454,7 @@ B3E_c28e:
     sta PPUADDR
     sta PPUADDR
     sta PPUADDR
-    sta $0500
+    sta palette_update_something
     rts
 B3E_c2c2:
     ldx #$00
@@ -628,8 +658,8 @@ B3E_c42f:
     lda #$01
 B3E_c431:
     sta nametable_mirroring
-    sta Script01_Kirby
-    sta Script01_Kirby
+    sta MIRROR
+    sta MIRROR
     rts
 
 
@@ -670,7 +700,7 @@ Decompress_Loop:
 
     ;low two bits of byte == length.hi
     and #%00000011
-    sta UNK_0+1
+    sta UNK_1
     ;get next byte and y++
     jsr Decompress_Ptr016BitInc
     ;next byte == length.lo
@@ -688,7 +718,7 @@ Decompress_Loop:
     sta UNK_0
 
     ;?
-    stx UNK_0+1
+    stx UNK_1
 
 
     B3E_c474: ;normal proc?
@@ -723,7 +753,7 @@ Decompress_Type0:
     dec UNK_0
     bne Decompress_Type0
     ;if length.hi > -1, loop
-    dec UNK_0+1
+    dec UNK_1
     bpl Decompress_Type0
     ;exit
     jmp Decompress_Loop
@@ -739,15 +769,15 @@ Decompress_Type1:
     dec UNK_0
     bne @type1_loop
     ;if length.hi > -1, loop
-    dec UNK_0+1
+    dec UNK_1
     bpl @type1_loop
     ;exit
     jmp Decompress_Loop
 
 Decompress_Type2:
     ;;; copy 2 bytes length times
-    byte1 := UNK_0+2
-    byte2 := UNK_0+3
+    byte1 := UNK_2
+    byte2 := UNK_3
     jsr Decompress_Ptr016BitInc
     sta byte1
     jsr Decompress_Ptr016BitInc
@@ -763,7 +793,7 @@ Decompress_Type2:
     dec UNK_0
     bne @type2_loop
     ;if length.hi > -1, loop
-    dec UNK_0+1
+    dec UNK_1
     bpl @type2_loop
     ;exit
     jmp Decompress_Loop
@@ -782,13 +812,13 @@ Decompress_Type3:
     dec UNK_0
     bne @type3_loop
     ;if length.hi > -1, loop
-    dec UNK_0+1
+    dec UNK_1
     bpl @type3_loop
     ;exit
     jmp Decompress_Loop
 
 B3E_c4dd:
-    sta UNK_0+2
+    sta UNK_2
     jsr Decompress_Ptr016BitInc
     sta ptr2+1
     jsr Decompress_Ptr016BitInc
@@ -801,7 +831,7 @@ B3E_c4dd:
     tya
     pha
     ldy #$00
-    lda UNK_0+2
+    lda UNK_2
     cmp #$80
     beq B3E_c504
     cmp #$a0
@@ -813,24 +843,24 @@ B3E_c504:
     jsr Decompress_Ptr116BitInc
     dec UNK_0
     bne B3E_c504
-    dec UNK_0+1
+    dec UNK_1
     bpl B3E_c504
     pla
     tay
     jmp Decompress_Loop
 B3E_c517:
     jsr B3E_c555
-    sta UNK_0+2
+    sta UNK_2
     ldx #$08
 B3E_c51e:
-    asl UNK_0+2
+    asl UNK_2
     ror a
     dex
     bne B3E_c51e
     jsr Decompress_Ptr116BitInc
     dec UNK_0
     bne B3E_c517
-    dec UNK_0+1
+    dec UNK_1
     bpl B3E_c517
     pla
     tay
@@ -845,7 +875,7 @@ B3E_c53d:
     jsr Decompress_Ptr116BitInc
     dec UNK_0
     bne B3E_c534
-    dec UNK_0+1
+    dec UNK_1
     bpl B3E_c534
     pla
     tay
@@ -933,35 +963,35 @@ B3E_c59a:
 B3E_c698:
     sta tmp0
     stx tmp0+1
-    stx UNK_0+13
+    stx UNK_D
     and tmp0+1
     and #$01
-    sta UNK_0+14
+    sta UNK_E
     ldx tmp0
     lda B3E_c7dd,x
-    sta UNK_0+15
+    sta UNK_F
     clc
-    lda UNK_0+14
+    lda UNK_E
     adc B3E_c6dd,x
     ldx tmp0+1
     adc B3E_c6dd,x
-    sta UNK_0+14
-    lda UNK_0+15
+    sta UNK_E
+    lda UNK_F
     adc B3E_c7dd,x
-    sta UNK_0+15
+    sta UNK_F
     lda tmp0
     cmp tmp0+1
     bcs B3E_c6c9
-    sta UNK_0+13
+    sta UNK_D
     lda tmp0+1
 B3E_c6c9:
     sec
-    sbc UNK_0+13
+    sbc UNK_D
     tax
-    lda UNK_0+14
+    lda UNK_E
     sbc B3E_c6dd,x
     sta tmp0
-    lda UNK_0+15
+    lda UNK_F
     sbc B3E_c7dd,x
     tax
     lda tmp0
@@ -1113,7 +1143,7 @@ B3E_c90e:
 	sta ptr0+1
 	lda #$00
 	sta $00
-	jmp B3E_c175
+	jmp AddToPPUQueue
 
 ;$1a2 == way
 Palette_FadeDarkIn:
@@ -4626,7 +4656,7 @@ B3F_e012:
     sbc UNK_0
     sta UNK_0+8
     lda UNK_0+5
-    sbc UNK_0+1
+    sbc UNK_1
     sta UNK_0+9
     php
     bcs B3F_e036
@@ -4639,23 +4669,23 @@ B3F_e012:
     adc #$00
     sta UNK_0+9
 B3F_e036:
-    lda UNK_0+2
+    lda UNK_2
     sec
     sbc UNK_0+6
-    sta UNK_0+10
-    lda UNK_0+3
+    sta UNK_A
+    lda UNK_3
     sbc UNK_0+7
-    sta UNK_0+11
+    sta UNK_B
     php
     bcs B3F_e056
-    lda UNK_0+10
+    lda UNK_A
     eor #$ff
     adc #$01
-    sta UNK_0+10
-    lda UNK_0+11
+    sta UNK_A
+    lda UNK_B
     eor #$ff
     adc #$00
-    sta UNK_0+11
+    sta UNK_B
 B3F_e056:
     pla
     lsr a
@@ -4668,17 +4698,17 @@ B3F_e056:
 B3F_e061:
     lsr a
     ror UNK_0+8
-    lsr UNK_0+11
-    ror UNK_0+11
+    lsr UNK_B
+    ror UNK_B
     tax
     bne B3F_e061
     sta UNK_0+9
 B3F_e06d:
-    lda UNK_0+11
+    lda UNK_B
     beq B3F_e07b
 B3F_e071:
     lsr a
-    ror UNK_0+10
+    ror UNK_A
     lsr UNK_0+9
     ror UNK_0+8
     tax
@@ -4686,7 +4716,7 @@ B3F_e071:
 B3F_e07b:
     ldx UNK_0+8
     lda #$00
-    ldy UNK_0+10
+    ldy UNK_A
     bne B3F_e087
     ldy #$10
     bne B3F_e0a3
@@ -4749,9 +4779,9 @@ B3F_e0f3:
     pha
     tax
     lda B3F_e177,x
-    sta UNK_0+2
+    sta UNK_2
     lda B3F_e177+1,x
-    sta UNK_0+3
+    sta UNK_3
     jsr B3F_e1f7
     pla
     tax
@@ -4773,9 +4803,9 @@ B3F_e115:
 B3F_e124:
     sta UNK_0+9
     lda B3F_e157,x
-    sta UNK_0+2
+    sta UNK_2
     lda B3F_e157+1,x
-    sta UNK_0+3
+    sta UNK_3
     jsr B3F_e1f7
     pla
     cmp #$40
@@ -4827,12 +4857,12 @@ B3F_e177:
 
 B3F_e1f7:
     lda UNK_0
-    ldx UNK_0+2
+    ldx UNK_2
     jsr B3E_c698
     sta UNK_0+4
     stx UNK_0+5
     lda UNK_0
-    ldx UNK_0+3
+    ldx UNK_3
     jsr B3E_c698
     clc
     adc UNK_0+5
@@ -4840,8 +4870,8 @@ B3F_e1f7:
     txa
     adc #$00
     sta UNK_0+6
-    lda UNK_0+1
-    ldx UNK_0+2
+    lda UNK_1
+    ldx UNK_2
     jsr B3E_c698
     clc
     adc UNK_0+5
@@ -4852,8 +4882,8 @@ B3F_e1f7:
     lda #$00
     adc #$00
     sta UNK_0+7
-    lda UNK_0+1
-    ldx UNK_0+3
+    lda UNK_1
+    ldx UNK_3
     jsr B3E_c698
     clc
     adc UNK_0+6
@@ -4868,7 +4898,7 @@ B3F_e23c:
     sta UNK_0
     iny
     lda (script_ptr),y
-    sta UNK_0+1
+    sta UNK_1
 B3F_e247:
     ldx curr_object_slot
     lda $61dc,x
@@ -4972,6 +5002,8 @@ B3F_e2f1:
     pla
     ldx #$01
     jmp OBJ_TryReplaceScriptPc
+
+;hotswap lower_prg with $39, get hitbox_data
 B3F_e31d:
     sta hitbox_data_ptr_0027
     stx hitbox_data_ptr_0027+1
@@ -4982,6 +5014,7 @@ B3F_e31d:
     jsr $8000
     pla
     jmp LowerBankswitch
+
 B3F_e330:
     lda lower_prg
     pha
@@ -5248,7 +5281,7 @@ B3F_e566:
     jmp B3F_e3e4
 B3F_e573:
     lda #$3d
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $bc32
     jsr B3F_f061
     jmp B3F_e43a
@@ -5329,19 +5362,19 @@ B3F_e624:
     rts
 B3F_e625:
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda #$13
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $a778
     jsr B3F_f03b
     jmp B3F_f061
 B3F_e638:
-    lda #$13
-    jsr B3F_f052
-    jmp Script01_Kirby
+    lda #.BANK(B13_a000)
+    jsr BankSwapUpper
+    jmp B13_a000
 B3F_e640:
     lda #$38
-    jsr B3F_f052
+    jsr BankSwapUpper
     jsr $acca
     ldx $055e
     lda $055f
@@ -5358,7 +5391,7 @@ B3F_e65d:
     lda $85d1,x
 B3F_e667:
     and #$7f
-    jsr B3F_f052
+    jsr BankSwapUpper
     pla
     sta ptr0
     sty ptr0+1
@@ -5368,11 +5401,11 @@ B3F_e667:
     sta ptr1+1
     jsr Decompress
     lda #$13
-    jsr B3F_f052
+    jsr BankSwapUpper
     jmp $a38c
 B3F_e684:
     lda $057d
-    jsr B3F_f052
+    jsr BankSwapUpper
     ldy #$00
     sty $66e2
     lda (ptr0),y
@@ -5393,14 +5426,14 @@ B3F_e684:
     adc UNK_ED+3
     sta UNK_ED+5
     lda #$0c
-    sta UNK_0+15
+    sta UNK_F
 B3F_e6b2:
     lda temp_x_hi
     pha
     jsr B3F_e8dc
     pla
     sta temp_x_hi
-    dec UNK_0+15
+    dec UNK_F
     beq B3F_e6cd
     lda tmp1
     clc
@@ -5411,19 +5444,19 @@ B3F_e6b2:
     jmp B3F_e6b2
 B3F_e6cd:
     lda #$13
-    jsr B3F_f052
+    jsr BankSwapUpper
     jmp $a690
 B3F_e6d5:
     lda #$00
-    jsr B3F_f025
+    jsr LoadBankLower
     lda #$13
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $a6c2
     jsr B3F_f03b
     jmp B3F_f061
 B3F_e6e8:
     lda #$38
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $ae2f
     jmp B3F_f061
 B3F_e6f3:
@@ -5437,9 +5470,9 @@ B3F_e6f9:
     cpy #$06
     bcs B3F_e714
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda #$13
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $a804
     jsr B3F_f03b
     jsr B3F_f061
@@ -5670,7 +5703,7 @@ B3F_e8c0:
     jsr B3F_ecf1
     sty temp_camera_y
     lda #$13
-    jsr B3F_f04b
+    jsr LoadBankUpper
     jsr $af9b
     jsr $a8e6
     jsr B3F_f03b
@@ -5682,9 +5715,9 @@ B3F_e8dc:
     rts
 B3F_e8e4:
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda $057d
-    jsr B3F_f04b
+    jsr LoadBankUpper
     lda temp_x_hi
     clc
     adc $676d,y
@@ -5692,7 +5725,7 @@ B3F_e8e4:
     lda tmp0+1
     ldy tmp1
     jsr B3F_f071
-    sta UNK_0+1
+    sta UNK_1
     lda #$10
     sta UNK_0
 B3F_e904:
@@ -5703,31 +5736,31 @@ B3F_e904:
     cpy $057e
     bcs B3F_e92e
     lda (UNK_ED),y
-    sta UNK_0+2
+    sta UNK_2
     cpy #$00
     beq B3F_e91e
     dey
     lda (UNK_ED),y
     tay
 B3F_e91e:
-    cpy UNK_0+2
+    cpy UNK_2
     bcs B3F_e92e
     lda (UNK_ED+2),y
-    cmp UNK_0+1
+    cmp UNK_1
     bne B3F_e92b
     jsr B3F_e9bb
 B3F_e92b:
     iny
     bne B3F_e91e
 B3F_e92e:
-    lda UNK_0+1
+    lda UNK_1
     clc
     adc #$10
     bcc B3F_e939
     inc temp_x_hi
     inc tmp0
 B3F_e939:
-    sta UNK_0+1
+    sta UNK_1
     dec UNK_0
     bne B3F_e904
     jsr B3F_f03b
@@ -5739,9 +5772,9 @@ B3F_e945:
     rts
 B3F_e94d:
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda $057d
-    jsr B3F_f04b
+    jsr LoadBankUpper
     tya
     ldy temp_y_hi
     clc
@@ -5750,7 +5783,7 @@ B3F_e94d:
     lda tmp0+1
     ldy tmp1
     jsr B3F_f071
-    sta UNK_0+1
+    sta UNK_1
     lda #$0b
     sta UNK_0
 B3F_e96e:
@@ -5761,24 +5794,24 @@ B3F_e96e:
     cpy $057e
     bcs B3F_e998
     lda (UNK_ED),y
-    sta UNK_0+2
+    sta UNK_2
     cpy #$00
     beq B3F_e988
     dey
     lda (UNK_ED),y
     tay
 B3F_e988:
-    cpy UNK_0+2
+    cpy UNK_2
     bcs B3F_e998
     lda (UNK_ED+2),y
-    cmp UNK_0+1
+    cmp UNK_1
     bne B3F_e995
     jsr B3F_e9bb
 B3F_e995:
     iny
     bne B3F_e988
 B3F_e998:
-    ldy UNK_0+1
+    ldy UNK_1
     iny
     tya
     and #$0f
@@ -5793,16 +5826,16 @@ B3F_e998:
     adc $67ee
     sta tmp0
 B3F_e9af:
-    sty UNK_0+1
+    sty UNK_1
     dec UNK_0
     bne B3F_e96e
     jsr B3F_f03b
     jmp B3F_f061
 B3F_e9bb:
-    sty UNK_0+3
+    sty UNK_3
     ldy #$08
 B3F_e9bf:
-    lda UNK_0+3
+    lda UNK_3
     cmp $057f,y
     bne B3F_e9ce
     ldx $6131,y
@@ -5811,7 +5844,7 @@ B3F_e9bf:
 B3F_e9ce:
     dey
     bpl B3F_e9bf
-    ldy UNK_0+3
+    ldy UNK_3
     jsr B3F_ea9b
     bcc B3F_e9d9
     rts
@@ -5841,12 +5874,12 @@ B3F_e9f7:
     sta $602b
     lda temp_y_hi
     sta $602c
-    ldy UNK_0+3
+    ldy UNK_3
     lda (UNK_ED+4),y
     sta UNK_0+4
     tay
     lda #$13
-    jsr B3F_f052
+    jsr BankSwapUpper
     lda #$00
     sta $6025
     sta $6026
@@ -5862,8 +5895,8 @@ B3F_e9f7:
     lda $a9d2,y
     pha
     lda $057d
-    jsr B3F_f052
-    ldy UNK_0+3
+    jsr BankSwapUpper
+    ldy UNK_3
     lda (UNK_ED+2),y
     and #$f0
     ora #$08
@@ -5880,7 +5913,7 @@ B3F_e9f7:
     cmp #$ff
     beq B3F_ea84
     tay
-    lda UNK_0+3
+    lda UNK_3
     sta $0576,y
     lda UNK_0+4
     cmp #$b0
@@ -5904,7 +5937,7 @@ B3F_ea76:
     lda $6128,y
     sta $059c
 B3F_ea84:
-    ldy UNK_0+3
+    ldy UNK_3
     rts
 B3F_ea87:
     ldx #$07
@@ -6037,7 +6070,7 @@ B3F_eb59:
     sty tmp1
     sta tmp0
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     jsr $8170
     jsr B3F_f03b
     lda $0571
@@ -6061,7 +6094,7 @@ B3F_eb95:
     lda $056f
     sta tmp0+1
     lda #$12
-    jsr B3F_f02c
+    jsr BankSwapLower
     jsr $82e6
     jsr B3F_f03b
     lda $056f
@@ -6089,9 +6122,9 @@ B3F_ebd2:
     rts
 B3F_ebd3:
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda #$13
-    jsr B3F_f04b
+    jsr LoadBankUpper
     lda $61dd
     bmi B3F_ec0e
     ldy #$08
@@ -6147,12 +6180,12 @@ B3F_ec37:
 .byte $00,$00,$00,$FF,$00,$FF,$00,$00
 .byte $FF,$00,$00
 B3F_ec58:
-    stx UNK_0+13
-    sty UNK_0+14
+    stx UNK_D
+    sty UNK_E
     ora $ec91,x
     ora $eca1,y
     tax
-    lda UNK_0+13
+    lda UNK_D
     lsr a
     ora $ecb9,y
     tay
@@ -6160,11 +6193,11 @@ B3F_ec58:
     and $ecd1,x
     ora $ece1,x
     sta $66ed,y
-    ldy UNK_0+14
+    ldy UNK_E
     txa
     eor $ecad,y
     tax
-    lda UNK_0+13
+    lda UNK_D
 B3F_ec7f:
     lsr a
     ora $ecc5,y
@@ -6482,8 +6515,8 @@ B3F_eeef:
     sec
     rts
 B3F_eef1:
-    sty UNK_0+1
-    stx UNK_0+2
+    sty UNK_1
+    stx UNK_2
     jsr B3F_ef90
     lda $8452,y
     and #$10
@@ -6502,11 +6535,11 @@ B3F_ef03:
     sec
     jmp B3F_f03b
 B3F_ef18:
-    sty UNK_0+1
-    stx UNK_0+2
+    sty UNK_1
+    stx UNK_2
     sta tmp0
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     stx tmp0+1
     ldx temp_y_hi
     lda temp_x_hi
@@ -6528,29 +6561,29 @@ B3F_ef18:
     jsr B3F_ef50
     jmp B3F_f03b
 B3F_ef50:
-    lda UNK_0+2
+    lda UNK_2
     and #$f0
     sec
     sbc $056f
     lda temp_x_hi
     sbc $0570
     bne B3F_ef84
-    lda UNK_0+1
+    lda UNK_1
     and #$f0
     sec
     sbc $0571
-    sta UNK_0+1
+    sta UNK_1
     lda temp_y_hi
     sbc $0572
     beq B3F_ef7b
     cmp #$ff
     bne B3F_ef84
-    lda UNK_0+1
+    lda UNK_1
     cmp #$f0
     bcs B3F_ef81
     rts
 B3F_ef7b:
-    lda UNK_0+1
+    lda UNK_1
     cmp #$b8
     bcs B3F_ef84
 B3F_ef81:
@@ -6565,7 +6598,7 @@ B3F_ef85:
     rts
 B3F_ef90:
     lda #$12
-    jsr B3F_f025
+    jsr LoadBankLower
     lda temp_x_hi
     bmi B3F_ef9e
     cmp $67ee
@@ -6648,17 +6681,15 @@ B3F_f01a:
 B3F_f023:
     tay
     rts
-B3F_f025:
+
+LoadBankLower:
     pha
     lda lower_prg
     sta $0575
     ;BIT trick
     .byte $24
-	B3F_f02c:
-	.byte $48
-
-
-
+	BankSwapLower:
+	pha
     lda #$86
     sta ram_BANKSELECT
     sta BANKSELECT
@@ -6666,6 +6697,7 @@ B3F_f025:
     sta lower_prg
     sta BANKDATA
     rts
+
 B3F_f03b:
     lda #$86
     sta ram_BANKSELECT
@@ -6674,14 +6706,15 @@ B3F_f03b:
     sta lower_prg
     sta BANKDATA
     rts
-B3F_f04b:
+
+LoadBankUpper:
     pha
     lda upper_prg
     sta $0576
 	;BIT trick
 	.byte $24
-	B3F_f052:
-	.byte $48
+	BankSwapUpper:
+	pha
     lda #$87
     sta ram_BANKSELECT
     sta BANKSELECT
@@ -6689,6 +6722,7 @@ B3F_f04b:
     sta upper_prg
     sta BANKDATA
     rts
+
 B3F_f061:
     lda #$87
     sta ram_BANKSELECT
@@ -6828,7 +6862,7 @@ B3F_f146:
 B3F_f14d:
     jsr B3F_f6fb
     lda B3F_f15e,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f176,y
     pha
     lda B3F_f16a,y
@@ -6863,7 +6897,7 @@ B3F_f189:
 B3F_f194:
     jsr B3F_f677
     lda B3F_f1a5,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f1bd,y
     pha
     lda B3F_f1b1,y
@@ -6905,7 +6939,7 @@ B3F_f1df:
 B3F_f1e8:
     jsr B3F_f649
     lda B3F_f1f9,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f211,y
     pha
     lda B3F_f205,y
@@ -6954,7 +6988,7 @@ B3F_f241:
     and #$01
     tax
     lda B3F_f255,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f26d,y
     pha
     lda B3F_f261,y
@@ -7014,7 +7048,7 @@ B3F_f29c:
 B3F_f2ab:
     jsr B3F_f649
     lda B3F_f2bc,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f2d4,y
     pha
     lda B3F_f2c8,y
@@ -7078,7 +7112,7 @@ B3F_f323:
     jmp B3F_f62e
     jsr B3F_f677
     lda B3F_f33e,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f356,y
     pha
     lda B3F_f34a,y
@@ -7132,7 +7166,7 @@ B3F_f395:
 B3F_f39e:
     jsr B3F_f6fb
     lda B3F_f3af,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f3c7,y
     pha
     lda B3F_f3bb,y
@@ -7176,10 +7210,10 @@ B3F_f3f7:
     jmp B3F_f62e
 B3F_f3fe:
     jsr B3F_f6a0
-    lda UNK_0+1
+    lda UNK_1
     bne B3F_f40a
     lda B3F_f413,y
-    sta UNK_0+1
+    sta UNK_1
 B3F_f40a:
     lda B3F_f42b,y
     pha
@@ -7233,10 +7267,10 @@ B3F_f45e:
     jmp B3F_f633
 B3F_f46f:
     jsr B3F_f6c8
-    lda UNK_0+1
+    lda UNK_1
     bne B3F_f47b
     lda B3F_f484,y
-    sta UNK_0+1
+    sta UNK_1
 B3F_f47b:
     lda B3F_f49c,y
     pha
@@ -7291,7 +7325,7 @@ B3F_f4ce:
 B3F_f4e2:
     jsr B3F_f6fb
     lda B3F_f4f3,y
-    sta UNK_0+1
+    sta UNK_1
     lda B3F_f50b,y
     pha
     lda B3F_f4ff,y
@@ -7337,10 +7371,10 @@ B3F_f533:
     jmp B3F_f62e
 B3F_f544:
     jsr B3F_f6c8
-    lda UNK_0+1
+    lda UNK_1
     bne B3F_f550
     lda B3F_f55c,y
-    sta UNK_0+1
+    sta UNK_1
 B3F_f550:
     lda B3F_f574,y
     pha
@@ -7397,10 +7431,10 @@ B3F_f5a7:
     jmp B3F_f62e
 B3F_f5ba:
     jsr B3F_f6a0
-    lda UNK_0+1
+    lda UNK_1
     bne B3F_f5c6
     lda B3F_f5d2,y
-    sta UNK_0+1
+    sta UNK_1
 B3F_f5c6:
     lda B3F_f5ea,y
     pha
@@ -7473,7 +7507,7 @@ B3F_f638:
     bpl B3F_f646
     dec $057a
 B3F_f646:
-    lda UNK_0+1
+    lda UNK_1
     rts
 B3F_f649:
     lda UNK_0
@@ -7670,10 +7704,10 @@ B3F_f773:
 .byte $00,$02,$02,$02,$02,$02,$02
 B3F_f7f6:
     lda $89ed,y
-    jsr B3F_f052
+    jsr BankSwapUpper
     jsr Decompress
     lda #$38
-    jmp B3F_f052
+    jmp BankSwapUpper
 B3F_f804:
     lda lower_prg
     pha

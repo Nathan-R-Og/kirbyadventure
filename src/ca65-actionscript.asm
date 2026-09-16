@@ -190,10 +190,10 @@
 .endmacro
 
 .macro MOVW dest, val
-    .if .xmatch(.left, (1, {val}), #)
+    .if .xmatch(.left (1, {val}), #)
         .byte $27
         .word dest
-        .byte val
+        .word .right (.tcount ({val})-1, {val})
     .else
         .assert 0, error, "unsupported addressing mode"
     .endif
@@ -207,10 +207,10 @@
         .byte dest
         _op_imm8 op, val
     .elseif .xmatch({dest}, REG)
-        .byte $16
+        .byte $25
         _op_imm8 op, val
     .else
-        .byte $16 ;25????
+        .byte $16
         .word dest
         _op_imm8 op, val
     .endif

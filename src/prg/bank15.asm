@@ -596,7 +596,7 @@
        and #$03
        bne B15_a6fa
        jmp $805b ; KirbyFinalize
-    
+
     B15_a714:
        .byte $04,$0A,$04,$0A
     B15_a718:
@@ -1227,7 +1227,7 @@
         DEC2POSE    WAIT #3                     ; 15AD63/A3
         DEC2POSE    WAIT #3                     ; 15AD64/A3
         A_JMP       L_15AD61                    ; 15AD65/1761AD
-    
+
     B15_ad68:
         jsr $8765 ; $8765
         jsr $95cd ; SetKirbyPosition
@@ -1468,14 +1468,14 @@
     B15_b0fd:
        stx OBJ_var0+1
        rts
-    
+
     B15_B101:
        .byte $80,$40,$10,$F0,$C0,$80
        .byte $80,$C0,$F0,$10,$40,$80
     B15_B10D:
        .byte $00,$00,$00,$FF,$FF,$FF
        .byte $FF,$FF,$FF,$00,$00,$00
-       
+
     B15_b119:
        lda temp_pad1_hold
        and #$04
@@ -1647,7 +1647,7 @@
        STATE_TRANSITION_IF $8b4e, $bc ; MAYBE_KirbyGroundCollision
        STATE_TRANSITION_IF $8a23, $b4 ; IsDoneSliding
        jmp $805b ; KirbyFinalize
-    
+
     B15_b346:
        jsr $b7be ; $b7be
        ldx #$02
@@ -1661,7 +1661,7 @@
         MOV         VAR3,#$03                   ; 15B35C/0D0303
         SETPOSE     #$71                        ; 15B35F/5071
         HALT                                    ; 15B361/09
-    
+
     B15_b362:
         lda temp_pad1_hold
         and #$08
@@ -2012,7 +2012,7 @@
         ASMCALL     $8FDC                       ; 15B696/D0DC8F // Set pose (respect facing)
         .byte       $2A                         ; 15B699/2A
         HALT                                    ; 15B69A/09
-    
+
     B15_b69b:
         jsr $8112 ; GetKirbyVelXAbs
         jsr $98c3 ; GetDirectionInX
@@ -2072,7 +2072,7 @@
         INC2POSE    WAIT #10                    ; 15B747/9A
         INC2POSE    WAIT #10                    ; 15B748/9A
         A_JMP       L_15B740                    ; 15B749/1740B7
-    
+
     B15_b74c:
         jsr $8883 ; $8883
         jsr $9c5a ; SetKirbyDirection
@@ -2107,13 +2107,13 @@
         jmp $9c72 ; GetKirbyHitbox
     B15_b7bd:
         rts
-    
+
     B15_b7be:
         ldx OBJ_pose+1
         lda .loword(B15_B7C8),x
         ldy .loword(B15_B83A),x
         rts
-    
+
     B15_B7C8 := $15B7C8
     B15_B83A := $15B83A
     ; CODE OR DATA -- $15B7C8 .. $15BA9D
@@ -2425,7 +2425,7 @@
     B15_bce2:
        tya
        rts
-    
+
     B15_bce4:
        .byte $7F,$7F,$5E,$5A,$46,$40,$5E
 
@@ -2520,13 +2520,13 @@
        adc #$00
        sta $0556
        rts
-    
+
     B15_bd87:
         .byte $02
     B15_bd88:
         .byte $00,$00,$FF,$00,$00,$00,$FB
 
-    
+
     ; CODE OR DATA -- $15BD8F .. $16BE67
     ; Probably data
     incbinRange "../split/prg/bank15.bin", $1D8F, $1E67

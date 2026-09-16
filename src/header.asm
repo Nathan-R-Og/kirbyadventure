@@ -41,7 +41,7 @@
 ;++++----- Upper nybble of mapper number
 ;
 ;Byte 7.
-.byte $00
+.byte $08                       ; NES 2.0
 
 ;----------------------------------------------------------------------------------------------------
 
@@ -71,9 +71,9 @@
 ;  +------ 0: Board has no bus conflicts; 1: Board has bus conflicts
 ;
 ;Byte 10.
-.byte $00                       ;NTSC, no PRG RAM, no bus conflicts.
+.byte $70                       ;NTSC, no PRG RAM, no bus conflicts.
 
 ;----------------------------------------------------------------------------------------------------
 
 ;Bytes 11-15.
-.byte $00, $00, $00, $00, $00   ;Unused.
+.byte $00, $00, $00, $00, $01   ;Unused.

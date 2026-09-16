@@ -1,3 +1,77 @@
+;actually starts at $692, probably
+.define music_volume_envelopes UNK_686+11
+
+;PAT_ is for patterns
+;MUS_ is for main tracks.
+;whether or not they hold the same commands is debatable
+;(they probably do)
+;i highly doubt MUS_PLAY can be in patterns.
+.macro MUS_UNK_F0 arg1
+    .byte $F0, arg1
+.endmacro
+
+.macro MUS_TEMPO arg1
+    .byte $F2, arg1
+.endmacro
+
+.macro MUS_UNK_F4 arg1
+    .byte $F4, arg1
+.endmacro
+
+.macro MUS_LOOP pointer
+    .byte $F8
+    .addr pointer
+.endmacro
+
+.macro MUS_PLAY pointer
+    .byte $FA
+    .addr pointer
+.endmacro
+
+.macro PAT_SAMPLE start, end
+    .byte $e0
+    .byte dmc_sampleaddr start
+    .byte dmc_samplelen start, end
+.endmacro
+
+.define PAT_END .byte $FB
+
+.macro PAT_REPEAT count
+    .byte $FC, count
+.endmacro
+
+.define PAT_ENDREPEAT .byte $FD
+
+.macro PAT_SETTINGS arg1
+    .byte $F0, arg1
+.endmacro
+
+.macro PAT_ENV1 arg1
+    .byte $F6, arg1
+.endmacro
+
+.macro PAT_TRANSPOSE arg1
+    .byte $F5, arg1
+.endmacro
+
+.macro PAT_ENV3 arg1
+    .byte $F4, arg1
+.endmacro
+
+.macro PAT_UNKF1 arg1
+    .byte $F1, arg1
+.endmacro
+
+.define PulseNote(length, type, pitch) .byte (length << 5) | (type << 4) | pitch
+
+.define PULSE_CUSTOM 6
+.define PULSE_HALF 5
+.define PULSE_DQUARTER 4
+.define PULSE_QUARTER 3
+.define PULSE_DEIGHTH 2
+.define PULSE_EIGHTH 1
+.define PULSE_SIXTEENTH 0
+
 .segment "PRG1D": absolute
 B1D_8000:
     ldx #$00
@@ -431,7 +505,7 @@ B1D_8316:
     lsr a
     adc UNK_686+41, x
     tay
-    lda B1D_8955, y
+    lda NoteLengthTable, y
 B1D_8322:
     sta music_timer_0641, x
     rts
@@ -445,11 +519,14 @@ is_greater_e0:
     ;a = argument
     jsr IncreasePatternPtr
     B1D_832f:
+    ;a <<= 4
     asl a
     asl a
     asl a
     asl a
+    ;store new argument in tmp1+1
     sta tmp1+1
+
     lda UNK_686+21, x
     and #$0f
     ora tmp1+1
@@ -463,7 +540,9 @@ is_greater_e0:
     ;command == $F1
     ;a = argument
     jsr IncreasePatternPtr
+    ;store argument to tmp1+1
     sta tmp1+1
+    ;a = (UNK_686+21[x] >> 4) + argument
     lda UNK_686+21, x
     lsr a
     lsr a
@@ -471,12 +550,15 @@ is_greater_e0:
     lsr a
     clc
     adc tmp1+1
+    ;if argument is negative, branch
     bit tmp1+1
     bmi B1D_8362
+    ;if the addition didnt carry, branch
     bcc B1D_8366
     lda #$0f
     bne B1D_8366
 B1D_8362:
+    ;if the addition carried, branch
     bcs B1D_8366
     lda #$00
 B1D_8366:
@@ -996,8 +1078,19 @@ Pitch_Table_Alias:
 incbinRange "../split/prg/bank1d.bin", $73a, $8b1
 B1D_88b1:
 incbinRange "../split/prg/bank1d.bin", $8b1, $955
-B1D_8955:
-incbinRange "../split/prg/bank1d.bin", $955, $991
+
+NoteLengthTable:
+.byte $01,$02,$03,$04,$05,$06
+.byte $05,$0A,$0F,$14,$1E,$50
+.byte $09,$12,$1B,$24,$2D,$36
+.byte $07,$0E,$15,$1C,$23,$2A
+.byte $06,$0C,$12,$18,$1E,$24
+.byte $08,$10,$18,$20,$28,$30
+.byte $0A,$14,$1E,$28,$32,$3C
+.byte $0B,$16,$21,$2C,$37,$42
+.byte $04,$04,$08,$10,$28,$20
+.byte $03,$04,$09,$0C,$1B,$3F
+
 B1D_8991:
 incbinRange "../split/prg/bank1d.bin", $991, $9cb
 B1D_89cb:
@@ -1014,464 +1107,25 @@ B1D_8b47:
 .incbin "../split/prg/bank1d.bin", $b47
 
 .segment "PRG1E": absolute
+mus_vegetable_valley:
 .byte 5
-.addr THE_PULSE2_CHANNEL
+.addr mus_vegetable_valley_pulse2
 .byte 4
-.addr THE_DPCM_CHANNEL
+.addr mus_vegetable_valley_dpcm
 .byte 12
-.addr THE_TRIANGLE_CHANNEL
+.addr mus_vegetable_valley_triangle
 .byte 8
-.addr THE_PULSE1_CHANNEL
+.addr mus_vegetable_valley_pulse1
 .byte 0
-.addr THE_NOISE_CHANNEL
+.addr mus_vegetable_valley_noise
 .byte 12
 
 
 
     incbinRange "../split/prg/bank1e.bin", $10, $8C
 
-;PAT_ is for patterns
-;MUS_ is for main tracks.
-;whether or not they hold the same commands is debatable
-;(they probably do)
-;i highly doubt MUS_PLAY can be in patterns.
-.macro PAT_SAMPLE start, end
-    .byte $e0
-    .byte dmc_sampleaddr start
-    .byte dmc_samplelen start, end
-.endmacro
 
-.macro MUS_UNK_F0 arg1
-    .byte $F0, arg1
-.endmacro
-
-.macro MUS_TEMPO arg1
-    .byte $F2, arg1
-.endmacro
-
-.macro MUS_UNK_F4 arg1
-    .byte $F4, arg1
-.endmacro
-
-.macro MUS_UNK_F5 arg1
-    .byte $F5, arg1
-.endmacro
-
-.macro MUS_LOOP pointer
-    .byte $F8
-    .addr pointer
-.endmacro
-
-.macro MUS_PLAY pointer
-    .byte $FA
-    .addr pointer
-.endmacro
-
-.macro PAT_END
-    .byte $FB
-.endmacro
-
-.macro PAT_REPEAT count
-    .byte $FC, count
-.endmacro
-
-THE_PULSE2_CHANNEL:
-MUS_TEMPO $01
-MUS_PLAY $A16E
-MUS_UNK_F0 $0D
-.byte $F4,$F0
-.byte $F6,$1E,$34
-.byte $F1
-.byte $FC,$F6,$21
-.byte $F4,$82
-PAT_REPEAT 7
-.byte $2A
-.byte $FD
-MUS_PLAY $A16E
-MUS_PLAY $A196
-MUS_TEMPO $01
-@loop:
-MUS_PLAY $A16E
-MUS_PLAY $A1BB
-MUS_PLAY $A16E
-MUS_PLAY $A1D4
-MUS_UNK_F5 $11
-MUS_PLAY $A2D7
-MUS_UNK_F5 $14
-MUS_PLAY $A2D7
-MUS_UNK_F5 $11
-MUS_PLAY $A2D7
-MUS_PLAY $A1FD
-MUS_UNK_F5 $11
-MUS_PLAY $A0ED
-MUS_UNK_F0 $0D
-MUS_PLAY $A154
-MUS_PLAY $A0ED
-MUS_PLAY $A12F
-MUS_UNK_F5 $11
-MUS_PLAY $A258
-MUS_UNK_F5 $14
-MUS_PLAY $A258
-MUS_UNK_F5 $11
-MUS_PLAY $A258
-MUS_PLAY $A29D
-MUS_LOOP @loop
-
-incbinRange "../split/prg/bank1e.bin", $ED, $301
-THE_NOISE_CHANNEL:
-MUS_TEMPO $01
-PAT_REPEAT 7
-MUS_PLAY $A350
-.byte $FD
-MUS_PLAY $A335
-MUS_TEMPO $01
-PAT_REPEAT 3
-MUS_PLAY $A350
-.byte $FD
-MUS_PLAY $A335
-PAT_REPEAT 3
-MUS_PLAY $A350
-.byte $FD
-MUS_PLAY $A335
-PAT_REPEAT 7
-MUS_PLAY $A350
-.byte $FD
-MUS_PLAY $A335
-PAT_REPEAT 15
-MUS_PLAY $A350
-.byte $FD
-MUS_PLAY $A335
-.byte $F8,$0E,$A3
-incbinRange "../split/prg/bank1e.bin", $335, $367
-
-THE_TRIANGLE_CHANNEL:
-MUS_TEMPO $01
-.byte $F5,$29
-MUS_PLAY $A47D
-MUS_PLAY $A47D
-.byte $F5,$2B
-MUS_PLAY $A47D
-.byte $F5,$29
-PAT_REPEAT 3
-MUS_PLAY $A47D
-.byte $FD
-.byte $F5,$2B
-MUS_PLAY $A47D
-.byte $F5,$29
-MUS_PLAY $A489
-MUS_TEMPO $01
-.byte $F5,$29
-MUS_PLAY $A47D
-MUS_PLAY $A47D
-.byte $F5,$2B
-MUS_PLAY $A47D
-.byte $F5,$29
-MUS_PLAY $A4A6
-.byte $F5,$29
-MUS_PLAY $A47D
-MUS_PLAY $A47D
-.byte $F5,$2B
-MUS_PLAY $A47D
-.byte $F5,$29
-MUS_PLAY $A496
-.byte $F5,$29
-.byte $F4,$78
-MUS_PLAY $A472
-.byte $F5,$2C
-MUS_PLAY $A472
-.byte $F5,$29
-MUS_PLAY $A472
-MUS_PLAY $A45F
-.byte $F4,$A0,$7E
-.byte $F5,$29
-MUS_PLAY $A42B
-MUS_PLAY $A452
-MUS_PLAY $A42B
-MUS_PLAY $A442
-.byte $F5,$35
-MUS_PLAY $A3E4
-MUS_PLAY $A415
-MUS_PLAY $A3E4
-MUS_PLAY $A3FF
-.byte $F8,$8A,$A3
-incbinRange "../split/prg/bank1e.bin", $3e4, $4b6
-
-THE_PULSE1_CHANNEL:
-MUS_TEMPO $01
-MUS_PLAY @PATTERN1
-MUS_TEMPO $01
-@loop:
-.byte $F0,$07
-.byte $F6,$24
-MUS_PLAY @PATTERN2
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN8
-MUS_PLAY @PATTERN9
-.byte $F6,$24
-MUS_PLAY @PATTERN3
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN5
-MUS_PLAY @PATTERN6
-.byte $F0,$07
-.byte $F6,$24
-MUS_PLAY @PATTERN11
-.byte $F6,$24
-MUS_PLAY @PATTERN12
-.byte $64
-.byte $F0,$07
-.byte $F6,$22
-MUS_PLAY @PATTERN2
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN8
-MUS_PLAY @PATTERN10
-.byte $F6,$22
-MUS_PLAY @PATTERN3
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN5
-MUS_PLAY @PATTERN7
-.byte $F0,$07
-.byte $F6,$0F
-MUS_PLAY @PATTERN11
-.byte $F6,$0F
-MUS_PLAY @PATTERN12
-.byte $70
-MUS_LOOP @loop
-
-@PATTERN1:
-.byte $F0,$07
-.byte $F6,$0F
-.byte $F5,$29
-.byte $F4,$7D
-
-;repeat
-PAT_REPEAT 5
-;notes
-.byte $39,$3B,$20
-.byte $FD,$19,$19
-;repeat
-PAT_REPEAT 3
-;notes
-.byte $3B,$3E,$25
-
-.byte $FD,$3B,$3E,$22,$24
-.byte $F4
-.byte $FA
-.byte $F1
-.byte $FF
-.byte $F5,$35,$00
-.byte $F1
-.byte $FD,$00
-.byte $F1,$03,$0C
-.byte $F1
-.byte $FD,$0C
-.byte $F1,$03,$00
-.byte $F1
-.byte $FD,$00
-.byte $F1,$03
-.byte $F6,$0F
-.byte $F4,$7D
-.byte $F5,$29
-.byte $F0,$07
-PAT_REPEAT 5
-.byte $39,$3B,$20
-.byte $FD,$19,$19,$3B
-.byte $F1
-.byte $FF,$3D,$3E,$22,$25,$22,$25,$29,$27
-.byte $F6,$04
-.byte $F1,$02
-.byte $F4,$6E,$2C,$2A
-.byte $F4,$C8,$29
-.byte $F4,$78,$27,$90
-PAT_END
-
-@PATTERN2:
-.byte $F5,$29,$F4
-.byte $FF,$9D,$1E,$00,$FB
-
-@PATTERN3:
-.byte $F5,$29,$F4,$FF,$80,$1D,$00,$FB
-
-@PATTERN4:
-.byte $67,$65,$64,$42,$04,$60,$FB
-
-@PATTERN5:
-.byte $65,$87,$08,$09,$6A,$4E,$0C,$CC,$28,$FB
-
-@PATTERN6:
-.byte $30,$F5
-.byte $29,$F0,$05,$F6,$07,$0A,$0A,$2A,$30,$FB
-
-@PATTERN7:
-.byte $10,$F5,$1D,$F0,$06,$F4
-.byte $FC,$F6,$21,$00,$F4,$AB,$02,$03,$04,$1E,$2A,$FB
-
-@PATTERN8:
-.byte $7D,$9E,$02,$05
-.byte $6C,$4A,$09,$C7,$28,$FB
-
-@PATTERN9:
-.byte $30,$F5,$35,$F6,$21,$F4,$A0,$F1,$FE,$07
-.byte $07,$04,$F1,$02,$50,$FB
-
-@PATTERN10:
-.byte $30,$F5,$35,$F6,$21,$F4,$A0,$F1,$FE,$07
-.byte $F1,$FF,$07,$F1,$02,$0C,$F1,$03,$50,$FB
-
-@PATTERN11:
-.byte $F5,$35,$F4,$FA,$5A,$1C
-.byte $1D,$10,$06,$10,$64,$5F,$01,$62,$5D,$02,$DC,$28,$5D,$1F,$00,$10
-.byte $09,$10,$67,$45,$04,$82,$F6,$04,$F4,$00,$F5,$41,$F1,$FD,$07,$F1
-.byte $FE,$07,$F1,$02,$1B,$F1,$FE,$1B,$F1,$05,$90,$F5,$35,$FB
-
-@PATTERN12:
-.byte $F4,$FA
-.byte $5A,$1B,$1D,$10,$26,$84,$1F,$01,$62,$5D,$02,$7C,$1D,$10,$1F,$10
-.byte $40,$02,$04,$10,$0C,$10,$2B,$30,$66,$C7,$28,$70,$F6,$0F,$F0,$06
-.byte $F4,$BE,$F5,$1D,$FB
-
-THE_DPCM_CHANNEL:
-MUS_TEMPO $01
-PAT_REPEAT 4
-MUS_PLAY @PATTERN4
-.byte $FD
-@loop:
-MUS_TEMPO $01
-PAT_REPEAT 2
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN5
-.byte $FD
-MUS_PLAY @PATTERN6
-MUS_PLAY @PATTERN7
-MUS_PLAY @PATTERN6
-MUS_PLAY @PATTERN8
-MUS_PLAY @PATTERN4
-MUS_PLAY @PATTERN3
-MUS_PLAY @PATTERN4
-PAT_REPEAT 3
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-.byte $FD
-PAT_SAMPLE kick_Start, kick_End
-.byte $9F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_REPEAT 3
-MUS_PLAY @PATTERN1
-MUS_PLAY @PATTERN2
-.byte $FD
-MUS_PLAY @PATTERN1
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F,$7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F
-MUS_LOOP @loop
-
-@PATTERN1:
-PAT_REPEAT 2
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F
-.byte $FD
-PAT_END
-
-@PATTERN2:
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F,$3F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-PAT_END
-
-@PATTERN3:
-PAT_REPEAT 3
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-.byte $FD
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F,$3F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-PAT_END
-
-@PATTERN4:
-PAT_REPEAT 3
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-.byte $FD
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F
-PAT_END
-
-@PATTERN5:
-PAT_REPEAT 3
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-.byte $FD
-PAT_SAMPLE kick_Start, kick_End
-.byte $9F,$3F
-PAT_END
-
-@PATTERN6:
-PAT_REPEAT 3
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F,$3F
-PAT_SAMPLE snare_Start, snare_End
-.byte $7F
-.byte $FD
-PAT_END
-
-@PATTERN7:
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $7F,$3F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-PAT_SAMPLE kick_Start, kick_End
-.byte $1F
-PAT_SAMPLE snare_Start, snare_End
-.byte $1F
-PAT_END
-
-@PATTERN8:
-PAT_REPEAT 2
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F
-PAT_SAMPLE snare_Start, snare_End
-.byte $3F
-.byte $FD,$7F
-PAT_SAMPLE kick_Start, kick_End
-.byte $3F,$1F,$1F
-PAT_END
+.include "songs/vegetable_valley.asm"
 
     .incbin "../split/prg/bank1e.bin", $739
 

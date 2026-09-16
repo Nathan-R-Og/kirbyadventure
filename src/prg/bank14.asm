@@ -1,9 +1,6 @@
 ZeroKirbyVelocity := $987d
 IsTileWater := $EEDB
 
-L_18B3B8 := $18b3b8
-L_18B2BA := $18B2BA
-
 .segment "PRG14": absolute
 Script01_Kirby:
     ;ending jptl
@@ -279,7 +276,7 @@ L_14A214:
     A_RTS                                   ; 14A221/19
 
 L_14A222:
-    ASMCALL     $A2A5, WAIT #12             ; 14A222/DCA5A2
+    ASMCALL     B14_a2a5, WAIT #12             ; 14A222/DCA5A2
     A_RTS                                   ; 14A225/19
 
 TASK_14A226:
@@ -394,7 +391,7 @@ B14_a2f2:
 
 L_14A304:
     MOV         $05F9,#$88                  ; 14A304/11F90588
-    ASMCALL     $A331                       ; 14A308/D031A3
+    ASMCALL     B14_a331                       ; 14A308/D031A3
     ONTICK      $14A24A                     ; 14A30B/084AA214
     ASMCALL     $DE4B                       ; 14A30F/D04BDE // Play sound effect
     .byte       $20                         ; 14A312/20
@@ -416,7 +413,7 @@ L_14A31F:
     A_RTS                                   ; 14A32C/19
 
 L_14A32D:
-    ASMCALL     $A2A5, WAIT #12             ; 14A32D/DCA5A2
+    ASMCALL     B14_a2a5, WAIT #12             ; 14A32D/DCA5A2
     A_RTS                                   ; 14A330/19
 
 
@@ -442,7 +439,7 @@ L_14A34A:
     MOV         $05F9,#$80                  ; 14A34D/11F90580
     ASMCALL     $DE4B                       ; 14A351/D04BDE // Play sound effect
     .byte       $4A                         ; 14A354/4A
-    ASMCALL     $A26E                       ; 14A355/D06EA2 // Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
+    ASMCALL     B14_a26e                       ; 14A355/D06EA2 // Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
     .word       $0080                       ; 14A358/8000
     ASMCALL     $885C                       ; 14A35A/D05C88 // Set Kirby's Y velocity
     .word       $FE00                       ; 14A35D/00FE
@@ -466,7 +463,7 @@ L_14A372:
 KSTE9_CharredKnockbackBounce:
     MOV         VAR0,#$78                   ; 14A37B/0D0078
     TASK        TASK_14A3A8                 ; 14A37E/07A8A3
-    ASMCALL     $DF61                       ; 14A381/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 14A381/D061DF // Load_Palette, palette, start_index, entries
     .word       L_14A3A4                    ; 14A384/A4A3
     .byte       $10                         ; 14A386/10
     .byte       $04                         ; 14A387/04
@@ -483,7 +480,7 @@ L_14A397:
     A_JMP       L_14A397                    ; 14A39D/1797A3
 
 L_14A3A0:
-    ASMCALL     $A2A5                       ; 14A3A0/D0A5A2
+    ASMCALL     B14_a2a5                       ; 14A3A0/D0A5A2
     HALT                                    ; 14A3A3/09
 
 L_14A3A4:
@@ -539,7 +536,7 @@ L_14A42A:
     MOV         $05F9,#$80                  ; 14A42D/11F90580
     ASMCALL     $DE4B                       ; 14A431/D04BDE // Play sound effect
     .byte       $4B                         ; 14A434/4B
-    ASMCALL     $A26E                       ; 14A435/D06EA2 // Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
+    ASMCALL     B14_a26e                       ; 14A435/D06EA2 // Set Kirby's X velocity (negative if `VAR1 ^ VAR2 < 0`)
     .word       $0080                       ; 14A438/8000
     ASMCALL     $885C                       ; 14A43A/D05C88 // Set Kirby's Y velocity
     .word       $FE00                       ; 14A43D/00FE
@@ -563,7 +560,7 @@ L_14A459:
     MOV         $05F9,#$80                  ; 14A45C/11F90580
     ASMCALL     $DE4B                       ; 14A460/D04BDE // Play sound effect
     .byte       $49                         ; 14A463/49
-    ASMCALL     $DF61                       ; 14A464/D061DF // Load_Palette, palette, start_index, entries
+    ASMCALL     Load_Palette                       ; 14A464/D061DF // Load_Palette, palette, start_index, entries
     .word       $A4AE                       ; 14A467/AEA4
     .byte       $10                         ; 14A469/10
     .byte       $04                         ; 14A46A/04
@@ -641,7 +638,7 @@ KSTEE_Miss:
     MOV         $059F,#$FF                  ; 14A507/119F05FF
     MOV         $05FC,#$04                  ; 14A50B/11FC0504
     ASMCALL     B14_a186                    ; 14A50F/D086A1 // Freeze all objects in slots 9 through 17 (enemies, enemy projectiles and misc)
-    ASMCALL     $A595                       ; 14A512/D095A5 // Store Kirby's position
+    ASMCALL     B14_a595                       ; 14A512/D095A5 // Store Kirby's position
     ONMOVE      $D864                       ; 14A515/2364D8
     ONPOSITION  $D97D                       ; 14A518/217DD9
     ASMCALL     $DE4B                       ; 14A51B/D04BDE // Play sound effect
@@ -650,7 +647,7 @@ KSTEE_Miss:
     .byte       $FF                         ; 14A522/FF
     ASMCALL     $E2D9                       ; 14A523/D0D9E2 // Unknown ASM $E2D9 (Set $05A0 and $05A1)
     .byte       $07                         ; 14A526/07
-    ASMCALL     $A58A                       ; 14A527/D08AA5 // Destroy all objects in slots 3, 4 and 5 (Kirby particles)
+    ASMCALL     B14_a58a                       ; 14A527/D08AA5 // Destroy all objects in slots 3, 4 and 5 (Kirby particles)
     ASMCALL     $9CB3                       ; 14A52A/D0B39C // Load some palette? (Kirby's palette?)
     ASMCALL     $C977                       ; 14A52D/D077C9
     ASMCALL     $9952                       ; 14A530/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -1001,7 +998,7 @@ L_14A763:
 
 KST03_Idle:
     MOV         $05E1,#$00                  ; 14A773/11E10500
-    ONTICK      $14A79B                     ; 14A777/089BA714
+    ONTICK      B14_a79b                     ; 14A777/089BA714
     ASMCALL     $8015                       ; 14A77B/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
     JEQ         L_14A789                    ; 14A77E/0A89A7
     ASMCALL     $801F                       ; 14A781/D01F80 // Maybe set sloped pose? (first = regular, second = slope)

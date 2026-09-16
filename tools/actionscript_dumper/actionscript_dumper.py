@@ -37,7 +37,7 @@ OPCODES = (
     ('ENDLOOP',     ''),                       # 02
     ('JML',         'label_24'),               # 03
     ('JSL',         'label_24'),               # 04
-    ('RTL',         ''),                       # 05
+    ('A_RTL',       ''),                       # 05
     ('WAIT',        'imm_u8'),                 # 06
     ('TASK',        'label_16'),               # 07
     ('ONTICK',      'addr_24'),                # 08
@@ -57,7 +57,7 @@ OPCODES = (
     ('BINOP',       'addr_16 imm_u8 imm_8'),   # 16
     ('A_JMP',       'label_16'),               # 17
     ('A_JSR',       'label_16'),               # 18
-    ('A_RTS',         ''),                       # 19
+    ('A_RTS',       ''),                       # 19
     ('SPRITEMAP',   'addr_24'),                # 1A
     ('MOV',         'reg imm_8'),              # 1B
     ('MOV',         'reg addr_16'),            # 1C
@@ -71,7 +71,7 @@ OPCODES = (
     ('SETPOSE',     'obj_var'),                # 24
     ('BINOP',       'reg imm_u8 imm_8'),       # 25
     ('ASMCALL_l',   'addr_24'),                # 26
-    ('MOV',         'addr_16 imm_16'),         # 27
+    ('MOVW',        'addr_16 imm_16'),         # 27
     ('SETBANK',     'imm_8'),                  # 28
     ('TABLECALL',   'imm_u8'),                 # 29
     ('SETXPOS',     'imm_16'),                 # 2A
@@ -235,7 +235,7 @@ class Disassembler(object):
 
                 self.pc = self.rom_file.tell()
                 if self.force_label:
-                    #write a comment to denote if there are breaks                    
+                    #write a comment to denote if there are breaks
                     if i < len(l):
                         if self.nes_pc != l[i]:
                             to_write_1 = '${:06X}'.format(self.nes_pc)
@@ -257,7 +257,7 @@ class Disassembler(object):
                                 self.out_file.write(f'; --- START OF BANK {bank_byte_2.upper()} ---\n')
                                 if not rom_addr_2 & 0x1FFF == 0x0000:
                                     self.out_file.write(f'incbinRange "../split/prg/bank{bank_byte_2}.bin", ' + '$0000, ' + '${:04X}\n'.format(rom_addr_2))
-                    
+
                     break
 
         l = list(self.bad_asmcall)
@@ -308,6 +308,9 @@ class Disassembler(object):
 
         comment = ''
         extra = ''
+
+        if self.pc == 0x330BC+0x10:
+            pass
 
         if mnemonic in ('ASMCALL', 'ASMCALL_l'):
             if mnemonic == 'ASMCALL_l':
@@ -459,6 +462,8 @@ class Disassembler(object):
                 self.lower_prg = None
             elif address in kirby_states:
                 self.lower_prg = 0x21
+            elif (address & 0xFF0000) >> 16 in range(0x16, 0x19+1):
+                self.lower_prg = 0x21
 
             self.traverse(address)
 
@@ -595,7 +600,6 @@ class Disassembler(object):
             return
 
         address = None
-        asm_function = None
         for i, line in enumerate(self.asm_functions_file):
             pre_comment = line.split(';', maxsplit=1)[0].strip()  # Get everything on the line before the comment
             if '=' in pre_comment:
