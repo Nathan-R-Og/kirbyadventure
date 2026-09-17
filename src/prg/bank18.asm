@@ -143,7 +143,7 @@ L_18A3A1:
 
 L_18A3AC:
     ASMCALL     $A40C                       ; 18A3AC/D00CA4
-    MOV         $01A2,#$04                  ; 18A3AF/11A20104
+    MOV         palette_fade,#$04                  ; 18A3AF/11A20104
     LOOP        #4                          ; 18A3B3/0104
         ASMCALL     $C996, WAIT #2              ; 18A3B5/D296C9 // Palette fade (out?) step
 L_18A3B8:
@@ -161,7 +161,7 @@ L_18A3BD:
 L_18A3CD:
     WAIT        #120                        ; 18A3CD/0678
 L_18A3CF:
-    MOV         $01A2,#$00                  ; 18A3CF/11A20100
+    MOV         palette_fade,#$00                  ; 18A3CF/11A20100
     LOOP        #4                          ; 18A3D3/0104
         ASMCALL     $C94C, WAIT #2              ; 18A3D5/D24CC9 // Palette fade dark in step
 L_18A3D8:
@@ -174,7 +174,7 @@ L_18A3DE:
 L_18A3E0:
     WAIT        #120                        ; 18A3E0/0678
 L_18A3E2:
-    MOV         $01A2,#$00                  ; 18A3E2/11A20100
+    MOV         palette_fade,#$00                  ; 18A3E2/11A20100
     MOV         $0603,#$FF                  ; 18A3E6/110306FF
     LOOP        #4                          ; 18A3EA/0104
         LOOP        #8                          ; 18A3EC/0108
@@ -200,7 +200,7 @@ L_18A847:
     MOV         $05E0,#$0A                  ; 18A847/11E0050A
     ASMCALL     $DE4B                       ; 18A84B/D04BDE // Play sound effect
     .byte       $4F                         ; 18A84E/4F
-    SPRITEMAP   $1B9CAE                     ; 18A84F/1AAE9C1B
+    SPRITEMAP   L_1B9CAE                     ; 18A84F/1AAE9C1B
     ONTICK      $18A882                     ; 18A853/0882A818
     ASMCALL     $8710                       ; 18A857/D01087 // Set Kirby's X velocity
     .word       $FE80                       ; 18A85A/80FE
@@ -310,7 +310,7 @@ L_18AA17:
     MOV         VAR0,#$00                   ; 18AA1B/0D0000
     ASMCALL     $DE4B                       ; 18AA1E/D04BDE // Play sound effect
     .byte       $51                         ; 18AA21/51
-    SPRITEMAP   $1B9E5A                     ; 18AA22/1A5A9E1B
+    SPRITEMAP   L_1B9E5A                     ; 18AA22/1A5A9E1B
     ONTICK      $18AA69                     ; 18AA26/0869AA18
     ASMCALL     $AADF                       ; 18AA2A/D0DFAA // Set VAR2 and VAR3
     .byte       $00                         ; 18AA2D/00
@@ -478,7 +478,7 @@ L_18AB7C:
     MOV         $05E0,#$07                  ; 18AB7C/11E00507
     MOV         $05E1,#$00                  ; 18AB80/11E10500
     ASMCALL     $9CB3                       ; 18AB84/D0B39C // Load some palette? (Kirby's palette?)
-    SPRITEMAP   $1C8216                     ; 18AB87/1A16821C
+    SPRITEMAP   L_1C8216                     ; 18AB87/1A16821C
     ONTICK      $18ABD5                     ; 18AB8B/08D5AB18
     ASMCALL     $8FDC                       ; 18AB8F/D0DC8F // Set pose (respect facing)
     .byte       $8A                         ; 18AB92/8A
@@ -614,7 +614,7 @@ L_18AC4F:
 incbinRange "../split/prg/bank18.bin", $0C5A, $0CD7
 
 L_18ACD7:
-    SPRITEMAP   $1A8846                     ; 18ACD7/1A46881A
+    SPRITEMAP   L_1A8846                     ; 18ACD7/1A46881A
     MOV         $05E1,#$09                  ; 18ACDB/11E10509
     ASMCALL     $9D8C                       ; 18ACDF/D08C9D
     MOV         VAR2,#$1E                   ; 18ACE2/0D021E
@@ -700,7 +700,7 @@ L_18AF53:
     .word       $0000                       ; 18AF66/0000
 L_18AF68:
     MOV         $05E0,#$01                  ; 18AF68/11E00501
-    SPRITEMAP   $1A8846                     ; 18AF6C/1A46881A
+    SPRITEMAP   L_1A8846                     ; 18AF6C/1A46881A
     ASMCALL     $9CB3                       ; 18AF70/D0B39C // Load some palette? (Kirby's palette?)
     A_RTS                                   ; 18AF73/19
 

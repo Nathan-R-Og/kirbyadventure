@@ -1169,7 +1169,7 @@ B3E_c95b:
 B3E_c970:
 	.byte $03,$00,$3F,$20,$01,$00,$01
 B3E_c977:
-    ldx $01a2
+    ldx palette_fade
     ldy #$0f
 B3E_c97c:
     lda $0182,y
@@ -1183,19 +1183,19 @@ B3E_c97c:
 B3E_c98f:
 	.byte $03,$00,$3F,$10,$01,$00,$01
 B3E_c996:
-    ldx $01a2
+    ldx palette_fade
     dex
     bpl B3E_c9a2
     cpx #$fc
     bcs B3E_c9a2
     ldx #$fc
 B3E_c9a2:
-    stx $01a2
+    stx palette_fade
     jmp B3E_c95b
 B3E_c9a8:
     lda #$00
 B3E_c9aa:
-    sta $01a2
+    sta palette_fade
     tax
     jmp B3E_c95b
 B3E_c9b1:
@@ -5042,7 +5042,7 @@ B3F_e33f:
     lda $78ed
     sta $62a3
     lda $78ee
-    sta $6360,x
+    sta SCR_sleep_timer,x
     lda $78ef
     rts
 B3F_e376:
@@ -5160,9 +5160,9 @@ B3F_e45d:
     bne B3F_e487
     lda $05a2
     beq B3F_e47c
-    lda $055f
+    lda current_room+1
     bne B3F_e47c
-    lda $055e
+    lda current_room
     cmp #$07
     bcc B3F_e487
 B3F_e47c:
@@ -5194,7 +5194,7 @@ B3F_e4b0:
     bne B3F_e4be
     jsr B3F_e581
     lda #$ff
-    sta $055f
+    sta current_room+1
     jmp B3F_e45d
 B3F_e4be:
     dex
@@ -5204,9 +5204,9 @@ B3F_e4be:
     jmp B3F_e566
 B3F_e4c9:
     lda $0596
-    sta $0597
+    sta kirby_health
     lda #$ff
-    sta $055f
+    sta current_room+1
     jmp B3F_e45d
 B3F_e4d7:
     dex
@@ -5219,23 +5219,23 @@ B3F_e4d7:
 B3F_e4e9:
     dex
     bne B3F_e53b
-    lda $055f
+    lda current_room+1
     cmp #$00
     bne B3F_e4fd
-    lda $055e
+    lda current_room
     cmp #$0c
     bne B3F_e4fd
     jmp B3F_e45d
 B3F_e4fd:
     lda $0596
-    sta $0597
+    sta kirby_health
     ldy $0558
     ldx $0520
     lda $0531,y
     ora B3E_cabe,x
     sta $0531,y
     lda #$ff
-    sta $055f
+    sta current_room+1
     jsr B3F_e581
     lda $0520
     cmp #$07
@@ -5376,8 +5376,8 @@ B3F_e640:
     lda #$38
     jsr BankSwapUpper
     jsr $acca
-    ldx $055e
-    lda $055f
+    ldx current_room
+    lda current_room+1
     bne B3F_e65d
     lda $88a6,x
     pha
@@ -5483,10 +5483,10 @@ B3F_e717:
     sta temp_camera_x
     lda camera_x+1
     sta temp_camera_x+1
-    lda $055f
+    lda current_room+1
     cmp #$00
     bne B3F_e799
-    lda $055e
+    lda current_room
     cmp #$0c
     bne B3F_e799
     lda temp_camera_x+1
@@ -6010,7 +6010,7 @@ B3F_eafe:
     cmp UNK_0+8
     bne B3F_eb0d
     lda $667b,x
-    cmp $055e
+    cmp current_room
     beq B3F_eb2d
 B3F_eb0d:
     inx
@@ -6025,7 +6025,7 @@ B3F_eb0e:
 B3F_eb1c:
     lda UNK_0+8
     sta $6621,x
-    lda $055e
+    lda current_room
     sta $667b,x
     inx
     stx $66dc
@@ -6050,7 +6050,7 @@ B3F_eb44:
     lda $0576,x
     ldx $66d5,y
     sta $6621,x
-    lda $055e
+    lda current_room
     sta $667b,x
     inx
     txa
@@ -6329,7 +6329,7 @@ B3F_ed9c:
     and #$1f
     rts
 B3F_eda2:
-    lda $055f
+    lda current_room+1
     cmp #$ff
     bne B3F_edaa
     rts
@@ -6357,8 +6357,8 @@ B3F_edd0:
     jsr B3F_f071
     sta tmp0
     stx tmp0+1
-    ldx $055e
-    lda $055f
+    ldx current_room
+    lda current_room+1
     bne B3F_edfa
     lda $8f82,x
     sta ptr0
@@ -6418,8 +6418,8 @@ B3F_ee40:
     clc
     adc UNK_0
     tay
-    ldx $055e
-    lda $055f
+    ldx current_room
+    lda current_room+1
     bne B3F_ee61
     lda $8f82,x
     sta ptr0
@@ -7901,7 +7901,7 @@ B3F_f945:
     sta BANKDATA
     lda $058a
     bne B3F_f9e4
-    lda $0597
+    lda kirby_health
     bpl B3F_f98e
     lda #$00
 B3F_f98e:

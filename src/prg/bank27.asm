@@ -1,7 +1,7 @@
 .segment "PRG27": absolute
 Script22_PoppyBrosSr:
     MOV         $0043,#$EE                  ; 27A000/114300EE
-    SPRITEMAP   $3786CA                     ; 27A004/1ACA8637
+    SPRITEMAP   L_3786CA                     ; 27A004/1ACA8637
     MOV         REG,VAR0                    ; 27A008/1E00
     JNE         L_27A4D3                    ; 27A00A/0BD3A4
     MOV         REG,#$1E                    ; 27A00D/1B1E
@@ -283,7 +283,7 @@ incbinRange "../split/prg/bank27.bin", $0978, $0AA3
 
 L_27AAA3:
     MOV         $0043,#$A4                  ; 27AAA3/114300A4
-    SPRITEMAP   $318000                     ; 27AAA7/1A008031
+    SPRITEMAP   L_318000                     ; 27AAA7/1A008031
     ONTICK      $27AAF0                     ; 27AAAB/08F0AA27
     MOV         VAR7,#$00                   ; 27AAAF/0D0700
     SETPOSE     #$00                        ; 27AAB2/5000
@@ -343,7 +343,7 @@ L_27AAEA:
 incbinRange "../split/prg/bank27.bin", $0AF0, $0B18
 
 Script33_CutterMinion:
-    SPRITEMAP   $3094C9                     ; 27AB18/1AC99430
+    SPRITEMAP   L_3094C9                     ; 27AB18/1AC99430
     ONTICK      $27ACC7                     ; 27AB1C/08C7AC27
     MOV         VAR6,#$FF                   ; 27AB20/0D06FF
     MOV         REG,#$06                    ; 27AB23/1B06
@@ -394,7 +394,7 @@ L_27AB5F:
     MOV         VAR3,#$00                   ; 27AB5F/0D0300
     MOV         VAR8,#$5A                   ; 27AB62/0D085A
     MOV         VAR9,#$00                   ; 27AB65/0D0900
-    SPRITEMAP   $3094C9                     ; 27AB68/1AC99430
+    SPRITEMAP   L_3094C9                     ; 27AB68/1AC99430
     ASMCALL     $9084                       ; 27AB6C/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
     .word       $0080                       ; 27AB6F/8000
     A_JMP       L_27AC19                    ; 27AB71/1719AC
@@ -434,7 +434,7 @@ L_27AB9C:
     MOV         VAR3,#$00                   ; 27AB9C/0D0300
     MOV         VAR8,#$5A                   ; 27AB9F/0D085A
     MOV         VAR9,#$00                   ; 27ABA2/0D0900
-    SPRITEMAP   $3094C9                     ; 27ABA5/1AC99430
+    SPRITEMAP   L_3094C9                     ; 27ABA5/1AC99430
     ASMCALL     $9084                       ; 27ABA9/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
     .word       $0080                       ; 27ABAC/8000
     A_JMP       L_27AC17                    ; 27ABAE/1717AC
@@ -442,7 +442,7 @@ L_27AB9C:
 L_27ABB1:
     MOV         VAR3,#$06                   ; 27ABB1/0D0306
     ASMCALL     $BBAE                       ; 27ABB4/D0AEBB
-    SPRITEMAP   $3094E1                     ; 27ABB7/1AE19430
+    SPRITEMAP   L_3094E1                     ; 27ABB7/1AE19430
 L_27ABBB:
     ZEROVEL                                 ; 27ABBB/38
     ASMCALL     $9075                       ; 27ABBC/D07590 // Set pose to 0 (1 if MSB of VAR4 is set)
@@ -487,13 +487,13 @@ L_27ABE7:
     MOV         VAR3,#$03                   ; 27ABF0/0D0303
     ASMCALL     $BBAE                       ; 27ABF3/D0AEBB
     ASMCALL     $9075                       ; 27ABF6/D07590
-    SPRITEMAP   $3094C9                     ; 27ABF9/1AC99430
+    SPRITEMAP   L_3094C9                     ; 27ABF9/1AC99430
     A_JMP       L_27AC15                    ; 27ABFD/1715AC
 
 L_27AC00:
     MOV         VAR3,#$00                   ; 27AC00/0D0300
     MOV         VAR8,#$5A                   ; 27AC03/0D085A
-    SPRITEMAP   $3094C9                     ; 27AC06/1AC99430
+    SPRITEMAP   L_3094C9                     ; 27AC06/1AC99430
     ASMCALL     $BBCA                       ; 27AC0A/D0CABB
     ASMCALL     $90C8                       ; 27AC0D/D0C890
     ASMCALL     $9084                       ; 27AC10/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
@@ -517,7 +517,7 @@ L_27AC1C:
 L_27AC21:
     ZEROVEL                                 ; 27AC21/38
     MOV         VAR3,#$01                   ; 27AC22/0D0301
-    SPRITEMAP   $3094E1                     ; 27AC25/1AE19430
+    SPRITEMAP   L_3094E1                     ; 27AC25/1AE19430
     ASMCALL     $BBCA                       ; 27AC29/D0CABB
     ASMCALL     $BCD5                       ; 27AC2C/D0D5BC // UNK
     .byte       $31                         ; 27AC2F/31
@@ -557,7 +557,7 @@ L_27AC51:
 L_27AC57:
     ZEROVEL                                 ; 27AC57/38
     MOV         VAR3,#$02                   ; 27AC58/0D0302
-    SPRITEMAP   $309505                     ; 27AC5B/1A059530
+    SPRITEMAP   L_309505                     ; 27AC5B/1A059530
     ASMCALL     $BBCA                       ; 27AC5F/D0CABB
     WAIT        #32                         ; 27AC62/0620
 L_27AC64:
@@ -582,7 +582,7 @@ L_27AC72:
 L_27AC75:
     ZEROVEL                                 ; 27AC75/38
     MOV         VAR3,#$03                   ; 27AC76/0D0303
-    SPRITEMAP   $309505                     ; 27AC79/1A059530
+    SPRITEMAP   L_309505                     ; 27AC79/1A059530
     ASMCALL     $BBCA                       ; 27AC7D/D0CABB
     ASMCALL     $DE4B                       ; 27AC80/D04BDE // Play sound effect
     .byte       $0D                         ; 27AC83/0D
@@ -608,7 +608,7 @@ L_27AC93:
 L_27AC98:
     ZEROVEL                                 ; 27AC98/38
     MOV         VAR3,#$04                   ; 27AC99/0D0304
-    SPRITEMAP   $309505                     ; 27AC9C/1A059530
+    SPRITEMAP   L_309505                     ; 27AC9C/1A059530
     ASMCALL     $BBDC                       ; 27ACA0/D0DCBB
     WAIT        #32                         ; 27ACA3/0620
     ASMCALL     $BCD5                       ; 27ACA5/D0D5BC // UNK
@@ -649,7 +649,7 @@ Script32_MaceMinion:
     .word       L_27AE26                    ; 27AE24/26AE
 L_27AE26:
     ASMCALL     $BBAE                       ; 27AE26/D0AEBB
-    SPRITEMAP   $309120                     ; 27AE29/1A209130
+    SPRITEMAP   L_309120                     ; 27AE29/1A209130
     MOV         VAR3,#$03                   ; 27AE2D/0D0303
     ASMCALL     $9084                       ; 27AE30/D08490
     END                                     ; 27AE33/00
@@ -707,7 +707,7 @@ L_27AE5A:
 L_27AE5D:
     ASMCALL     $BBAE                       ; 27AE5D/D0AEBB
 L_27AE60:
-    SPRITEMAP   $309182                     ; 27AE60/1A829130
+    SPRITEMAP   L_309182                     ; 27AE60/1A829130
     MOV         VAR3,#$02                   ; 27AE64/0D0302
     ASMCALL     $9084                       ; 27AE67/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
     .word       $0040                       ; 27AE6A/4000
@@ -731,7 +731,7 @@ L_27AE74:
 L_27AE7E:
     ASMCALL     $BBAE                       ; 27AE7E/D0AEBB
 L_27AE81:
-    SPRITEMAP   $309108                     ; 27AE81/1A089130
+    SPRITEMAP   L_309108                     ; 27AE81/1A089130
     MOV         VAR3,#$00                   ; 27AE85/0D0300
     ASMCALL     $9075                       ; 27AE88/D07590 // Set pose to 0 (1 if MSB of VAR4 is set)
     WAIT        #32                         ; 27AE8B/0620
@@ -743,7 +743,7 @@ L_27AE90:
     A_JMP       L_27AE81                    ; 27AE93/1781AE
 
 L_27AE96:
-    SPRITEMAP   $309110                     ; 27AE96/1A109130
+    SPRITEMAP   L_309110                     ; 27AE96/1A109130
     ASMCALL     $9075, WAIT #4              ; 27AE9A/D47590 // Set pose to 0 (1 if MSB of VAR4 is set)
 L_27AE9D:
     INC2POSE    WAIT #4                     ; 27AE9D/94
@@ -772,7 +772,7 @@ L_27AEB1:
     INC2POSE                                ; 27AEB5/90
     INC2POSE    WAIT #1                     ; 27AEB6/91
 L_27AEB7:
-    SPRITEMAP   $309174                     ; 27AEB7/1A749130
+    SPRITEMAP   L_309174                     ; 27AEB7/1A749130
     ASMCALL     $9066                       ; 27AEBB/D06690
     ASMCALL     $9075, WAIT #2              ; 27AEBE/D27590 // Set pose to 0 (1 if MSB of VAR4 is set)
 L_27AEC1:
@@ -805,7 +805,7 @@ L_27AEE6:
     A_RTS                                   ; 27AEE6/19
 
 L_27AEE7:
-    SPRITEMAP   $309120                     ; 27AEE7/1A209130
+    SPRITEMAP   L_309120                     ; 27AEE7/1A209130
     ASMCALL     $DE4B                       ; 27AEEB/D04BDE // Play sound effect
     .byte       $23                         ; 27AEEE/23
     ASMCALL     $9075, WAIT #1              ; 27AEEF/D17590 // Set pose to 0 (1 if MSB of VAR4 is set)
@@ -853,7 +853,7 @@ incbinRange "../split/prg/bank27.bin", $0F08, $0FFE
 
 Script35_TridentMinion:
     ONTICK      $27B1E5                     ; 27AFFE/08E5B127
-    SPRITEMAP   $30987B                     ; 27B002/1A7B9830
+    SPRITEMAP   L_30987B                     ; 27B002/1A7B9830
     MOV         VAR6,#$FF                   ; 27B006/0D06FF
     MOV         REG,#$06                    ; 27B009/1B06
     ASMCALL_l   $27BB72                     ; 27B00B/2672BB27
@@ -988,7 +988,7 @@ L_27B0C0:
     MOV         VAR8,#$78                   ; 27B0C5/0D0878
     MOV         VAR9,#$00                   ; 27B0C8/0D0900
 L_27B0CB:
-    SPRITEMAP   $30987B                     ; 27B0CB/1A7B9830
+    SPRITEMAP   L_30987B                     ; 27B0CB/1A7B9830
     ASMCALL     $9075                       ; 27B0CF/D07590 // Set pose to 0 (1 if MSB of VAR4 is set)
     LOOP        #3                          ; 27B0D2/0103
         WAIT        #8                          ; 27B0D4/0608
@@ -1005,7 +1005,7 @@ L_27B0DA:
 L_27B0DB:
         ADDPOSE     #-10                        ; 27B0DB/60F6
     ENDLOOP                                 ; 27B0DD/02
-    SPRITEMAP   $309893                     ; 27B0DE/1A939830
+    SPRITEMAP   L_309893                     ; 27B0DE/1A939830
     ASMCALL     $BBCA, WAIT #4              ; 27B0E2/D4CABB
 L_27B0E5:
     INC2POSE    WAIT #4                     ; 27B0E5/94
@@ -1082,7 +1082,7 @@ L_27B143:
     MOV         VAR9,#$00                   ; 27B14C/0D0900
     MOV         VAR3,#$01                   ; 27B14F/0D0301
 L_27B152:
-    SPRITEMAP   $30987B                     ; 27B152/1A7B9830
+    SPRITEMAP   L_30987B                     ; 27B152/1A7B9830
     MOV         REG,VAR9                    ; 27B156/1E09
     JNE         L_27B16F                    ; 27B158/0B6FB1
     ASMCALL     $9084                       ; 27B15B/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
@@ -1131,7 +1131,7 @@ L_27B1A4:
     MOV         VAR3,#$03                   ; 27B1A4/0D0303
     ZEROVEL                                 ; 27B1A7/38
     MOV         VAR9,#$00                   ; 27B1A8/0D0900
-    SPRITEMAP   $309893                     ; 27B1AB/1A939830
+    SPRITEMAP   L_309893                     ; 27B1AB/1A939830
     A_JSR       L_27B1CB                    ; 27B1AF/18CBB1
     WAIT        #16                         ; 27B1B2/0610
 L_27B1B4:
@@ -1141,7 +1141,7 @@ L_27B1B4:
 L_27B1B8:
     MOV         VAR3,#$04                   ; 27B1B8/0D0304
     ZEROVEL                                 ; 27B1BB/38
-    SPRITEMAP   $309893                     ; 27B1BC/1A939830
+    SPRITEMAP   L_309893                     ; 27B1BC/1A939830
     SETYVEL     #$FD00                      ; 27B1C0/C000FD
     ASMCALL     $DE4B                       ; 27B1C3/D04BDE // Play sound effect
     .byte       $0D                         ; 27B1C6/0D
@@ -1189,7 +1189,7 @@ Script34_SpearMinion:
     .word       L_27B38A                    ; 27B35E/8AB3
     .word       L_27B362                    ; 27B360/62B3
 L_27B362:
-    SPRITEMAP   $309705                     ; 27B362/1A059730
+    SPRITEMAP   L_309705                     ; 27B362/1A059730
     MOV         VAR3,#$06                   ; 27B366/0D0306
     ASMCALL     $BBAE                       ; 27B369/D0AEBB
     ASMCALL     $9084                       ; 27B36C/D08490
@@ -1211,7 +1211,7 @@ L_27B387:
 
 L_27B38A:
     MOV         VAR3,#$00                   ; 27B38A/0D0300
-    SPRITEMAP   $3096C9                     ; 27B38D/1AC99630
+    SPRITEMAP   L_3096C9                     ; 27B38D/1AC99630
     MOV         VAR8,#$03                   ; 27B391/0D0803
     ASMCALL     $BBCA                       ; 27B394/D0CABB
     ASMCALL     $B62E                       ; 27B397/D02EB6
@@ -1265,7 +1265,7 @@ Script31_MinionProjectile:
 L_27B69C:
     MOV         REG,#$FF                    ; 27B69C/1BFF
     ASMCALL_l   $27BB72                     ; 27B69E/2672BB27
-    SPRITEMAP   $3795BF                     ; 27B6A2/1ABF9537
+    SPRITEMAP   L_3795BF                     ; 27B6A2/1ABF9537
     SETPOSE     #$00, WAIT #2               ; 27B6A6/5200
 L_27B6A8:
     INCPOSE     WAIT #2                     ; 27B6A8/72
@@ -1321,7 +1321,7 @@ L_27B746:
     ASMCALL     $DE4B                       ; 27B746/D04BDE // Play sound effect
     .byte       $3F                         ; 27B749/3F
     MOV         VAR0,#$02                   ; 27B74A/0D0002
-    SPRITEMAP   $30952D                     ; 27B74D/1A2D9530
+    SPRITEMAP   L_30952D                     ; 27B74D/1A2D9530
     ONTICK      $27B768                     ; 27B751/0868B727
     ASMCALL     $BCA4                       ; 27B755/D0A4BC
     ASMCALL     $9084                       ; 27B758/D08490 // Set X velocity (velocity is negative if MSB of VAR4 is set)
@@ -1342,7 +1342,7 @@ L_27B765:
 incbinRange "../split/prg/bank27.bin", $1768, $1814
 
 L_27B814:
-    SPRITEMAP   $309180                     ; 27B814/1A809130
+    SPRITEMAP   L_309180                     ; 27B814/1A809130
     SETPOSE     #$00                        ; 27B818/5000
     ASMCALL     $DE4B                       ; 27B81A/D04BDE // Play sound effect
     .byte       $3E                         ; 27B81D/3E
@@ -1393,7 +1393,7 @@ L_27B904:
     MOV         VAR0,#$02                   ; 27B904/0D0002
     ASMCALL     $DE4B                       ; 27B907/D04BDE // Play sound effect
     .byte       $46                         ; 27B90A/46
-    SPRITEMAP   $3098B7                     ; 27B90B/1AB79830
+    SPRITEMAP   L_3098B7                     ; 27B90B/1AB79830
     ONTICK      $27B935                     ; 27B90F/0835B927
     ASMCALL     $BCA4                       ; 27B913/D0A4BC
     ADDYPOS     #-10                        ; 27B916/2DF6FF
@@ -1452,7 +1452,7 @@ incbinRange "../split/prg/bank27.bin", $1992, $19AA
 
 L_27B9AA:
     ONTICK      $27B9C4                     ; 27B9AA/08C4B927
-    SPRITEMAP   $30973B                     ; 27B9AE/1A3B9730
+    SPRITEMAP   L_30973B                     ; 27B9AE/1A3B9730
     MOV         VAR0,#$02                   ; 27B9B2/0D0002
     ASMCALL     $9075                       ; 27B9B5/D07590 // Set pose to 0 (1 if MSB of VAR4 is set)
     ASMCALL     $BCA4                       ; 27B9B8/D0A4BC

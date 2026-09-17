@@ -71,7 +71,7 @@ L_2EA1C0:
     LOOP        #4                          ; 2EA20E/0104
         ASMCALL     $C94C, WAIT #4              ; 2EA210/D44CC9 // Palette fade dark in step
     ENDLOOP                                 ; 2EA213/02
-    SPRITEMAP   $359B38                     ; 2EA214/1A389B35
+    SPRITEMAP   L_359B38                     ; 2EA214/1A389B35
     SETPOSE     #$08                        ; 2EA218/5008
     MOV         VAR7,#$00                   ; 2EA21A/0D0700
     ONTICK      $2EA59E                     ; 2EA21D/089EA52E
@@ -96,7 +96,7 @@ L_2EA252:
     ONDRAW      $DDA3                       ; 2EA25B/20A3DD
     ZEROVEL                                 ; 2EA25E/38
     MOV         VAR4,#$00                   ; 2EA25F/0D0400
-    SPRITEMAP   $1C8216                     ; 2EA262/1A16821C
+    SPRITEMAP   L_1C8216                     ; 2EA262/1A16821C
 L_2EA266:
     ASMCALL     $DE4B                       ; 2EA266/D04BDE // Play sound effect
     .byte       $52                         ; 2EA269/52
@@ -113,7 +113,7 @@ incbinRange "../split/prg/bank2e.bin", $0276, $0360
 
 L_2EA360:
     SETZPOS     #$00C8                      ; 2EA360/3AC800
-    SPRITEMAP   $359B38                     ; 2EA363/1A389B35
+    SPRITEMAP   L_359B38                     ; 2EA363/1A389B35
 L_2EA367:
     SETXPOS     #$0072                      ; 2EA367/2A7200
     SETYPOS     #$008E                      ; 2EA36A/2B8E00
@@ -122,7 +122,7 @@ L_2EA367:
 
 L_2EA373:
     SETZPOS     #$00C1                      ; 2EA373/3AC100
-    SPRITEMAP   $359B38                     ; 2EA376/1A389B35
+    SPRITEMAP   L_359B38                     ; 2EA376/1A389B35
     SETXPOS     #$0062                      ; 2EA37A/2A6200
     SETYPOS     #$008E                      ; 2EA37D/2B8E00
     A_JSR       L_2EA386                    ; 2EA380/1886A3
@@ -170,18 +170,18 @@ L_2EB069:
     ONPOSITION  $D968                       ; 2EB069/2168D9
     ONMOVE      $D942                       ; 2EB06C/2342D9
     SETBANK     #$22                        ; 2EB06F/2822
-    SPRITEMAP   $379A97                     ; 2EB071/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB071/1A979A37
     MOV         $0042,#$98                  ; 2EB075/11420098
     MOV         $0043,#$CC                  ; 2EB079/114300CC
     MOV         $058A,#$01                  ; 2EB07D/118A0501
     SETPOSE     #$FF                        ; 2EB081/50FF
     ASMCALL     $C086                       ; 2EB083/D086C0 // Write 0xFF to $37 and wait a frame
     ASMCALL     $9009                       ; 2EB086/D00990 // Call $3DBCFC
-    MOV         $055F,#$00                  ; 2EB089/115F0500
+    MOV         current_room+1,#$00                  ; 2EB089/115F0500
     ONTICK      $2EBAD8                     ; 2EB08D/08D8BA2E
     MOV         VAR0,#$07                   ; 2EB091/0D0007
     ASMCALL     $BA64                       ; 2EB094/D064BA
-    MOV         $01A2,#$04                  ; 2EB097/11A20104
+    MOV         palette_fade,#$04                  ; 2EB097/11A20104
     LOOP        #4                          ; 2EB09B/0104
         ASMCALL     $C996, WAIT #8              ; 2EB09D/D896C9 // Palette fade (out?) step
 L_2EB0A0:
@@ -578,7 +578,7 @@ L_2EB32D:
 L_2EB334:
     ONPOSITION  $D968                       ; 2EB334/2168D9
     ONMOVE      $D945                       ; 2EB337/2345D9
-    SPRITEMAP   $339B28                     ; 2EB33A/1A289B33
+    SPRITEMAP   L_339B28                     ; 2EB33A/1A289B33
     SETZPOS     #$0080                      ; 2EB33E/3A8000
     SETXPOS     #$00D0                      ; 2EB341/2AD000
     SETYPOS     #$00B0                      ; 2EB344/2BB000
@@ -608,7 +608,7 @@ L_2EB372:
     END                                     ; 2EB372/00
 
 L_2EB373:
-    SPRITEMAP   $379A97                     ; 2EB373/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB373/1A979A37
     ONPOSITION  $D9BB                       ; 2EB377/21BBD9
     ONMOVE      $D920                       ; 2EB37A/2320D9
     SETXPOS     #$00B0                      ; 2EB37D/2AB000
@@ -649,7 +649,7 @@ L_2EB39C:
     A_JMP       L_2EB38D                    ; 2EB39C/178DB3
 
 L_2EB39F:
-    SPRITEMAP   $379A97                     ; 2EB39F/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB39F/1A979A37
     ONPOSITION  $D968                       ; 2EB3A3/2168D9
     ONMOVE      $D945                       ; 2EB3A6/2345D9
     ZEROVEL                                 ; 2EB3A9/38
@@ -699,7 +699,7 @@ L_2EB3ED:
     END                                     ; 2EB3ED/00
 
 L_2EB3EE:
-    SPRITEMAP   $379A97                     ; 2EB3EE/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB3EE/1A979A37
     SETXPOS     #$0070                      ; 2EB3F2/2A7000
     SETYPOS     #$0067                      ; 2EB3F5/2B6700
     MOV         REG,VAR1                    ; 2EB3F8/1E01
@@ -863,7 +863,7 @@ L_2EB4CB:
 L_2EB4CE:
     ONPOSITION  $D968                       ; 2EB4CE/2168D9
     ONMOVE      $D945                       ; 2EB4D1/2345D9
-    SPRITEMAP   $379A97                     ; 2EB4D4/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB4D4/1A979A37
     ZEROVEL                                 ; 2EB4D8/38
     SETPOSE     #$2E                        ; 2EB4D9/502E
     ASMCALL     $BA97                       ; 2EB4DB/D097BA
@@ -892,11 +892,11 @@ L_2EB4F1:
     .word       L_2EB8CD                    ; 2EB501/CDB8
 L_2EB503:
     SETBANK     #$21                        ; 2EB503/2821
-    SPRITEMAP   $379A97                     ; 2EB505/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB505/1A979A37
     MOV         $0042,#$98                  ; 2EB509/11420098
     MOV         $0043,#$80                  ; 2EB50D/11430080
     MOV         $058A,#$01                  ; 2EB511/118A0501
-    MOV         $01A2,#$04                  ; 2EB515/11A20104
+    MOV         palette_fade,#$04                  ; 2EB515/11A20104
     ASMCALL     $C086                       ; 2EB519/D086C0 // Write 0xFF to $37 and wait a frame
     MOV         VAR0,#$06                   ; 2EB51C/0D0006
     ASMCALL     $BA64                       ; 2EB51F/D064BA
@@ -945,7 +945,7 @@ L_2EB566:
     ASMCALL     $BB8C                       ; 2EB573/D08CBB
     MOV         $0180,#$00                  ; 2EB576/11800100
     ASMCALL     $C9A8                       ; 2EB57A/D0A8C9
-    MOV         $01A2,#$04                  ; 2EB57D/11A20104
+    MOV         palette_fade,#$04                  ; 2EB57D/11A20104
     ASMCALL     $C977                       ; 2EB581/D077C9
     WAIT        #120                        ; 2EB584/0678
 L_2EB586:
@@ -959,11 +959,11 @@ L_2EB594:
     A_JSR       L_2EB7D1                    ; 2EB594/18D1B7
     WAIT        #210                        ; 2EB597/06D2
 L_2EB599:
-    MOV         $01A2,#$00                  ; 2EB599/11A20100
+    MOV         palette_fade,#$00                  ; 2EB599/11A20100
     LOOP        #4                          ; 2EB59D/0104
         ASMCALL     $BBE5, WAIT #12             ; 2EB59F/DCE5BB
 L_2EB5A2:
-        ADD         $01A2,#1                    ; 2EB5A2/16A2010201
+        ADD         palette_fade,#1                    ; 2EB5A2/16A2010201
     ENDLOOP                                 ; 2EB5A7/02
     MOV         $0603,#$FF                  ; 2EB5A8/110306FF
     LOOP        #128                        ; 2EB5AC/0180
@@ -982,7 +982,7 @@ L_2EB5C5:
     ASMCALL     $DE4B                       ; 2EB5C5/D04BDE // Play sound effect
     .byte       $44                         ; 2EB5C8/44
     ONMOVE      $D920                       ; 2EB5C9/2320D9
-    SPRITEMAP   $379A97                     ; 2EB5CC/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB5CC/1A979A37
     SETXPOS     #$007E                      ; 2EB5D0/2A7E00
     SETYPOS     #$003A                      ; 2EB5D3/2B3A00
     MOV         REG,VAR1                    ; 2EB5D6/1E01
@@ -1110,7 +1110,7 @@ L_2EB6AC:
     END                                     ; 2EB6B4/00
 
 L_2EB6B5:
-    SPRITEMAP   $379A97                     ; 2EB6B5/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB6B5/1A979A37
     ONMOVE      $D920                       ; 2EB6B9/2320D9
     MOV         REG,VAR1                    ; 2EB6BC/1E01
     TABLEJMP    #10                         ; 2EB6BE/0F0A
@@ -1283,7 +1283,7 @@ L_2EB7C2:
     A_RTS                                   ; 2EB7C3/19
 
 L_2EB7C4:
-    SPRITEMAP   $379A97                     ; 2EB7C4/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB7C4/1A979A37
     SETXPOS     #$0080                      ; 2EB7C8/2A8000
     SETYPOS     #$0123                      ; 2EB7CB/2B2301
     SETPOSE     #$33                        ; 2EB7CE/5033
@@ -1292,7 +1292,7 @@ L_2EB7D0:
 
 L_2EB7D1:
     ONMOVE      $D920                       ; 2EB7D1/2320D9
-    SPRITEMAP   $379A97                     ; 2EB7D4/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB7D4/1A979A37
     ONPOSITION  $D97D                       ; 2EB7D8/217DD9
     ASMCALL     $DE4B                       ; 2EB7DB/D04BDE // Play sound effect
     .byte       $14                         ; 2EB7DE/14
@@ -1370,7 +1370,7 @@ L_2EB855:
     A_JMP       L_2EB84F                    ; 2EB855/174FB8
 
 L_2EB858:
-    SPRITEMAP   $379A97                     ; 2EB858/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB858/1A979A37
     SETXPOS     #$0080                      ; 2EB85C/2A8000
     SETYPOS     #$00C8                      ; 2EB85F/2BC800
     ZEROVEL                                 ; 2EB862/38
@@ -1421,7 +1421,7 @@ L_2EB88C:
     HALT                                    ; 2EB88C/09
 
 L_2EB88D:
-    SPRITEMAP   $379A97                     ; 2EB88D/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB88D/1A979A37
     ONMOVE      $D920                       ; 2EB891/2320D9
     ASMCALL     $BB41                       ; 2EB894/D041BB
     SETYVEL     #$0400                      ; 2EB897/C00004
@@ -1499,7 +1499,7 @@ L_2EB8F2:
     .word       $B968                       ; 2EB922/68B9
     .byte       $1C                         ; 2EB924/1C
     .byte       $04                         ; 2EB925/04
-    SPRITEMAP   $379A97                     ; 2EB926/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB926/1A979A37
     ONMOVE      $D945                       ; 2EB92A/2345D9
     ONPOSITION  $D968                       ; 2EB92D/2168D9
     SETZPOS     #$00C0                      ; 2EB930/3AC000
@@ -1538,7 +1538,7 @@ L_2EB960:
 incbinRange "../split/prg/bank2e.bin", $1968, $196C
 
 L_2EB96C:
-    SPRITEMAP   $379A97                     ; 2EB96C/1A979A37
+    SPRITEMAP   L_379A97                     ; 2EB96C/1A979A37
     ONMOVE      $D945                       ; 2EB970/2345D9
     ONPOSITION  $D968                       ; 2EB973/2168D9
     SETXPOS     #$0080                      ; 2EB976/2A8000
@@ -1569,7 +1569,7 @@ L_2EB99C:
     ONPOSITION  $D9BB                       ; 2EB99F/21BBD9
     SETXPOS     #$0081                      ; 2EB9A2/2A8100
     SETYPOS     #$0068                      ; 2EB9A5/2B6800
-    SPRITEMAP   $359310                     ; 2EB9A8/1A109335
+    SPRITEMAP   L_359310                     ; 2EB9A8/1A109335
 L_2EB9AC:
     SETPOSE     #$00, WAIT #1               ; 2EB9AC/5100
 L_2EB9AE:
@@ -1616,7 +1616,7 @@ L_2EB9E5:
 L_2EB9EB:
     ONMOVE      $D864                       ; 2EB9EB/2364D8
     ONPOSITION  $D9BB                       ; 2EB9EE/21BBD9
-    SPRITEMAP   $359282                     ; 2EB9F1/1A829235
+    SPRITEMAP   L_359282                     ; 2EB9F1/1A829235
     LOOP        #10                         ; 2EB9F5/010A
         LOOP        #255                        ; 2EB9F7/01FF
             SETPOSE     #$FF, WAIT #3               ; 2EB9F9/53FF

@@ -1,7 +1,7 @@
 .segment "PRG16": absolute
 
 L_16A000:
-    SPRITEMAP   $1C8216                     ; 16A000/1A16821C
+    SPRITEMAP   L_1C8216                     ; 16A000/1A16821C
     MOV         REG,$05E3                   ; 16A004/1CE305
     TABLECALL   #25                         ; 16A007/2919
     _is_faraddr L_16A070                    ; 16A009/70A016
@@ -30,15 +30,15 @@ L_16A000:
     _is_faraddr $000000                     ; 16A04E/000000
     _is_faraddr $000000                     ; 16A051/000000
 L_16A054:
-    SPRITEMAP   $1A8676                     ; 16A054/1A76861A
+    SPRITEMAP   L_1A8676                     ; 16A054/1A76861A
     JML         KST33_CopyWaterEnter                    ; 16A058/03AEBC14
 
 KirbyState3C:
-    SPRITEMAP   $1A8676                     ; 16A05C/1A76861A
+    SPRITEMAP   L_1A8676                     ; 16A05C/1A76861A
     JML         KST39_CopyWaterSurface                    ; 16A060/03B7BF14
 
 KirbyState3D:
-    SPRITEMAP   $1A8676                     ; 16A064/1A76861A
+    SPRITEMAP   L_1A8676                     ; 16A064/1A76861A
     JML         KST2D_Ladder                    ; 16A068/035DBA14
 
 KirbyState3E:
@@ -614,7 +614,7 @@ L_16A538:
 incbinRange "../split/prg/bank16.bin", $0548, $055A
 
 L_16A55A:
-    SPRITEMAP   $1A8846                     ; 16A55A/1A46881A
+    SPRITEMAP   L_1A8846                     ; 16A55A/1A46881A
     MOV         $05E1,#$09                  ; 16A55E/11E10509
     MOV         $05FC,#$00                  ; 16A562/11FC0500
     MOV         VAR2,#$1E                   ; 16A566/0D021E
@@ -649,7 +649,7 @@ L_16A5FF:
     MOV         $05E1,#$0C                  ; 16A5FF/11E1050C
     MOV         $05F9,#$80                  ; 16A603/11F90580
     MOV         VAR2,#$78                   ; 16A607/0D0278
-    SPRITEMAP   $1A96A4                     ; 16A60A/1AA4961A
+    SPRITEMAP   L_1A96A4                     ; 16A60A/1AA4961A
     ASMCALL     $DE4B                       ; 16A60E/D04BDE // Play sound effect
     .byte       $FF                         ; 16A611/FF
     ASMCALL     $DE4B                       ; 16A612/D04BDE // Play sound effect
@@ -1124,7 +1124,7 @@ B16_aa31:
 
 Script02_KirbyParticle:
     SETBANK     #$21                        ; 16AA3A/2821
-    SPRITEMAP   $1C94CE                     ; 16AA3C/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 16AA3C/1ACE941C
     MOV         REG,VAR3                    ; 16AA40/1E03
     TABLEJMP    #32                         ; 16AA42/0F20
     .word       SCR02_BumpStar              ; 16AA44/84AA
@@ -1550,7 +1550,7 @@ L_16B00F:
 incbinRange "../split/prg/bank16.bin", $1011, $1049
 
 SCR02_StarDeath:
-    SPRITEMAP   $1C9CD7                     ; 16B049/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 16B049/1AD79C1C
     ASMCALL     $E23C, WAIT #3              ; 16B04D/D33CE2 // Unknown ASM $E23C
     .word       $0600                       ; 16B050/0006
 L_16B052:
@@ -1742,7 +1742,7 @@ incbinRange "../split/prg/bank16.bin", $1304, $135B
 
 Script03_KirbyProjectile:
     SETBANK     #$21                        ; 16B35B/2821
-    SPRITEMAP   $1C9CD7                     ; 16B35D/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 16B35D/1AD79C1C
     MOV         REG,VAR3                    ; 16B361/1E03
     TABLEJMP    #14                         ; 16B363/0F0E
     .word       SCR03_StarExhale            ; 16B365/B7B3
@@ -1780,7 +1780,7 @@ L_16B381:
     .word       L_16B3B0                    ; 16B3A3/B0B3
 L_16B3A5:
     SETZPOS     #$0080                      ; 16B3A5/3A8000
-    SPRITEMAP   $1C9F16                     ; 16B3A8/1A169F1C
+    SPRITEMAP   L_1C9F16                     ; 16B3A8/1A169F1C
     SETPOSE     #$0D, WAIT #2               ; 16B3AC/520D
 L_16B3AE:
     INCPOSE     WAIT #2                     ; 16B3AE/72
@@ -1788,7 +1788,7 @@ L_16B3AF:
     END                                     ; 16B3AF/00
 
 L_16B3B0:
-    SPRITEMAP   $1C94CE                     ; 16B3B0/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 16B3B0/1ACE941C
     A_JMP       SCR02_EnemyHit              ; 16B3B4/170CAC
 
 SCR03_StarExhale:
@@ -1846,7 +1846,7 @@ L_16B3F6:
 L_16B3FA:
     MOV         VAR3,#$FF                   ; 16B3FA/0D03FF
     SETZPOS     #$00C1                      ; 16B3FD/3AC100
-    SPRITEMAP   $1C94CE                     ; 16B400/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 16B400/1ACE941C
     ZEROVEL                                 ; 16B404/38
     SETPOSE     #$0B, WAIT #3               ; 16B405/530B
 L_16B407:
@@ -2013,7 +2013,7 @@ L_16B6C9:
     ASMCALL     $E23C                       ; 16B6D0/D03CE2 // Unknown ASM $E23C
     .word       $0400                       ; 16B6D3/0004
     SETZPOS     #$00FF                      ; 16B6D5/3AFF00
-    SPRITEMAP   $1C94CE                     ; 16B6D8/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 16B6D8/1ACE941C
     SETPOSE     #$00, WAIT #2               ; 16B6DC/5200
 L_16B6DE:
     INCPOSE     WAIT #2                     ; 16B6DE/72
@@ -2088,7 +2088,7 @@ SCR03_IceCube:
     MOV         VAR0,#$0A                   ; 16B8AA/0D000A
     SETZPOS     #$00FF                      ; 16B8AD/3AFF00
     ONPOSITION  $D9BB                       ; 16B8B0/21BBD9
-    SPRITEMAP   $1C9CD7                     ; 16B8B3/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 16B8B3/1AD79C1C
     SETPOSE     #$2F                        ; 16B8B7/502F
     ASMCALL     $E26A, WAIT #8              ; 16B8B9/D86AE2 // Set X velocity (respect facing)
     .word       $0400                       ; 16B8BC/0004

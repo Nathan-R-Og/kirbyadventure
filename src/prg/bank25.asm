@@ -2,7 +2,7 @@
 Script2A_Parasol:
     SETBANK     #$22                        ; 25A000/2822
     ONPOSITION  $D9BB                       ; 25A002/21BBD9
-    SPRITEMAP   $308CA4                     ; 25A005/1AA48C30
+    SPRITEMAP   L_308CA4                     ; 25A005/1AA48C30
     ASMCALL     $A27A                       ; 25A009/D07AA2
     JEQ         L_25A079                    ; 25A00C/0A79A0
 L_25A00F:
@@ -104,7 +104,7 @@ incbinRange "../split/prg/bank25.bin", $00A3, $02F5
 Script2B_Knight:
     SETBANK     #$22                        ; 25A2F5/2822
     ONPOSITION  $D9BB                       ; 25A2F7/21BBD9
-    SPRITEMAP   $308D6D                     ; 25A2FA/1A6D8D30
+    SPRITEMAP   L_308D6D                     ; 25A2FA/1A6D8D30
     ASMCALL     $84A4                       ; 25A2FE/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 25A301/0D0002
     ONTICK      $25A585                     ; 25A304/0885A525
@@ -271,7 +271,7 @@ incbinRange "../split/prg/bank25.bin", $0612, $069C
 Script2C_Slippy:
     SETBANK     #$22                        ; 25A69C/2822
     ONPOSITION  $D9BB                       ; 25A69E/21BBD9
-    SPRITEMAP   $308EED                     ; 25A6A1/1AED8E30
+    SPRITEMAP   L_308EED                     ; 25A6A1/1AED8E30
     ASMCALL     $84A4                       ; 25A6A5/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 25A6A8/0D0002
     MOV         VAR7,#$00                   ; 25A6AB/0D0700
@@ -511,7 +511,7 @@ incbinRange "../split/prg/bank25.bin", $084B, $09A5
 Script2D_Bubbles:
     SETBANK     #$22                        ; 25A9A5/2822
     ONPOSITION  $D9BB                       ; 25A9A7/21BBD9
-    SPRITEMAP   $308F2F                     ; 25A9AA/1A2F8F30
+    SPRITEMAP   L_308F2F                     ; 25A9AA/1A2F8F30
     ASMCALL     $84A4                       ; 25A9AE/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 25A9B1/0D0002
     ASMCALL     $8851                       ; 25A9B4/D05188 // Face towards Kirby
@@ -596,7 +596,7 @@ incbinRange "../split/prg/bank25.bin", $0A47, $0B6A
 Script2E_Noddy:
     SETBANK     #$22                        ; 25AB6A/2822
     ONPOSITION  $D9BB                       ; 25AB6C/21BBD9
-    SPRITEMAP   $308F62                     ; 25AB6F/1A628F30
+    SPRITEMAP   L_308F62                     ; 25AB6F/1A628F30
     ASMCALL     $84A4                       ; 25AB73/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 25AB76/0D0002
 L_25AB79:
@@ -647,7 +647,7 @@ incbinRange "../split/prg/bank25.bin", $0BCD, $0D71
 L_25AD71:
     SETBANK     #$22                        ; 25AD71/2822
     ONPOSITION  $D9BB                       ; 25AD73/21BBD9
-    SPRITEMAP   $308F62                     ; 25AD76/1A628F30
+    SPRITEMAP   L_308F62                     ; 25AD76/1A628F30
     ASMCALL     $E26A                       ; 25AD7A/D06AE2 // Set X velocity (respect facing)
     .word       $0040                       ; 25AD7D/4000
     SETYVEL     #$FF80                      ; 25AD7F/C080FF
@@ -659,7 +659,7 @@ L_25AD88:
 
 Script2F_Starman:
     SETBANK     #$22                        ; 25AD89/2822
-    SPRITEMAP   $308FBE                     ; 25AD8B/1ABE8F30
+    SPRITEMAP   L_308FBE                     ; 25AD8B/1ABE8F30
     ASMCALL     $84A4                       ; 25AD8F/D0A484 // Store VAR1 in $0784[self]
     MOV         REG,VAR0                    ; 25AD92/1E00
     TABLEJMP    #2                          ; 25AD94/0F02
@@ -820,7 +820,7 @@ L_25AF9A:
 incbinRange "../split/prg/bank25.bin", $0FA6, $11C7
 
 Script1A_Coconut:
-    SPRITEMAP   $328934                     ; 25B1C7/1A348932
+    SPRITEMAP   L_328934                     ; 25B1C7/1A348932
     SETPOSE     #$06                        ; 25B1CB/5006
     ONTICK      $25B1DC                     ; 25B1CD/08DCB125
     MOV         REG,#$02                    ; 25B1D1/1B02
@@ -836,7 +836,7 @@ incbinRange "../split/prg/bank25.bin", $11DC, $1241
 Script1B_Coner:
     MOV         REG,#$02                    ; 25B241/1B02
     ASMCALL_l   $228470                     ; 25B243/26708422
-    SPRITEMAP   $328934                     ; 25B247/1A348932
+    SPRITEMAP   L_328934                     ; 25B247/1A348932
     ASMCALL     $B3A9                       ; 25B24B/D0A9B3
     JNE         L_25B278                    ; 25B24E/0B78B2
 L_25B251:
@@ -885,7 +885,7 @@ incbinRange "../split/prg/bank25.bin", $1292, $13BD
 Script48_MrFrosty:
     SETBANK     #$22                        ; 25B3BD/2822
     ONPOSITION  $D97D                       ; 25B3BF/217DD9
-    SPRITEMAP   $318BCD                     ; 25B3C2/1ACD8B31
+    SPRITEMAP   L_318BCD                     ; 25B3C2/1ACD8B31
     ASMCALL     $84A4                       ; 25B3C6/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$14                   ; 25B3C9/0D0014
     MOV         VAR5,#$00                   ; 25B3CC/0D0500
@@ -1176,7 +1176,7 @@ incbinRange "../split/prg/bank25.bin", $164F, $1B43
 L_25BB43:
     SETBANK     #$22                        ; 25BB43/2822
     ONPOSITION  $D97D                       ; 25BB45/217DD9
-    SPRITEMAP   $318BCD                     ; 25BB48/1ACD8B31
+    SPRITEMAP   L_318BCD                     ; 25BB48/1ACD8B31
     SETPOSE     #$15                        ; 25BB4C/5015
     ONTICK      $25BBAD                     ; 25BB4E/08ADBB25
     SETYVEL     #$FC00                      ; 25BB52/C000FC
@@ -1250,7 +1250,7 @@ Script0A_MuseumDisplay:
     .word       SCR0A_Museum0E              ; 25BC89/4DBD
     .word       SCR0A_Museum0F              ; 25BC8B/5CBD
 SCR0A_Museum00:
-    SPRITEMAP   $3080D5                     ; 25BC8D/1AD58030
+    SPRITEMAP   L_3080D5                     ; 25BC8D/1AD58030
 L_25BC91:
     ASMCALL     $8829, WAIT #15             ; 25BC91/DF2988 // Set pose to 0 (respect facing)
     INC2POSE    WAIT #8                     ; 25BC94/98
@@ -1259,7 +1259,7 @@ L_25BC91:
     A_JMP       L_25BC91                    ; 25BC97/1791BC
 
 SCR0A_MuseumLaser:
-    SPRITEMAP   $308310                     ; 25BC9A/1A108330
+    SPRITEMAP   L_308310                     ; 25BC9A/1A108330
 L_25BC9E:
     ASMCALL     $8829, WAIT #4              ; 25BC9E/D42988 // Set pose to 0 (respect facing)
 L_25BCA1:
@@ -1268,7 +1268,7 @@ L_25BCA2:
     A_JMP       L_25BC9E                    ; 25BCA2/179EBC
 
 SCR0A_MuseumFire:
-    SPRITEMAP   $30850C                     ; 25BCA5/1A0C8530
+    SPRITEMAP   L_30850C                     ; 25BCA5/1A0C8530
 L_25BCA9:
     ASMCALL     $8829, WAIT #12             ; 25BCA9/DC2988 // Set pose to 0 (respect facing)
 L_25BCAC:
@@ -1277,7 +1277,7 @@ L_25BCAD:
     A_JMP       L_25BCA9                    ; 25BCAD/17A9BC
 
 SCR0A_Museum03:
-    SPRITEMAP   $3083D5                     ; 25BCB0/1AD58330
+    SPRITEMAP   L_3083D5                     ; 25BCB0/1AD58330
 L_25BCB4:
     LOOP        #2                          ; 25BCB4/0102
         SETPOSE     #$00, WAIT #12              ; 25BCB6/5C00
@@ -1289,7 +1289,7 @@ L_25BCB4:
     A_JMP       L_25BCB4                    ; 25BCBE/17B4BC
 
 SCR0A_MuseumSword:
-    SPRITEMAP   $308D6D                     ; 25BCC1/1A6D8D30
+    SPRITEMAP   L_308D6D                     ; 25BCC1/1A6D8D30
 L_25BCC5:
     ASMCALL     $8829, WAIT #10             ; 25BCC5/DA2988 // Set pose to 0 (respect facing)
 L_25BCC8:
@@ -1306,7 +1306,7 @@ L_25BCCD:
     A_JMP       L_25BCC5                    ; 25BCCD/17C5BC
 
 SCR0A_Museum05:
-    SPRITEMAP   $308F2F                     ; 25BCD0/1A2F8F30
+    SPRITEMAP   L_308F2F                     ; 25BCD0/1A2F8F30
 L_25BCD4:
     SETPOSE     #$04, WAIT #6               ; 25BCD4/5604
 L_25BCD6:
@@ -1316,7 +1316,7 @@ L_25BCDA:
     A_JMP       L_25BCD4                    ; 25BCDA/17D4BC
 
 SCR0A_Museum06:
-    SPRITEMAP   $308F62                     ; 25BCDD/1A628F30
+    SPRITEMAP   L_308F62                     ; 25BCDD/1A628F30
 L_25BCE1:
     ASMCALL     $8829, WAIT #8              ; 25BCE1/D82988 // Set pose to 0 (respect facing)
 L_25BCE4:
@@ -1325,7 +1325,7 @@ L_25BCE5:
     A_JMP       L_25BCE1                    ; 25BCE5/17E1BC
 
 SCR0A_MuseumHiJump:
-    SPRITEMAP   $308FBE                     ; 25BCE8/1ABE8F30
+    SPRITEMAP   L_308FBE                     ; 25BCE8/1ABE8F30
 L_25BCEC:
     LOOP        #2                          ; 25BCEC/0102
         ASMCALL     $8829, WAIT #12             ; 25BCEE/DC2988 // Set pose to 0 (respect facing)
@@ -1348,14 +1348,14 @@ L_25BD01:
     A_JMP       L_25BCEC                    ; 25BD02/17ECBC
 
 SCR0A_Museum08:
-    SPRITEMAP   $309BCC                     ; 25BD05/1ACC9B30
+    SPRITEMAP   L_309BCC                     ; 25BD05/1ACC9B30
 L_25BD09:
     ASMCALL     $8829, WAIT #15             ; 25BD09/DF2988 // Set pose to 0 (respect facing)
     INC2POSE    WAIT #8                     ; 25BD0C/98
     A_JMP       L_25BD09                    ; 25BD0D/1709BD
 
 SCR0A_MuseumTornado:
-    SPRITEMAP   $3284CE                     ; 25BD10/1ACE8432
+    SPRITEMAP   L_3284CE                     ; 25BD10/1ACE8432
 L_25BD14:
     SETPOSE     #$00, WAIT #8               ; 25BD14/5800
 L_25BD16:
@@ -1368,7 +1368,7 @@ L_25BD19:
     A_JMP       L_25BD14                    ; 25BD19/1714BD
 
 SCR0A_MuseumWheel:
-    SPRITEMAP   $309AA9                     ; 25BD1C/1AA99A30
+    SPRITEMAP   L_309AA9                     ; 25BD1C/1AA99A30
 L_25BD20:
     ASMCALL     $8829, WAIT #2              ; 25BD20/D22988 // Set pose to 0 (respect facing)
 L_25BD23:
@@ -1377,14 +1377,14 @@ L_25BD24:
     A_JMP       L_25BD20                    ; 25BD24/1720BD
 
 SCR0A_Museum0B:
-    SPRITEMAP   $309108                     ; 25BD27/1A089130
+    SPRITEMAP   L_309108                     ; 25BD27/1A089130
 L_25BD2B:
     ASMCALL     $8829, WAIT #12             ; 25BD2B/DC2988 // Set pose to 0 (respect facing)
     INC2POSE    WAIT #12                    ; 25BD2E/9C
     A_JMP       L_25BD2B                    ; 25BD2F/172BBD
 
 SCR0A_MuseumStone:
-    SPRITEMAP   $328526                     ; 25BD32/1A268532
+    SPRITEMAP   L_328526                     ; 25BD32/1A268532
 L_25BD36:
     ASMCALL     $8C53                       ; 25BD36/D0538C // Set pose (respect facing)
     .byte       $04                         ; 25BD39/04
@@ -1396,14 +1396,14 @@ L_25BD3F:
     A_JMP       L_25BD36                    ; 25BD3F/1736BD
 
 SCR0A_Museum0D:
-    SPRITEMAP   $3287AB                     ; 25BD42/1AAB8732
+    SPRITEMAP   L_3287AB                     ; 25BD42/1AAB8732
 L_25BD46:
     ASMCALL     $8829, WAIT #12             ; 25BD46/DC2988 // Set pose to 0 (respect facing)
     INC2POSE    WAIT #12                    ; 25BD49/9C
     A_JMP       L_25BD46                    ; 25BD4A/1746BD
 
 SCR0A_Museum0E:
-    SPRITEMAP   $3285E6                     ; 25BD4D/1AE68532
+    SPRITEMAP   L_3285E6                     ; 25BD4D/1AE68532
 L_25BD51:
     ASMCALL     $8829                       ; 25BD51/D02988 // Set pose to 0 (respect facing)
     WAIT        #48                         ; 25BD54/0630
@@ -1412,7 +1412,7 @@ L_25BD51:
     A_JMP       L_25BD51                    ; 25BD59/1751BD
 
 SCR0A_Museum0F:
-    SPRITEMAP   $3286D9                     ; 25BD5C/1AD98632
+    SPRITEMAP   L_3286D9                     ; 25BD5C/1AD98632
 L_25BD60:
     SETPOSE     #$02, WAIT #3               ; 25BD60/5302
     INCPOSE     WAIT #15                    ; 25BD62/7F

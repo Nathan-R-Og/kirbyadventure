@@ -12,7 +12,7 @@ Script4D_FireLion:
     ONPOSITION  $DA09                       ; 2AA037/2109DA
     MOV         REG,VAR0                    ; 2AA03A/1E00
     JNE         L_2AA000                    ; 2AA03C/0B00A0
-    SPRITEMAP   $378A5A                     ; 2AA03F/1A5A8A37
+    SPRITEMAP   L_378A5A                     ; 2AA03F/1A5A8A37
     ASMCALL     $84A4                       ; 2AA043/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$1B                   ; 2AA046/0D001B
     MOV         VAR2,#$00                   ; 2AA049/0D0200
@@ -661,7 +661,7 @@ Script49_GrandWheelie:
 L_2AA823:
     ONPOSITION  $DA09                       ; 2AA823/2109DA
     ASMCALL     $84A4                       ; 2AA826/D0A484 // Store VAR1 in $0784[self]
-    SPRITEMAP   $338000                     ; 2AA829/1A008033
+    SPRITEMAP   L_338000                     ; 2AA829/1A008033
     ASMCALL     $AB37                       ; 2AA82D/D037AB
     TASK        L_2AAA8F                    ; 2AA830/078FAA
     ONTICK      $2AAB49                     ; 2AA833/0849AB2A
@@ -897,7 +897,7 @@ L_2AA9E8:
 
 L_2AA9EB:
     ONPOSITION  $D9BB                       ; 2AA9EB/21BBD9
-    SPRITEMAP   $309AA9                     ; 2AA9EE/1AA99A30
+    SPRITEMAP   L_309AA9                     ; 2AA9EE/1AA99A30
     SETZPOS     #$0081                      ; 2AA9F2/3A8100
     ASMCALL     $8851                       ; 2AA9F5/D05188 // Face towards Kirby
     TASK        L_2AAAED                    ; 2AA9F8/07EDAA
@@ -1176,7 +1176,7 @@ L_2AB0BF:
     MOV         VAR0,#$19                   ; 2AB0C2/0D0019
     ASMCALL     $84A4                       ; 2AB0C5/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR8,#$FF                   ; 2AB0C8/0D08FF
-    SPRITEMAP   $339E5A                     ; 2AB0CB/1A5A9E33
+    SPRITEMAP   L_339E5A                     ; 2AB0CB/1A5A9E33
     ASMCALL     $B401                       ; 2AB0CF/D001B4
     ZEROVEL                                 ; 2AB0D2/38
     ONTICK      $2AB425                     ; 2AB0D3/0825B42A
@@ -1559,7 +1559,7 @@ L_2AB3A3:
 
 L_2AB3AD:
     SETZPOS     #$0081                      ; 2AB3AD/3A8100
-    SPRITEMAP   $329E98                     ; 2AB3B0/1A989E32
+    SPRITEMAP   L_329E98                     ; 2AB3B0/1A989E32
     TASK        L_2AB3CC                    ; 2AB3B4/07CCB3
     LOOP        #4                          ; 2AB3B7/0104
         SETPOSE     #$00, WAIT #1               ; 2AB3B9/5100
@@ -1594,7 +1594,7 @@ L_2AB3D2:
 L_2AB3D5:
     ONPOSITION  $D97D                       ; 2AB3D5/217DD9
     SETZPOS     #$0081                      ; 2AB3D8/3A8100
-    SPRITEMAP   $329EA8                     ; 2AB3DB/1AA89E32
+    SPRITEMAP   L_329EA8                     ; 2AB3DB/1AA89E32
     SETPOSE     #$00                        ; 2AB3DF/5000
     SETYVEL     #$FD00                      ; 2AB3E1/C000FD
     ASMCALL     $8B7F                       ; 2AB3E4/D07F8B // Unknown ASM $228B7F
@@ -1612,7 +1612,7 @@ incbinRange "../split/prg/bank2a.bin", $13F9, $19E6
 Script1C_Kabu:
     SETBANK     #$22                        ; 2AB9E6/2822
     ONPOSITION  $D9BB                       ; 2AB9E8/21BBD9
-    SPRITEMAP   $309058                     ; 2AB9EB/1A589030
+    SPRITEMAP   L_309058                     ; 2AB9EB/1A589030
     ASMCALL     $84A4                       ; 2AB9EF/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR5,#$00                   ; 2AB9F2/0D0500
     MOV         REG,VAR0                    ; 2AB9F5/1E00

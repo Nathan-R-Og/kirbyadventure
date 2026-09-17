@@ -1522,7 +1522,7 @@ L_38AFD5:
 L_38AFF4:
     ONDRAW      $DDAA                       ; 38AFF4/20AADD
     ONPOSITION  $D968                       ; 38AFF7/2168D9
-    SPRITEMAP   $1A8000                     ; 38AFFA/1A00801A
+    SPRITEMAP   L_1A8000                     ; 38AFFA/1A00801A
     SETPOSE     #$00                        ; 38AFFE/5000
     SETXPOS     #$0050                      ; 38B000/2A5000
     SETYPOS     #$00BA                      ; 38B003/2BBA00
@@ -1565,7 +1565,7 @@ L_38B045:
 L_38B04E:
     ENDLOOP                                 ; 38B04E/02
     ASMCALL     $B113                       ; 38B04F/D013B1 // Restore palette and CHR banks after unpausing?
-    MOVW        $055E,#$FFFF                ; 38B052/275E05FFFF
+    MOVW        current_room,#$FFFF                ; 38B052/275E05FFFF
     MOVW        $0562,#$FFFF                ; 38B057/276205FFFF
     MOV         $056A,#$06                  ; 38B05C/116A0506
     END                                     ; 38B060/00

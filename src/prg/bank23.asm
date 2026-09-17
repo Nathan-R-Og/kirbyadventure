@@ -16,7 +16,7 @@ Script06_WarpStar:
 L_23A01A:
     SETBANK     #$22                        ; 23A01A/2822
     ONPOSITION  $D97D                       ; 23A01C/217DD9
-    SPRITEMAP   $1C9CD7                     ; 23A01F/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 23A01F/1AD79C1C
     ASMCALL     $A20F                       ; 23A023/D00FA2
     ONTICK      $23A043                     ; 23A026/0843A023
 L_23A02A:
@@ -81,7 +81,7 @@ L_23A3C0:
     MOV         $0043,#$CE                  ; 23A3C2/114300CE
     ASMCALL     $A4F3                       ; 23A3C6/D0F3A4
     ONPOSITION  $D97D                       ; 23A3C9/217DD9
-    SPRITEMAP   $3180F8                     ; 23A3CC/1AF88031
+    SPRITEMAP   L_3180F8                     ; 23A3CC/1AF88031
     ONDRAW      $DA89                       ; 23A3D0/2089DA
     ONTICK      $23A46C                     ; 23A3D3/086CA423
     TASK        L_23A428                    ; 23A3D7/0728A4
@@ -195,7 +195,7 @@ L_23A530:
     MOV         $0043,#$EC                  ; 23A530/114300EC
     SETBANK     #$22                        ; 23A534/2822
     SETZPOS     #$001C                      ; 23A536/3A1C00
-    SPRITEMAP   $3783DC                     ; 23A539/1ADC8337
+    SPRITEMAP   L_3783DC                     ; 23A539/1ADC8337
     MOV         $07DB,#$00                  ; 23A53D/11DB0700
     ONTICK      $23A5C7                     ; 23A541/08C7A523
     MOV         VAR2,#$00                   ; 23A545/0D0200
@@ -205,7 +205,7 @@ L_23A54A:
 
 L_23A54B:
     MOV         $0042,#$EA                  ; 23A54B/114200EA
-    SPRITEMAP   $378406                     ; 23A54F/1A068437
+    SPRITEMAP   L_378406                     ; 23A54F/1A068437
     ASMCALL     $A5AA                       ; 23A553/D0AAA5
     MOV         VAR2,#$01                   ; 23A556/0D0201
     MOV         VAR3,#$FF                   ; 23A559/0D03FF
@@ -330,7 +330,7 @@ L_23A791:
     .word       L_23A7A8                    ; 23A7A6/A8A7
 L_23A7A8:
     SETBANK     #$22                        ; 23A7A8/2822
-    SPRITEMAP   $308AA2                     ; 23A7AA/1AA28A30
+    SPRITEMAP   L_308AA2                     ; 23A7AA/1AA28A30
     ASMCALL     $A7BB                       ; 23A7AE/D0BBA7
     LOOP        #6                          ; 23A7B1/0106
         SETPOSE     #$00, WAIT #1               ; 23A7B3/5100
@@ -347,7 +347,7 @@ incbinRange "../split/prg/bank23.bin", $07BB, $081B
 
 L_23A81B:
     SETBANK     #$22                        ; 23A81B/2822
-    SPRITEMAP   $378406                     ; 23A81D/1A068437
+    SPRITEMAP   L_378406                     ; 23A81D/1A068437
     ONPOSITION  $D97D                       ; 23A821/217DD9
     ONTICK      $23A839                     ; 23A824/0839A823
     ASMCALL     $A969                       ; 23A828/D069A9
@@ -369,7 +369,7 @@ incbinRange "../split/prg/bank23.bin", $0839, $09F0
 L_23A9F0:
     SETBANK     #$22                        ; 23A9F0/2822
     ONPOSITION  $D9BB                       ; 23A9F2/21BBD9
-    SPRITEMAP   $308B7A                     ; 23A9F5/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 23A9F5/1A7A8B30
     MOV         REG,VAR1                    ; 23A9F9/1E01
     JNE         L_23AA10                    ; 23A9FB/0B10AA
     ASMCALL     $8C87                       ; 23A9FE/D0878C // Unknown ASM $228C87
@@ -399,7 +399,7 @@ incbinRange "../split/prg/bank23.bin", $0A1E, $0A9C
 
 Script0B_CannonFuse:
     SETBANK     #$22                        ; 23AA9C/2822
-    SPRITEMAP   $37856A                     ; 23AA9E/1A6A8537
+    SPRITEMAP   L_37856A                     ; 23AA9E/1A6A8537
     ONTICK      $23AAAF                     ; 23AAA2/08AFAA23
     SETZPOS     #$00FF                      ; 23AAA6/3AFF00
     ADDXPOS     #4                          ; 23AAA9/2C0400
@@ -431,7 +431,7 @@ L_23ADAB:
     MOV         $0043,#$C8                  ; 23ADAB/114300C8
     SETBANK     #$22                        ; 23ADAF/2822
     ONPOSITION  $D9BB                       ; 23ADB1/21BBD9
-    SPRITEMAP   $1C9CD7                     ; 23ADB4/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 23ADB4/1AD79C1C
     ASMCALL     $AF28, WAIT #2              ; 23ADB8/D228AF
 L_23ADBB:
     ONTICK      $23AE53                     ; 23ADBB/0853AE23
@@ -485,7 +485,7 @@ L_23ADF4:
 
 L_23ADF7:
     SETZPOS     #$007F                      ; 23ADF7/3A7F00
-    SPRITEMAP   $378000                     ; 23ADFA/1A008037
+    SPRITEMAP   L_378000                     ; 23ADFA/1A008037
     MOV         REG,$07DD                   ; 23ADFE/1CDD07
     JEQ         L_23AE0A                    ; 23AE01/0A0AAE
     ASMCALL     $8C87                       ; 23AE04/D0878C // Unknown ASM $228C87
@@ -889,7 +889,7 @@ incbinRange "../split/prg/bank23.bin", $12EE, $1302
 L_23B302:
     ONDRAW      $DDAA                       ; 23B302/20AADD
     SETZPOS     #$007F                      ; 23B305/3A7F00
-    SPRITEMAP   $378000                     ; 23B308/1A008037
+    SPRITEMAP   L_378000                     ; 23B308/1A008037
     MOV         VAR9,#$00                   ; 23B30C/0D0900
     MOV         VAR8,#$00                   ; 23B30F/0D0800
     MOV         VAR6,#$03                   ; 23B312/0D0603
@@ -936,12 +936,12 @@ L_23B3BF:
     ONDRAW      $DA89                       ; 23B3C5/2089DA
     ASMCALL     $B3E0                       ; 23B3C8/D0E0B3
     JNE         L_23B3D5                    ; 23B3CB/0BD5B3
-    SPRITEMAP   $1C94CE                     ; 23B3CE/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 23B3CE/1ACE941C
     SETPOSE     #$0A                        ; 23B3D2/500A
     HALT                                    ; 23B3D4/09
 
 L_23B3D5:
-    SPRITEMAP   $339DAF                     ; 23B3D5/1AAF9D33
+    SPRITEMAP   L_339DAF                     ; 23B3D5/1AAF9D33
 L_23B3D9:
     SETPOSE     #$01, WAIT #3               ; 23B3D9/5301
 L_23B3DB:
@@ -1198,7 +1198,7 @@ L_23B5A8:
         WAIT        #48                         ; 23B5B5/0630
 L_23B5B7:
         ONDRAW      $DA89                       ; 23B5B7/2089DA
-        SPRITEMAP   $1C94CE                     ; 23B5BA/1ACE941C
+        SPRITEMAP   L_1C94CE                     ; 23B5BA/1ACE941C
         SETZPOS     #$00FF                      ; 23B5BE/3AFF00
         SETPOSE     #$0A                        ; 23B5C1/500A
         ZEROVEL                                 ; 23B5C3/38
@@ -1517,7 +1517,7 @@ L_23B833:
 L_23B836:
         ASMCALL     $DE4B                       ; 23B836/D04BDE // Play sound effect
         .byte       $55                         ; 23B839/55
-        SPRITEMAP   $1C8DA6                     ; 23B83A/1AA68D1C
+        SPRITEMAP   L_1C8DA6                     ; 23B83A/1AA68D1C
         SETPOSE     #$00                        ; 23B83E/5000
         SETYVEL     #$0300, WAIT #4             ; 23B840/C40003
 L_23B843:
@@ -1541,7 +1541,7 @@ L_23B85D:
         A_JMP       L_23BD19                    ; 23B861/1719BD
 
 L_23B864:
-        SPRITEMAP   $1C8DA6                     ; 23B864/1AA68D1C
+        SPRITEMAP   L_1C8DA6                     ; 23B864/1AA68D1C
         LOOP        #3                          ; 23B868/0103
             SETPOSE     #$4A, WAIT #4               ; 23B86A/544A
 L_23B86C:
@@ -1735,7 +1735,7 @@ L_23B9B1:
         .byte       $22                         ; 23B9B4/22
         A_JSR       L_23B410                    ; 23B9B5/1810B4
         A_JSR       L_23B3FE                    ; 23B9B8/18FEB3
-        SPRITEMAP   $1C8DA6                     ; 23B9BB/1AA68D1C
+        SPRITEMAP   L_1C8DA6                     ; 23B9BB/1AA68D1C
         SETPOSE     #$05                        ; 23B9BF/5005
         SETXVEL     #$FF00                      ; 23B9C1/B000FF
         SETYVEL     #$FD00, WAIT #8             ; 23B9C4/C800FD
@@ -1754,7 +1754,7 @@ L_23B9D4:
 L_23B9D8:
         ASMCALL     $DE4B                       ; 23B9D8/D04BDE // Play sound effect
         .byte       $38                         ; 23B9DB/38
-        SPRITEMAP   $1A8000                     ; 23B9DC/1A00801A
+        SPRITEMAP   L_1A8000                     ; 23B9DC/1A00801A
         SETPOSE     #$22                        ; 23B9E0/5022
         SETYVEL     #$0200, WAIT #8             ; 23B9E2/C80002
 L_23B9E5:
@@ -1849,7 +1849,7 @@ L_23BA76:
         SETXVEL     #$0400, WAIT #12            ; 23BA79/BC0004
 L_23BA7C:
         ONDRAW      $DA89                       ; 23BA7C/2089DA
-        SPRITEMAP   $1C9CD7                     ; 23BA7F/1AD79C1C
+        SPRITEMAP   L_1C9CD7                     ; 23BA7F/1AD79C1C
         SETPOSE     #$11                        ; 23BA83/5011
         SETYVEL     #$FFE0                      ; 23BA85/C0E0FF
         WAIT        #18                         ; 23BA88/0612
@@ -1859,7 +1859,7 @@ L_23BA8A:
         SETXVEL     #$0040                      ; 23BA8D/B04000
         WAIT        #16                         ; 23BA90/0610
 L_23BA92:
-        SPRITEMAP   $1C94CE                     ; 23BA92/1ACE941C
+        SPRITEMAP   L_1C94CE                     ; 23BA92/1ACE941C
         SETZPOS     #$00FF                      ; 23BA96/3AFF00
         SETPOSE     #$0A                        ; 23BA99/500A
         SETXVEL     #$FE00                      ; 23BA9B/B000FE
@@ -2009,11 +2009,11 @@ L_23BBA1:
         SETYVEL     #$0020, WAIT #8             ; 23BBA5/C82000
 L_23BBA8:
         ONDRAW      $DA89                       ; 23BBA8/2089DA
-        SPRITEMAP   $1C9CD7                     ; 23BBAB/1AD79C1C
+        SPRITEMAP   L_1C9CD7                     ; 23BBAB/1AD79C1C
         SETPOSE     #$11                        ; 23BBAF/5011
         SETYVEL     #$0040, WAIT #8             ; 23BBB1/C84000
 L_23BBB4:
-        SPRITEMAP   $1C94CE                     ; 23BBB4/1ACE941C
+        SPRITEMAP   L_1C94CE                     ; 23BBB4/1ACE941C
         SETZPOS     #$00FF                      ; 23BBB8/3AFF00
         SETPOSE     #$0A                        ; 23BBBB/500A
         SETYVEL     #$0080, WAIT #8             ; 23BBBD/C88000
@@ -2162,7 +2162,7 @@ L_23BCB0:
         SETBANK     #$22                        ; 23BCB0/2822
         ONDRAW      $DA89                       ; 23BCB2/2089DA
         ZEROVEL                                 ; 23BCB5/38
-        SPRITEMAP   $3085E8                     ; 23BCB6/1AE88530
+        SPRITEMAP   L_3085E8                     ; 23BCB6/1AE88530
         SETPOSE     #$2A                        ; 23BCBA/502A
         WAIT        #1                          ; 23BCBC/0601
 L_23BCBE:
@@ -2203,7 +2203,7 @@ L_23BCF5:
 L_23BCF8:
     ASMCALL     $DE4B                       ; 23BCF8/D04BDE // Play sound effect
     .byte       $55                         ; 23BCFB/55
-    SPRITEMAP   $1A8000                     ; 23BCFC/1A00801A
+    SPRITEMAP   L_1A8000                     ; 23BCFC/1A00801A
     SETPOSE     #$24                        ; 23BD00/5024
     A_JSR       L_23B40A                    ; 23BD02/180AB4
     SETYVEL     #$FF00, WAIT #8             ; 23BD05/C800FF
@@ -2230,7 +2230,7 @@ L_23BD27:
     END                                     ; 23BD27/00
 
 L_23BD28:
-    SPRITEMAP   $1C8DA6                     ; 23BD28/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 23BD28/1AA68D1C
     LOOP        #3                          ; 23BD2C/0103
         SETPOSE     #$4A, WAIT #4               ; 23BD2E/544A
 L_23BD30:
@@ -2246,7 +2246,7 @@ L_23BD33:
 L_23BD35:
     ONDRAW      $DDAA                       ; 23BD35/20AADD
     SETZPOS     #$00FE                      ; 23BD38/3AFE00
-    SPRITEMAP   $378000                     ; 23BD3B/1A008037
+    SPRITEMAP   L_378000                     ; 23BD3B/1A008037
     ADDYPOS     #-104                       ; 23BD3F/2D98FF
     ASMCALL     $BDA6                       ; 23BD42/D0A6BD
 L_23BD45:
@@ -2304,7 +2304,7 @@ L_23BD92:
 incbinRange "../split/prg/bank23.bin", $1DA6, $1DC0
 
 L_23BDC0:
-    SPRITEMAP   $1C8DA6                     ; 23BDC0/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 23BDC0/1AA68D1C
     ASMCALL     $8AE7                       ; 23BDC4/D0E78A // Get facing as 0 or 1
     JNE         L_23BDDA                    ; 23BDC7/0BDABD
     LOOP        #4                          ; 23BDCA/0104
@@ -2317,7 +2317,7 @@ L_23BDD1:
         INCPOSE     WAIT #4                     ; 23BDD1/74
 L_23BDD2:
     ENDLOOP                                 ; 23BDD2/02
-    SPRITEMAP   $1A8000                     ; 23BDD3/1A00801A
+    SPRITEMAP   L_1A8000                     ; 23BDD3/1A00801A
     SETPOSE     #$24                        ; 23BDD7/5024
     ENDTASK                                 ; 23BDD9/0C
 
@@ -2332,7 +2332,7 @@ L_23BDE0:
         SETPOSE     #$4D, WAIT #4               ; 23BDE0/544D
 L_23BDE2:
     ENDLOOP                                 ; 23BDE2/02
-    SPRITEMAP   $1A8000                     ; 23BDE3/1A00801A
+    SPRITEMAP   L_1A8000                     ; 23BDE3/1A00801A
     SETPOSE     #$25                        ; 23BDE7/5025
     ENDTASK                                 ; 23BDE9/0C
 
@@ -2342,7 +2342,7 @@ L_23BDED:
     ASMCALL     $B0BC, WAIT #4              ; 23BDED/D4BCB0
 L_23BDF0:
     JNE         L_23BDED                    ; 23BDF0/0BEDBD
-    SPRITEMAP   $1C8DA6                     ; 23BDF3/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 23BDF3/1AA68D1C
     ONDRAW      $DDAA                       ; 23BDF7/20AADD
     SETPOSE     #$03                        ; 23BDFA/5003
     ZEROVEL                                 ; 23BDFC/38
@@ -2361,7 +2361,7 @@ L_23BE10:
 L_23BE13:
     JNE         L_23BE10                    ; 23BE13/0B10BE
     ONDRAW      $DDAA                       ; 23BE16/20AADD
-    SPRITEMAP   $378000                     ; 23BE19/1A008037
+    SPRITEMAP   L_378000                     ; 23BE19/1A008037
     SETPOSE     #$42                        ; 23BE1D/5042
     SETYVEL     #$0600                      ; 23BE1F/C00006
     SETXVEL     #$0080                      ; 23BE22/B08000

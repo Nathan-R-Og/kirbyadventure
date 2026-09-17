@@ -1,7 +1,7 @@
 .segment "PRG15": absolute
     L_15A000:
         MOV         $05E0,#$03                  ; 15A000/11E00503
-        SPRITEMAP   $1B8000                     ; 15A004/1A00801B
+        SPRITEMAP   L_1B8000                     ; 15A004/1A00801B
         ASMCALL     $9CB3                       ; 15A008/D0B39C // Load some palette? (Kirby's palette?)
     KST60_SwordLand: ; "Base" of sword stuff. Logic for the landing squish animation is in here somewhere...
         ASMCALL     $9BF7                       ; 15A00B/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
@@ -1058,7 +1058,7 @@
 
     L_15AC09:
         MOV         $05E0,#$05                  ; 15AC09/11E00505
-        SPRITEMAP   $1B9320                     ; 15AC0D/1A20931B
+        SPRITEMAP   L_1B9320                     ; 15AC0D/1A20931B
         ASMCALL     $9CB3                       ; 15AC11/D0B39C // Load some palette? (Kirby's palette?)
     KSTB3_ParasolLand: ; Probably base parasol
         ASMCALL     $9BF7                       ; 15AC14/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
@@ -2126,7 +2126,7 @@
         JEQ         L_15BB0D                    ; 15BAA3/0A0DBB
         ASMCALL     $BC4C                       ; 15BAA6/D04CBC // Remove UFO ability
         ONTICK      B15_bf0e                     ; 15BAA9/080EBF15
-        SPRITEMAP   $1C9F16                     ; 15BAAD/1A169F1C
+        SPRITEMAP   L_1C9F16                     ; 15BAAD/1A169F1C
         ASMCALL     $DE4B                       ; 15BAB1/D04BDE // Play sound effect
         .byte       $43                         ; 15BAB4/43
         MOV         $6620,#$01                  ; 15BAB5/11206601
@@ -2185,10 +2185,10 @@
         JML         L_14A077                    ; 15BB10/0377A014
 
     L_15BB14:
-        SPRITEMAP   $1C9F16                     ; 15BB14/1A169F1C
+        SPRITEMAP   L_1C9F16                     ; 15BB14/1A169F1C
         WAIT        #10                         ; 15BB18/060A
     L_15BB1A:
-        SPRITEMAP   $1B9F22                     ; 15BB1A/1A229F1B
+        SPRITEMAP   L_1B9F22                     ; 15BB1A/1A229F1B
         ASMCALL     $8710                       ; 15BB1E/D01087 // Set Kirby's X velocity
         .word       $0140                       ; 15BB21/4001
         SETPOSE     #$00, WAIT #6               ; 15BB23/5600

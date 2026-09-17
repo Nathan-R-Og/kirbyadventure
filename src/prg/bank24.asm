@@ -4,7 +4,7 @@ Script0E_WaddleDee:
     MOV         REG,VAR0                    ; 24A002/1E00
     MOV         VAR6,REG                    ; 24A004/1D06
     ONPOSITION  $D9BB                       ; 24A006/21BBD9
-    SPRITEMAP   $308000                     ; 24A009/1A008030
+    SPRITEMAP   L_308000                     ; 24A009/1A008030
     ASMCALL     $84A4                       ; 24A00D/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24A010/0D0002
     ASMCALL     $8851                       ; 24A013/D05188 // Face towards Kirby
@@ -55,7 +55,7 @@ incbinRange "../split/prg/bank24.bin", $0062, $0149
 Script0F_WaddleDoo:
     SETBANK     #$22                        ; 24A149/2822
     ONPOSITION  $D9BB                       ; 24A14B/21BBD9
-    SPRITEMAP   $30802C                     ; 24A14E/1A2C8030
+    SPRITEMAP   L_30802C                     ; 24A14E/1A2C8030
     ASMCALL     $84A4                       ; 24A152/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24A155/0D0002
     ASMCALL     $8851                       ; 24A158/D05188 // Face towards Kirby
@@ -147,7 +147,7 @@ incbinRange "../split/prg/bank24.bin", $01E6, $02B2
 L_24A2B2:
     SETBANK     #$22                        ; 24A2B2/2822
     ONPOSITION  $D9BB                       ; 24A2B4/21BBD9
-    SPRITEMAP   $3082EC                     ; 24A2B7/1AEC8230
+    SPRITEMAP   L_3082EC                     ; 24A2B7/1AEC8230
     ASMCALL     $84AD                       ; 24A2BB/D0AD84 // Copy $0784[self.parent] to $0784[self]
     ONTICK      $24A2D4                     ; 24A2BE/08D4A224
     MOV         VAR0,#$01                   ; 24A2C2/0D0001
@@ -171,7 +171,7 @@ Script10_Shotzo:
     JEQ         L_24A331                    ; 24A32B/0A31A3
     ASMCALL     $A3AF                       ; 24A32E/D0AFA3
 L_24A331:
-    SPRITEMAP   $30806E                     ; 24A331/1A6E8030
+    SPRITEMAP   L_30806E                     ; 24A331/1A6E8030
     MOV         VAR6,#$00                   ; 24A335/0D0600
     ASMCALL     $A507                       ; 24A338/D007A5
 L_24A33B:
@@ -255,12 +255,12 @@ Script51_CannonBall:
     ASMCALL     $84AD                       ; 24A59B/D0AD84 // Copy $0784[self.parent] to $0784[self]
     ASMCALL     $A4CA                       ; 24A59E/D0CAA4 // Unknown ASM $24A4CA
     .word       $A64B                       ; 24A5A1/4BA6
-    SPRITEMAP   $3082EC                     ; 24A5A3/1AEC8230
+    SPRITEMAP   L_3082EC                     ; 24A5A3/1AEC8230
     SETPOSE     #$02, WAIT #2               ; 24A5A7/5202
 L_24A5A9:
     INCPOSE     WAIT #2                     ; 24A5A9/72
 L_24A5AA:
-    SPRITEMAP   $3080AB                     ; 24A5AA/1AAB8030
+    SPRITEMAP   L_3080AB                     ; 24A5AA/1AAB8030
     MOV         REG,VAR0                    ; 24A5AE/1E00
     JNE         L_24A5C5                    ; 24A5B0/0BC5A5
     MOV         VAR0,#$01                   ; 24A5B3/0D0001
@@ -289,7 +289,7 @@ L_24A5DD:
     ASMCALL     $DE4B                       ; 24A5DD/D04BDE // Play sound effect
     .byte       $0E                         ; 24A5E0/0E
     SETZPOS     #$00FF                      ; 24A5E1/3AFF00
-    SPRITEMAP   $308B7A                     ; 24A5E4/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 24A5E4/1A7A8B30
     ASMCALL     $8542                       ; 24A5E8/D04285
     SETPOSE     #$05, WAIT #2               ; 24A5EB/5205
 L_24A5ED:
@@ -301,7 +301,7 @@ L_24A5EF:
     ASMCALL     $DE4B                       ; 24A5EF/D04BDE // Play sound effect
     .byte       $0E                         ; 24A5F2/0E
     SETZPOS     #$0080                      ; 24A5F3/3A8000
-    SPRITEMAP   $308B7A                     ; 24A5F6/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 24A5F6/1A7A8B30
     SETPOSE     #$04, WAIT #4               ; 24A5FA/5404
 L_24A5FC:
     END                                     ; 24A5FC/00
@@ -312,7 +312,7 @@ incbinRange "../split/prg/bank24.bin", $05FD, $0673
 Script11_Sparky:
     SETBANK     #$22                        ; 24A673/2822
     ONPOSITION  $D9BB                       ; 24A675/21BBD9
-    SPRITEMAP   $3080D5                     ; 24A678/1AD58030
+    SPRITEMAP   L_3080D5                     ; 24A678/1AD58030
     ASMCALL     $84A4                       ; 24A67C/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24A67F/0D0002
     ASMCALL     $8851                       ; 24A682/D05188 // Face towards Kirby
@@ -432,7 +432,7 @@ incbinRange "../split/prg/bank24.bin", $0766, $0857
 L_24A857:
     ASMCALL     $DE4B                       ; 24A857/D04BDE // Play sound effect
     .byte       $39                         ; 24A85A/39
-    SPRITEMAP   $30812D                     ; 24A85B/1A2D8130
+    SPRITEMAP   L_30812D                     ; 24A85B/1A2D8130
     ASMCALL     $A86A                       ; 24A85F/D06AA8
     ASMCALL     $E23C                       ; 24A862/D03CE2 // Unknown ASM $E23C
     .word       $0200                       ; 24A865/0002
@@ -451,7 +451,7 @@ Script12_PoppyBrosJr:
     ASMCALL     $84A4                       ; 24A8CC/D0A484 // Store VAR1 in $0784[self]
     ASMCALL     $8851                       ; 24A8CF/D05188 // Face towards Kirby
     ONPOSITION  $D9BB                       ; 24A8D2/21BBD9
-    SPRITEMAP   $308138                     ; 24A8D5/1A388130
+    SPRITEMAP   L_308138                     ; 24A8D5/1A388130
     MOV         VAR2,#$00                   ; 24A8D9/0D0200
     MOV         VAR3,#$00                   ; 24A8DC/0D0300
     MOV         VAR6,#$00                   ; 24A8DF/0D0600
@@ -503,7 +503,7 @@ L_24A92A:
     ASMCALL     $84AD                       ; 24A92A/D0AD84 // Copy $0784[self.parent] to $0784[self]
     ASMCALL     $8851                       ; 24A92D/D05188 // Face towards Kirby
     ONPOSITION  $D9BB                       ; 24A930/21BBD9
-    SPRITEMAP   $308138                     ; 24A933/1A388130
+    SPRITEMAP   L_308138                     ; 24A933/1A388130
     MOV         VAR2,#$00                   ; 24A937/0D0200
     MOV         VAR3,#$00                   ; 24A93A/0D0300
     MOV         VAR6,#$00                   ; 24A93D/0D0600
@@ -522,7 +522,7 @@ incbinRange "../split/prg/bank24.bin", $0952, $0AA4
 Script13_PoppyBrosApple:
     SETBANK     #$22                        ; 24AAA4/2822
     ONPOSITION  $D9BB                       ; 24AAA6/21BBD9
-    SPRITEMAP   $308164                     ; 24AAA9/1A648130
+    SPRITEMAP   L_308164                     ; 24AAA9/1A648130
     ASMCALL     $84A4                       ; 24AAAD/D0A484 // Store VAR1 in $0784[self]
     ASMCALL     $8851                       ; 24AAB0/D05188 // Face towards Kirby
     MOV         VAR0,#$02                   ; 24AAB3/0D0002
@@ -580,7 +580,7 @@ L_24AAFA:
     .byte       $01                         ; 24AB03/01
     .byte       $00                         ; 24AB04/00
 L_24AB05:
-    SPRITEMAP   $308138                     ; 24AB05/1A388130
+    SPRITEMAP   L_308138                     ; 24AB05/1A388130
     ASMCALL     $8829                       ; 24AB09/D02988 // Set pose to 0 (respect facing)
     A_RTS                                   ; 24AB0C/19
 
@@ -605,11 +605,11 @@ L_24AB20:
     ADDYPOS     #2                          ; 24AB2B/2D0200
     MOV         REG,VAR3                    ; 24AB2E/1E03
     JNE         L_24AB3A                    ; 24AB30/0B3AAB
-    SPRITEMAP   $308294                     ; 24AB33/1A948230
+    SPRITEMAP   L_308294                     ; 24AB33/1A948230
     A_JMP       L_24AB3E                    ; 24AB37/173EAB
 
 L_24AB3A:
-    SPRITEMAP   $3082C0                     ; 24AB3A/1AC08230
+    SPRITEMAP   L_3082C0                     ; 24AB3A/1AC08230
 L_24AB3E:
     ASMCALL     $8829                       ; 24AB3E/D02988 // Set pose to 0 (respect facing)
     A_JMP       $8100                       ; 24AB41/170081
@@ -620,7 +620,7 @@ incbinRange "../split/prg/bank24.bin", $0B44, $0BB8
 Script14_PoppyBrosTomato:
     SETBANK     #$22                        ; 24ABB8/2822
     ONPOSITION  $D9BB                       ; 24ABBA/21BBD9
-    SPRITEMAP   $3081FC                     ; 24ABBD/1AFC8130
+    SPRITEMAP   L_3081FC                     ; 24ABBD/1AFC8130
     ASMCALL     $84A4                       ; 24ABC1/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24ABC4/0D0002
     ASMCALL     $8851                       ; 24ABC7/D05188 // Face towards Kirby
@@ -632,11 +632,11 @@ L_24ABD0:
     MOV         REG,VAR0                    ; 24ABD2/1E00
     MOV         VAR5,REG                    ; 24ABD4/1D05
     JNE         L_24ABE0                    ; 24ABD6/0BE0AB
-    SPRITEMAP   $308294                     ; 24ABD9/1A948230
+    SPRITEMAP   L_308294                     ; 24ABD9/1A948230
     A_JMP       L_24ABE4                    ; 24ABDD/17E4AB
 
 L_24ABE0:
-    SPRITEMAP   $3082C0                     ; 24ABE0/1AC08230
+    SPRITEMAP   L_3082C0                     ; 24ABE0/1AC08230
 L_24ABE4:
     MOV         VAR0,#$02                   ; 24ABE4/0D0002
     ONPOSITION  $D9BB                       ; 24ABE7/21BBD9
@@ -661,7 +661,7 @@ incbinRange "../split/prg/bank24.bin", $0C0B, $0CA9
 Script16_LaserBall:
     SETBANK     #$22                        ; 24ACA9/2822
     ONPOSITION  $D9BB                       ; 24ACAB/21BBD9
-    SPRITEMAP   $308310                     ; 24ACAE/1A108330
+    SPRITEMAP   L_308310                     ; 24ACAE/1A108330
     ASMCALL     $84A4                       ; 24ACB2/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24ACB5/0D0002
     ASMCALL     $8851                       ; 24ACB8/D05188 // Face towards Kirby
@@ -751,7 +751,7 @@ L_24AEA1:
     .byte       $42                         ; 24AEA4/42
     SETBANK     #$22                        ; 24AEA5/2822
     ONPOSITION  $D9BB                       ; 24AEA7/21BBD9
-    SPRITEMAP   $3083B5                     ; 24AEAA/1AB58330
+    SPRITEMAP   L_3083B5                     ; 24AEAA/1AB58330
     ASMCALL     $AEEB                       ; 24AEAE/D0EBAE // Move object 8 pixels forward
     ONTICK      $24AED1                     ; 24AEB1/08D1AE24
     MOV         REG,VAR0                    ; 24AEB5/1E00
@@ -781,7 +781,7 @@ incbinRange "../split/prg/bank24.bin", $0ED1, $0F08
 L_24AF08:
     SETBANK     #$22                        ; 24AF08/2822
     ONPOSITION  $D9BB                       ; 24AF0A/21BBD9
-    SPRITEMAP   $30844E                     ; 24AF0D/1A4E8430
+    SPRITEMAP   L_30844E                     ; 24AF0D/1A4E8430
     ASMCALL     $AF21                       ; 24AF11/D021AF
     ASMCALL     $8C05                       ; 24AF14/D0058C // Unknown ASM $228C05
     .byte       $06                         ; 24AF17/06
@@ -799,7 +799,7 @@ incbinRange "../split/prg/bank24.bin", $0F21, $0F44
 Script18_Blipper:
     SETBANK     #$22                        ; 24AF44/2822
     ONPOSITION  $D9BB                       ; 24AF46/21BBD9
-    SPRITEMAP   $30845C                     ; 24AF49/1A5C8430
+    SPRITEMAP   L_30845C                     ; 24AF49/1A5C8430
     ASMCALL     $84A4                       ; 24AF4D/D0A484 // Store VAR1 in $0784[self]
     ASMCALL     $8851                       ; 24AF50/D05188 // Face towards Kirby
     MOV         REG,VAR0                    ; 24AF53/1E00
@@ -947,7 +947,7 @@ incbinRange "../split/prg/bank24.bin", $1225, $12EC
 Script19_Bounder:
     SETBANK     #$22                        ; 24B2EC/2822
     ONPOSITION  $D9BB                       ; 24B2EE/21BBD9
-    SPRITEMAP   $3084B4                     ; 24B2F1/1AB48430
+    SPRITEMAP   L_3084B4                     ; 24B2F1/1AB48430
     MOV         VAR0,#$02                   ; 24B2F5/0D0002
     MOV         VAR2,#$78                   ; 24B2F8/0D0278
     MOV         VAR6,#$00                   ; 24B2FB/0D0600
@@ -1157,7 +1157,7 @@ incbinRange "../split/prg/bank24.bin", $1458, $1711
 L_24B711:
     SETBANK     #$22                        ; 24B711/2822
     ONPOSITION  $D9BB                       ; 24B713/21BBD9
-    SPRITEMAP   $308B82                     ; 24B716/1A828B30
+    SPRITEMAP   L_308B82                     ; 24B716/1A828B30
     ASMCALL     $84AD                       ; 24B71A/D0AD84 // Copy $0784[self.parent] to $0784[self]
     MOV         VAR0,#$01                   ; 24B71D/0D0001
     ASMCALL     $B748                       ; 24B720/D048B7 // Move object 6 pixels forward
@@ -1174,7 +1174,7 @@ incbinRange "../split/prg/bank24.bin", $1732, $1765
 Script29_HotHead:
     SETBANK     #$22                        ; 24B765/2822
     ONPOSITION  $D9BB                       ; 24B767/21BBD9
-    SPRITEMAP   $30850C                     ; 24B76A/1A0C8530
+    SPRITEMAP   L_30850C                     ; 24B76A/1A0C8530
     ASMCALL     $84A4                       ; 24B76E/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 24B771/0D0002
     ASMCALL     $8851                       ; 24B774/D05188 // Face towards Kirby
@@ -1280,7 +1280,7 @@ L_24B8E7:
     .byte       $1E                         ; 24B8EA/1E
     SETBANK     #$22                        ; 24B8EB/2822
     ONPOSITION  $D9BB                       ; 24B8ED/21BBD9
-    SPRITEMAP   $308590                     ; 24B8F0/1A908530
+    SPRITEMAP   L_308590                     ; 24B8F0/1A908530
     ASMCALL     $84AD                       ; 24B8F4/D0AD84 // Copy $0784[self.parent] to $0784[self]
     ASMCALL     $8829                       ; 24B8F7/D02988 // Set pose to 0 (respect facing)
     MOV         REG,VAR0                    ; 24B8FA/1E00
@@ -1372,7 +1372,7 @@ L_24BA80:
 incbinRange "../split/prg/bank24.bin", $1a8d, $1Abb
 
 L_24BABB:
-    SPRITEMAP   $308B7A                     ; 24BABB/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 24BABB/1A7A8B30
     SETZPOS     #$0080                      ; 24BABF/3A8000
     ASMCALL     $BAC8, WAIT #2              ; 24BAC2/D2C8BA
 L_24BAC5:
@@ -1384,7 +1384,7 @@ L_24BAC7:
 incbinRange "../split/prg/bank24.bin", $1AC8, $1B11
 
 L_24BB11:
-    SPRITEMAP   $308B7A                     ; 24BB11/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 24BB11/1A7A8B30
     SETZPOS     #$0080                      ; 24BB15/3A8000
     ASMCALL     $BB1E, WAIT #2              ; 24BB18/D21EBB
 L_24BB1B:

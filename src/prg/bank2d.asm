@@ -83,7 +83,7 @@ L_2DA08D:
     A_JMP       L_2DA088                    ; 2DA08E/1788A0
 
 L_2DA091:
-    SPRITEMAP   $33963A                     ; 2DA091/1A3A9633
+    SPRITEMAP   L_33963A                     ; 2DA091/1A3A9633
     ASMCALL     $8851                       ; 2DA095/D05188
     ASMCALL     $8C53                       ; 2DA098/D0538C
     LOOP        #25                         ; 2DA09B/0119
@@ -95,7 +95,7 @@ L_2DA09D:
     HALT                                    ; 2DA0AA/09
 
 L_2DA0AB:
-    SPRITEMAP   $339C20                     ; 2DA0AB/1A209C33
+    SPRITEMAP   L_339C20                     ; 2DA0AB/1A209C33
     ZEROVEL                                 ; 2DA0AF/38
     MOV         REG,VAR4                    ; 2DA0B0/1E04
     TABLEJMP    #3                          ; 2DA0B2/0F03
@@ -213,14 +213,14 @@ L_2DA15D:
     A_RTS                                   ; 2DA178/19
 
 L_2DA179:
-    SPRITEMAP   $339D35                     ; 2DA179/1A359D33
+    SPRITEMAP   L_339D35                     ; 2DA179/1A359D33
     SETPOSE     #$01                        ; 2DA17D/5001
     ASMCALL     $A72B                       ; 2DA17F/D02BA7
     ONTICK      $2DA73C                     ; 2DA182/083CA72D
     HALT                                    ; 2DA186/09
 
 L_2DA187:
-    SPRITEMAP   $339D35                     ; 2DA187/1A359D33
+    SPRITEMAP   L_339D35                     ; 2DA187/1A359D33
     WAIT        #1                          ; 2DA18B/0601
 L_2DA18D:
     ZEROVEL                                 ; 2DA18D/38
@@ -343,7 +343,7 @@ L_2DA226:
     MOV         REG,VAR5                    ; 2DA226/1E05
     JEQ         L_2DA224                    ; 2DA228/0A24A2
     ENDLASTTASK                             ; 2DA22B/12
-    SPRITEMAP   $339886                     ; 2DA22C/1A869833
+    SPRITEMAP   L_339886                     ; 2DA22C/1A869833
     ASMCALL     $AD2E                       ; 2DA230/D02EAD
     ASMCALL     $B4DB                       ; 2DA233/D0DBB4
     LOOP        #208                        ; 2DA236/01D0
@@ -389,7 +389,7 @@ L_2DA270:
     HALT                                    ; 2DA273/09
 
 L_2DA274:
-    SPRITEMAP   $3396A6                     ; 2DA274/1AA69633
+    SPRITEMAP   L_3396A6                     ; 2DA274/1AA69633
     ASMCALL     $8851                       ; 2DA278/D05188 // Face towards Kirby
 L_2DA27B:
     ASMCALL     $B4DB                       ; 2DA27B/D0DBB4
@@ -424,7 +424,7 @@ L_2DA2A8:
 L_2DA2AB:
     MOV         VAR2,#$01                   ; 2DA2AB/0D0201
     MOV         VAR4,#$00                   ; 2DA2AE/0D0400
-    SPRITEMAP   $339722                     ; 2DA2B1/1A229733
+    SPRITEMAP   L_339722                     ; 2DA2B1/1A229733
     ASMCALL     $8851                       ; 2DA2B5/D05188 // Face towards Kirby
     ONTICK      $2DAB29                     ; 2DA2B8/0829AB2D
     TASK        L_2DA2E5                    ; 2DA2BC/07E5A2
@@ -435,7 +435,7 @@ L_2DA2C1:
     HALT                                    ; 2DA2C5/09
 
 L_2DA2C6:
-    SPRITEMAP   $339722                     ; 2DA2C6/1A229733
+    SPRITEMAP   L_339722                     ; 2DA2C6/1A229733
     ONTICK      $2DAB29                     ; 2DA2CA/0829AB2D
     TASK        L_2DA2D2                    ; 2DA2CE/07D2A2
     HALT                                    ; 2DA2D1/09
@@ -493,7 +493,7 @@ L_2DA31C:
 L_2DA32A:
     ZEROVEL                                 ; 2DA32A/38
     ASMCALL     $B130                       ; 2DA32B/D030B1
-    SPRITEMAP   $339758                     ; 2DA32E/1A589733
+    SPRITEMAP   L_339758                     ; 2DA32E/1A589733
     ASMCALL     $A8C5                       ; 2DA332/D0C5A8
     MOV         VAR4,#$00                   ; 2DA335/0D0400
     ONTICK      $2DA90B                     ; 2DA338/080BA92D
@@ -510,7 +510,7 @@ L_2DA349:
     ZEROVEL                                 ; 2DA349/38
     WAIT        #1                          ; 2DA34A/0601
 L_2DA34C:
-    SPRITEMAP   $339796                     ; 2DA34C/1A969733
+    SPRITEMAP   L_339796                     ; 2DA34C/1A969733
     ASMCALL     $B4DB                       ; 2DA350/D0DBB4
     LOOP        #6                          ; 2DA353/0106
     .byte 4
@@ -556,7 +556,7 @@ L_2DA38E:
     HALT                                    ; 2DA3A0/09
 
 L_2DA3A1:
-    SPRITEMAP   $339E0E                     ; 2DA3A1/1A0E9E33
+    SPRITEMAP   L_339E0E                     ; 2DA3A1/1A0E9E33
     MOV         REG,$05E0                   ; 2DA3A5/1CE005
     TABLEJMP    #2                          ; 2DA3A8/0F02
     .word       L_2DA3AE                    ; 2DA3AA/AEA3
@@ -603,7 +603,7 @@ L_2DA3CA:
 L_2DA3D8:
     MOV         $05F9,#$60                  ; 2DA3D8/11F90560
     ONTICK      $2195DE                     ; 2DA3DC/08DE9521
-    SPRITEMAP   $339E0E                     ; 2DA3E0/1A0E9E33
+    SPRITEMAP   L_339E0E                     ; 2DA3E0/1A0E9E33
     SETPOSE     #$00                        ; 2DA3E4/5000
     SETYVEL     #$FD00                      ; 2DA3E6/C000FD
     ASMCALL     $AA02                       ; 2DA3E9/D002AA
@@ -628,7 +628,7 @@ L_2DA407:
     MOV         VAR2,#$04                   ; 2DA408/0D0204
     MOV         VAR5,#$00                   ; 2DA40B/0D0500
     MOV         VAR4,#$00                   ; 2DA40E/0D0400
-    SPRITEMAP   $339B28                     ; 2DA411/1A289B33
+    SPRITEMAP   L_339B28                     ; 2DA411/1A289B33
     ONTICK      $2DAA64                     ; 2DA415/0864AA2D
     ASMCALL     $B4DB                       ; 2DA419/D0DBB4
     LOOP        #200                        ; 2DA41C/01C8
@@ -722,7 +722,7 @@ L_2DA4AD:
 
 L_2DA4BB:
     ZEROVEL                                 ; 2DA4BB/38
-    SPRITEMAP   $339A02                     ; 2DA4BC/1A029A33
+    SPRITEMAP   L_339A02                     ; 2DA4BC/1A029A33
     ASMCALL     $AE31                       ; 2DA4C0/D031AE
     ASMCALL     $859F                       ; 2DA4C3/D09F85 // Unknown ASM $22859F
     .word       $0018                       ; 2DA4C6/1800
@@ -769,7 +769,7 @@ L_2DA4FB:
     ASMCALL     $DE45                       ; 2DA50A/D045DE // Play music
     .byte       $FF                         ; 2DA50D/FF
     SETZPOS     #$0080                      ; 2DA50E/3A8000
-    SPRITEMAP   $339A40                     ; 2DA511/1A409A33
+    SPRITEMAP   L_339A40                     ; 2DA511/1A409A33
     ASMCALL     $AEC3                       ; 2DA515/D0C3AE
     ONTICK      $2DAEE2                     ; 2DA518/08E2AE2D
     HALT                                    ; 2DA51C/09
@@ -854,7 +854,7 @@ L_2DA58A:
 
 L_2DA58D:
     SETZPOS     #$00FF                      ; 2DA58D/3AFF00
-    SPRITEMAP   $308B82                     ; 2DA590/1A828B30
+    SPRITEMAP   L_308B82                     ; 2DA590/1A828B30
     SETPOSE     #$00                        ; 2DA594/5000
     ASMCALL     $AFA9                       ; 2DA596/D0A9AF
     WAIT        #3                          ; 2DA599/0603
@@ -867,7 +867,7 @@ L_2DA59E:
 L_2DA59F:
     ZEROVEL                                 ; 2DA59F/38
     ASMCALL     $B044                       ; 2DA5A0/D044B0
-    SPRITEMAP   $339D99                     ; 2DA5A3/1A999D33
+    SPRITEMAP   L_339D99                     ; 2DA5A3/1A999D33
     ONTICK      $2DB03C                     ; 2DA5A7/083CB02D
     MOV         REG,VAR4                    ; 2DA5AB/1E04
     JNE         L_2DA5CA                    ; 2DA5AD/0BCAA5
@@ -908,7 +908,7 @@ L_2DA5E3:
 
 L_2DA5E4:
     SETZPOS     #$00FF                      ; 2DA5E4/3AFF00
-    SPRITEMAP   $339DE2                     ; 2DA5E7/1AE29D33
+    SPRITEMAP   L_339DE2                     ; 2DA5E7/1AE29D33
     ASMCALL     $B0B3                       ; 2DA5EB/D0B3B0
     ONTICK      $2DB09F                     ; 2DA5EE/089FB02D
     MOV         REG,VAR4                    ; 2DA5F2/1E04
@@ -947,7 +947,7 @@ L_2DA607:
 L_2DA61D:
     SETBANK     #$22                        ; 2DA61D/2822
     SETZPOS     #$0080                      ; 2DA61F/3A8000
-    SPRITEMAP   $339DAF                     ; 2DA622/1AAF9D33
+    SPRITEMAP   L_339DAF                     ; 2DA622/1AAF9D33
     SETBANK     #$22                        ; 2DA626/2822
     ONTICK      $2DAFF8                     ; 2DA628/08F8AF2D
     SETYVEL     #$FE80                      ; 2DA62C/C080FE
@@ -1026,7 +1026,7 @@ L_2DA673:
 incbinRange "../split/prg/bank2d.bin", $067C, $1594
 
 Script20_BroomHatter:
-    SPRITEMAP   $3289D4                     ; 2DB594/1AD48932
+    SPRITEMAP   L_3289D4                     ; 2DB594/1AD48932
     MOV         REG,#$02                    ; 2DB598/1B02
     ASMCALL_l   $228470                     ; 2DB59A/26708422
     MOV         VAR5,#$00                   ; 2DB59E/0D0500
@@ -1135,7 +1135,7 @@ L_2DB653:
 incbinRange "../split/prg/bank2d.bin", $1657, $1779
 
 Script21_Cappy:
-    SPRITEMAP   $3289EE                     ; 2DB779/1AEE8932
+    SPRITEMAP   L_3289EE                     ; 2DB779/1AEE8932
     MOV         REG,#$02                    ; 2DB77D/1B02
     ASMCALL_l   $228470                     ; 2DB77F/26708422
     JNE         L_2DB7AB                    ; 2DB783/0BABB7
@@ -1157,7 +1157,7 @@ L_2DB79B:
     HALT                                    ; 2DB7AA/09
 
 L_2DB7AB:
-    SPRITEMAP   $3289E6                     ; 2DB7AB/1AE68932
+    SPRITEMAP   L_3289E6                    ; 2DB7AB/1AE68932
     ASMCALL     $8851                       ; 2DB7AF/D05188
     ADD         VAR1,#-128                  ; 2DB7B2/13010280
     ASMCALL     $E26A                       ; 2DB7B6/D06AE2 // Set X velocity (respect facing)
@@ -1224,7 +1224,7 @@ Script37_CoolSpook:
     ASMCALL     $84A4                       ; 2DB896/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 2DB899/0D0002
     ONPOSITION  $D9BB                       ; 2DB89C/21BBD9
-    SPRITEMAP   $309B01                     ; 2DB89F/1A019B30
+    SPRITEMAP   L_309B01                     ; 2DB89F/1A019B30
     ONTICK      $2DB8D1                     ; 2DB8A3/08D1B82D
     ASMCALL     $8851                       ; 2DB8A7/D05188 // Face towards Kirby
     SETXVEL     #$FF80                      ; 2DB8AA/B080FF
@@ -1263,7 +1263,7 @@ Script36_Wheelie:
     ASMCALL     $84A4                       ; 2DB8DB/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 2DB8DE/0D0002
     ONPOSITION  $D9BB                       ; 2DB8E1/21BBD9
-    SPRITEMAP   $309AA9                     ; 2DB8E4/1AA99A30
+    SPRITEMAP   L_309AA9                     ; 2DB8E4/1AA99A30
     ASMCALL     $8851                       ; 2DB8E8/D05188 // Face towards Kirby
     MOV         VAR5,#$1E                   ; 2DB8EB/0D051E
     ASMCALL     $DE4B                       ; 2DB8EE/D04BDE // Play sound effect
@@ -1369,7 +1369,7 @@ Script41_SirKibble:
     .word       L_2DBD30                    ; 2DBB30/30BD
 L_2DBB32:
     ASMCALL     $BBCE                       ; 2DBB32/D0CEBB
-    SPRITEMAP   $309BCC                     ; 2DBB35/1ACC9B30
+    SPRITEMAP   L_309BCC                     ; 2DBB35/1ACC9B30
     MOV         REG,#$02                    ; 2DBB39/1B02
     ASMCALL_l   $228470                     ; 2DBB3B/26708422
     ASMCALL     $BBE6                       ; 2DBB3F/D0E6BB
@@ -1458,7 +1458,7 @@ incbinRange "../split/prg/bank2d.bin", $1BCE, $1D30
 L_2DBD30:
     SETBANK     #$22                        ; 2DBD30/2822
     ONPOSITION  $D9BB                       ; 2DBD32/21BBD9
-    SPRITEMAP   $30952D                     ; 2DBD35/1A2D9530
+    SPRITEMAP   L_30952D                     ; 2DBD35/1A2D9530
     ONTICK      $2DBD6F                     ; 2DBD39/086FBD2D
     ASMCALL     $DE4B                       ; 2DBD3D/D04BDE // Play sound effect
     .byte       $3F                         ; 2DBD40/3F

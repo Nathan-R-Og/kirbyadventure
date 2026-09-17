@@ -71,7 +71,7 @@ L_3CA040:
 .byte $32,$80,$FF,$09
 
 L_3CA0AE:
-    SPRITEMAP   $3A9E25                     ; 3CA0AE/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CA0AE/1A259E3A
     SETXPOS     #$00D0                      ; 3CA0B2/2AD000
 L_3CA0B5:
     SETPOSE     #$09                        ; 3CA0B5/5009
@@ -79,14 +79,14 @@ L_3CA0B5:
     HALT                                    ; 3CA0BA/09
 
 L_3CA0BB:
-    SPRITEMAP   $3A9E25                     ; 3CA0BB/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CA0BB/1A259E3A
     SETXPOS     #$00C8                      ; 3CA0BF/2AC800
     MOV         REG,$07D1                   ; 3CA0C2/1CD107
     JNE         L_3CA0B5                    ; 3CA0C5/0BB5A0
     END                                     ; 3CA0C8/00
 
 L_3CA0C9:
-    SPRITEMAP   $3A9E25                     ; 3CA0C9/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CA0C9/1A259E3A
     SETXPOS     #$00C0                      ; 3CA0CD/2AC000
     MOV         REG,$07D1                   ; 3CA0D0/1CD107
     TABLEJMP    #3                          ; 3CA0D3/0F03
@@ -97,7 +97,7 @@ L_3CA0DB:
     END                                     ; 3CA0DB/00
 
 L_3CA0DC:
-    MOV         $01A2,#$FC                  ; 3CA0DC/11A201FC
+    MOV         palette_fade,#$FC                  ; 3CA0DC/11A201FC
     LOOP        #4                          ; 3CA0E0/0104
         ASMCALL     $C94C, WAIT #6              ; 3CA0E2/D64CC9 // Palette fade dark in step
     ENDLOOP                                 ; 3CA0E5/02
@@ -785,7 +785,7 @@ B3C_adaf:
 L_3CADCB:
     SETXPOS     #$0020                      ; 3CADCB/2A2000
     SETYPOS     #$0060                      ; 3CADCE/2B6000
-    SPRITEMAP   $3A9E04                     ; 3CADD1/1A049E3A
+    SPRITEMAP   L_3A9E04                     ; 3CADD1/1A049E3A
     MOV         REG,$07CF                   ; 3CADD5/1CCF07
     JEQ         L_3CADE1                    ; 3CADD8/0AE1AD
 L_3CADDB:
@@ -803,7 +803,7 @@ rts
 L_3CADE8:
     ADDXPOS     #22                         ; 3CADE8/2C1600
     ADDYPOS     #-8                         ; 3CADEB/2DF8FF
-    SPRITEMAP   $3A9DEF                     ; 3CADEE/1AEF9D3A
+    SPRITEMAP   L_3A9DEF                     ; 3CADEE/1AEF9D3A
     SETPOSE     #$01, WAIT #1               ; 3CADF2/5101
     DECPOSE     WAIT #1                     ; 3CADF4/81
     SETXVEL     #$0010                      ; 3CADF5/B01000
@@ -817,7 +817,7 @@ L_3CADE8:
 L_3CAE06:
     ADDXPOS     #-8                         ; 3CAE06/2CF8FF
     ADDYPOS     #-8                         ; 3CAE09/2DF8FF
-    SPRITEMAP   $3A9DEF                     ; 3CAE0C/1AEF9D3A
+    SPRITEMAP   L_3A9DEF                     ; 3CAE0C/1AEF9D3A
     SETPOSE     #$01, WAIT #1               ; 3CAE10/5101
     DECPOSE     WAIT #1                     ; 3CAE12/81
     SETXVEL     #$FFF0                      ; 3CAE13/B0F0FF
@@ -831,7 +831,7 @@ L_3CAE06:
 L_3CAE24:
     SETXPOS     #$0065                      ; 3CAE24/2A6500
     SETYPOS     #$008C                      ; 3CAE27/2B8C00
-    SPRITEMAP   $3A9DEF                     ; 3CAE2A/1AEF9D3A
+    SPRITEMAP   L_3A9DEF                     ; 3CAE2A/1AEF9D3A
     ONMOVE      $D864                       ; 3CAE2E/2364D8
     ONPOSITION  $D968                       ; 3CAE31/2168D9
     SETPOSE     #$01, WAIT #1               ; 3CAE34/5101
@@ -850,7 +850,7 @@ L_3CAE4C:
     SETXPOS     #$0090                      ; 3CAE4C/2A9000
     SETYPOS     #$0080                      ; 3CAE4F/2B8000
     ZEROVEL                                 ; 3CAE52/38
-    SPRITEMAP   $3A9DEF                     ; 3CAE53/1AEF9D3A
+    SPRITEMAP   L_3A9DEF                     ; 3CAE53/1AEF9D3A
     ADDPOSE     #1, WAIT #2                 ; 3CAE57/6201
     ADDPOSE     #2, WAIT #2                 ; 3CAE59/6202
     INCPOSE     WAIT #2                     ; 3CAE5B/72
@@ -863,10 +863,10 @@ L_3CAE4C:
 
 L_3CAE66:
     ASMCALL     $AEDA                       ; 3CAE66/D0DAAE
-    SPRITEMAP   $3A9C62                     ; 3CAE69/1A629C3A
+    SPRITEMAP   L_3A9C62                     ; 3CAE69/1A629C3A
     ASMCALL     $AEE3                       ; 3CAE6D/D0E3AE
     JEQ         L_3CAE77                    ; 3CAE70/0A77AE
-    SPRITEMAP   $3A9C58                     ; 3CAE73/1A589C3A
+    SPRITEMAP   L_3A9C58                     ; 3CAE73/1A589C3A
 L_3CAE77:
     SETPOSE     VAR7                        ; 3CAE77/2407
     MOV         VAR5,#$00                   ; 3CAE79/0D0500
@@ -883,7 +883,7 @@ L_3CAE77:
 
 L_3CAE97:
     ASMCALL     $AEDA                       ; 3CAE97/D0DAAE
-    SPRITEMAP   $3A9CAC                     ; 3CAE9A/1AAC9C3A
+    SPRITEMAP   L_3A9CAC                     ; 3CAE9A/1AAC9C3A
     MOV         VAR5,#$01                   ; 3CAE9E/0D0501
     WAIT        #2                          ; 3CAEA1/0602
     TASK        TASK_3CAEBA                 ; 3CAEA3/07BAAE
@@ -906,7 +906,7 @@ TASK_3CAEBA:
     ENDTASK                                 ; 3CAEC2/0C
 
 L_3CAEC3:
-    SPRITEMAP   $3A9CAC                     ; 3CAEC3/1AAC9C3A
+    SPRITEMAP   L_3A9CAC                     ; 3CAEC3/1AAC9C3A
     MOV         VAR5,#$01                   ; 3CAEC7/0D0501
     WAIT        #4                          ; 3CAECA/0604
     TASK        TASK_3CAED2                 ; 3CAECC/07D2AE
@@ -1058,7 +1058,7 @@ B3C_b01d:
 L_3CB037:
     ASMCALL     PlayMusic                       ; 3CB037/D045DE // Play music
     .byte       $1D                         ; 3CB03A/1D
-    SPRITEMAP   $3A9B40                     ; 3CB03B/1A409B3A
+    SPRITEMAP   L_3A9B40                     ; 3CB03B/1A409B3A
     SETPOSE     #$00                        ; 3CB03F/5000
     WAIT        #24                         ; 3CB041/0618
 L_3CB043:
@@ -1121,7 +1121,7 @@ L_3CB109:
     ONPOSITION  $D968                       ; 3CB10F/2168D9
     SETXPOS     #$0060                      ; 3CB112/2A6000
     SETYPOS     #$0090                      ; 3CB115/2B9000
-    SPRITEMAP   $3A9CC1                     ; 3CB118/1AC19C3A
+    SPRITEMAP   L_3A9CC1                     ; 3CB118/1AC19C3A
     SETXVEL     #$0080                      ; 3CB11C/B08000
     SETYVEL     #$FA00                      ; 3CB11F/C000FA
     SETPOSE     #$06, WAIT #5               ; 3CB122/5506
@@ -1208,7 +1208,7 @@ L_3CB1ED:
     SETXPOS     #$0065                      ; 3CB1ED/2A6500
     SETYPOS     #$0084                      ; 3CB1F0/2B8400
     ZEROVEL                                 ; 3CB1F3/38
-    SPRITEMAP   $3A9CC1                     ; 3CB1F4/1AC19C3A
+    SPRITEMAP   L_3A9CC1                     ; 3CB1F4/1AC19C3A
     LOOP        #3                          ; 3CB1F8/0103
         SETPOSE     #$04                        ; 3CB1FA/5004
         SETXVEL     #$0010, WAIT #2             ; 3CB1FC/B21000
@@ -1226,7 +1226,7 @@ L_3CB209:
     SETXPOS     #$0080                      ; 3CB209/2A8000
     SETYPOS     #$0040                      ; 3CB20C/2B4000
     MOV         VAR7,#$00                   ; 3CB20F/0D0700
-    SPRITEMAP   $3A9D19                     ; 3CB212/1A199D3A
+    SPRITEMAP   L_3A9D19                     ; 3CB212/1A199D3A
     SETPOSE     VAR7                        ; 3CB216/2407
     WAIT        #32                         ; 3CB218/0620
 L_3CB21A:
@@ -1292,7 +1292,7 @@ L_3CB26B:
     SETYPOS     #$0040                      ; 3CB274/2B4000
     SETZPOS     #$0081                      ; 3CB277/3A8100
 L_3CB27A:
-    SPRITEMAP   $3A9E25                     ; 3CB27A/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB27A/1A259E3A
     SETPOSE     #$00, WAIT #15              ; 3CB27E/5F00
     MOV         $07CC,#$01                  ; 3CB280/11CC0701
     HALT                                    ; 3CB284/09
@@ -1302,13 +1302,13 @@ L_3CB285:
     SETYPOS     #$0050                      ; 3CB288/2B5000
     SETZPOS     #$0081                      ; 3CB28B/3A8100
 L_3CB28E:
-    SPRITEMAP   $3A9E25                     ; 3CB28E/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB28E/1A259E3A
     SETPOSE     #$01, WAIT #15              ; 3CB292/5F01
     MOV         $07CC,#$01                  ; 3CB294/11CC0701
     HALT                                    ; 3CB298/09
 
 L_3CB299:
-    SPRITEMAP   $3A9E25                     ; 3CB299/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB299/1A259E3A
     SETPOSE     #$FF, WAIT #5               ; 3CB29D/55FF
     SETXVEL     #$FD00                      ; 3CB29F/B000FD
     SETYVEL     #$FF00                      ; 3CB2A2/C000FF
@@ -1319,7 +1319,7 @@ L_3CB299:
     HALT                                    ; 3CB2AD/09
 
 L_3CB2AE:
-    SPRITEMAP   $3A9E25                     ; 3CB2AE/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB2AE/1A259E3A
     SETPOSE     #$FF, WAIT #8               ; 3CB2B2/58FF
     SETXVEL     #$FE00                      ; 3CB2B4/B000FE
     SETYVEL     #$FF00                      ; 3CB2B7/C000FF
@@ -1330,7 +1330,7 @@ L_3CB2AE:
     HALT                                    ; 3CB2C2/09
 
 L_3CB2C3:
-    SPRITEMAP   $3A9E25                     ; 3CB2C3/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB2C3/1A259E3A
     SETPOSE     #$FF                        ; 3CB2C7/50FF
     WAIT        #13                         ; 3CB2C9/060D
     SETXVEL     #$FF00                      ; 3CB2CB/B000FF
@@ -1342,7 +1342,7 @@ L_3CB2C3:
     HALT                                    ; 3CB2D9/09
 
 L_3CB2DA:
-    SPRITEMAP   $3A9E25                     ; 3CB2DA/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB2DA/1A259E3A
     SETPOSE     #$FF                        ; 3CB2DE/50FF
     WAIT        #19                         ; 3CB2E0/0613
     SETXVEL     #$FF80                      ; 3CB2E2/B080FF
@@ -1353,7 +1353,7 @@ L_3CB2DA:
     HALT                                    ; 3CB2ED/09
 
 L_3CB2EE:
-    SPRITEMAP   $3A9E25                     ; 3CB2EE/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB2EE/1A259E3A
     SETPOSE     #$FF                        ; 3CB2F2/50FF
     WAIT        #24                         ; 3CB2F4/0618
     SETXVEL     #$0080                      ; 3CB2F6/B08000
@@ -1364,7 +1364,7 @@ L_3CB2EE:
     HALT                                    ; 3CB301/09
 
 L_3CB302:
-    SPRITEMAP   $3A9E25                     ; 3CB302/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB302/1A259E3A
     SETPOSE     #$FF                        ; 3CB306/50FF
     WAIT        #29                         ; 3CB308/061D
     SETXVEL     #$0100                      ; 3CB30A/B00001
@@ -1376,7 +1376,7 @@ L_3CB302:
     HALT                                    ; 3CB318/09
 
 L_3CB319:
-    SPRITEMAP   $3A9E25                     ; 3CB319/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB319/1A259E3A
     SETPOSE     #$FF                        ; 3CB31D/50FF
     WAIT        #35                         ; 3CB31F/0623
     SETXVEL     #$0200                      ; 3CB321/B00002
@@ -1388,7 +1388,7 @@ L_3CB319:
     HALT                                    ; 3CB32F/09
 
 L_3CB330:
-    SPRITEMAP   $3A9E25                     ; 3CB330/1A259E3A
+    SPRITEMAP   L_3A9E25                     ; 3CB330/1A259E3A
     SETPOSE     #$FF                        ; 3CB334/50FF
     WAIT        #45                         ; 3CB336/062D
     SETXVEL     #$0300                      ; 3CB338/B00003
@@ -1423,7 +1423,7 @@ B3C_b35e:
 L_3CB371:
     SETXPOS     #$0060                      ; 3CB371/2A6000
     SETYPOS     #$0020                      ; 3CB374/2B2000
-    SPRITEMAP   $3A9DCE                     ; 3CB377/1ACE9D3A
+    SPRITEMAP   L_3A9DCE                     ; 3CB377/1ACE9D3A
     LOOP        #4                          ; 3CB37B/0104
         SETYVEL     #$0400                      ; 3CB37D/C00004
         SETPOSE     #$02, WAIT #2               ; 3CB380/5202
@@ -1494,7 +1494,7 @@ L_3CB3FD:
     ASMCALL     $B4FF, WAIT #1              ; 3CB400/D1FFB4
     SETXPOS     #$00A0                      ; 3CB403/2AA000
     SETYPOS     #$0090                      ; 3CB406/2B9000
-    SPRITEMAP   $3A971A                     ; 3CB409/1A1A973A
+    SPRITEMAP   L_3A971A                     ; 3CB409/1A1A973A
     SETPOSE     VAR7                        ; 3CB40D/2407
     ZEROVEL                                 ; 3CB40F/38
     HALT                                    ; 3CB410/09
@@ -1504,7 +1504,7 @@ L_3CB411:
     SETYPOS     #$0020                      ; 3CB414/2B2000
     ASMCALL     $B4FF, WAIT #1              ; 3CB417/D1FFB4
     SETYVEL     #$0700                      ; 3CB41A/C00007
-    SPRITEMAP   $3A971A                     ; 3CB41D/1A1A973A
+    SPRITEMAP   L_3A971A                     ; 3CB41D/1A1A973A
     SETPOSE     VAR7                        ; 3CB421/2407
     WAIT        #16                         ; 3CB423/0610
     ZEROVEL                                 ; 3CB425/38
@@ -1729,7 +1729,7 @@ L_3CB5A1:
     TASK        TASK_3CB5D8                 ; 3CB5A1/07D8B5
     SETXPOS     #$00BF                      ; 3CB5A4/2ABF00
     SETYPOS     #$0070                      ; 3CB5A7/2B7000
-    SPRITEMAP   $3A974C                     ; 3CB5AA/1A4C973A
+    SPRITEMAP   L_3A974C                     ; 3CB5AA/1A4C973A
     LOOP        #3                          ; 3CB5AE/0103
         SETXVEL     #$0100                      ; 3CB5B0/B00001
         SETYVEL     #$FE00, WAIT #2             ; 3CB5B3/C200FE
@@ -1793,7 +1793,7 @@ L_3CB613:
 L_3CB620:
     SETXPOS     #$00BF                      ; 3CB620/2ABF00
     SETYPOS     #$0075                      ; 3CB623/2B7500
-    SPRITEMAP   $3A974C                     ; 3CB626/1A4C973A
+    SPRITEMAP   L_3A974C                     ; 3CB626/1A4C973A
     LOOP        #3                          ; 3CB62A/0103
         SETPOSE     VAR7                        ; 3CB62C/2407
         ADDPOSE     #15                         ; 3CB62E/600F
@@ -1850,7 +1850,7 @@ L_3CB620:
     ZEROVEL                                 ; 3CB6B5/38
     WAIT        #100                        ; 3CB6B6/0664
 L_3CB6B8:
-    SPRITEMAP   $3A978C                     ; 3CB6B8/1A8C973A
+    SPRITEMAP   L_3A978C                     ; 3CB6B8/1A8C973A
     SETPOSE     VAR7                        ; 3CB6BC/2407
     SETYPOS     #$00A4                      ; 3CB6BE/2BA400
     ASMCALL     $B724                       ; 3CB6C1/D024B7
@@ -1875,7 +1875,7 @@ L_3CB6DA:
     ASMCALL     $B74A, WAIT #1              ; 3CB6DA/D14AB7
     SETXPOS     #$00C0                      ; 3CB6DD/2AC000
     SETYPOS     #$0001                      ; 3CB6E0/2B0100
-    SPRITEMAP   $3A974C                     ; 3CB6E3/1A4C973A
+    SPRITEMAP   L_3A974C                     ; 3CB6E3/1A4C973A
     TASK        TASK_3CB70D                 ; 3CB6E7/070DB7
     LOOP        #3                          ; 3CB6EA/0103
         LOOP        #3                          ; 3CB6EC/0103
@@ -1893,7 +1893,7 @@ L_3CB6FD:
     ASMCALL     $B74A, WAIT #1              ; 3CB6FD/D14AB7
     SETXPOS     #$00AD                      ; 3CB700/2AAD00
     SETYPOS     #$0068                      ; 3CB703/2B6800
-    SPRITEMAP   $3A974C                     ; 3CB706/1A4C973A
+    SPRITEMAP   L_3A974C                     ; 3CB706/1A4C973A
     SETPOSE     VAR7                        ; 3CB70A/2407
     HALT                                    ; 3CB70C/09
 
@@ -2072,7 +2072,7 @@ L_3CB8A3:
     SETYPOS     #$0080                      ; 3CB8A7/2B8000
     MOV         VAR3,#$01                   ; 3CB8AA/0D0301
     MOV         VAR1,#$00                   ; 3CB8AD/0D0100
-    SPRITEMAP   $3A9E9C                     ; 3CB8B0/1A9C9E3A
+    SPRITEMAP   L_3A9E9C                     ; 3CB8B0/1A9C9E3A
     ASMCALL     $BA2C                       ; 3CB8B4/D02CBA
     MOV         VAR2,#$00                   ; 3CB8B7/0D0200
     WAIT        #15                         ; 3CB8BA/060F
@@ -2197,7 +2197,7 @@ L_3CB979:
     SETXPOS     #$0080                      ; 3CB989/2A8000
     SETYPOS     #$0080                      ; 3CB98C/2B8000
     MOV         VAR3,#$02                   ; 3CB98F/0D0302
-    SPRITEMAP   $3A9E9C                     ; 3CB992/1A9C9E3A
+    SPRITEMAP   L_3A9E9C                     ; 3CB992/1A9C9E3A
     ASMCALL     $BA2C                       ; 3CB996/D02CBA
     MOV         VAR2,#$00                   ; 3CB999/0D0200
     WAIT        #15                         ; 3CB99C/060F
@@ -2255,10 +2255,10 @@ L_3CB9F1:
     END                                     ; 3CB9FF/00
 
 L_3CBA00:
-    SPRITEMAP   $3A9E9C                     ; 3CBA00/1A9C9E3A
+    SPRITEMAP   L_3A9E9C                     ; 3CBA00/1A9C9E3A
     WAIT        #2                          ; 3CBA04/0602
 L_3CBA06:
-    SPRITEMAP   $3A9EAC                     ; 3CBA06/1AAC9E3A
+    SPRITEMAP   L_3A9EAC                     ; 3CBA06/1AAC9E3A
     WAIT        #2                          ; 3CBA0A/0602
 L_3CBA0C:
     A_JMP       L_3CBA00                    ; 3CBA0C/1700BA
@@ -2363,7 +2363,7 @@ B3C_bacc:
 L_3CBACD:
     ONMOVE      $D864                       ; 3CBACD/2364D8
     ONPOSITION  $D968                       ; 3CBAD0/2168D9
-    SPRITEMAP   $3A85DE                     ; 3CBAD3/1ADE853A
+    SPRITEMAP   L_3A85DE                     ; 3CBAD3/1ADE853A
     ASMCALL     $BB73                       ; 3CBAD7/D073BB
     SETPOSE     #$FF                        ; 3CBADA/50FF
     SETXPOS     #$00C0                      ; 3CBADC/2AC000
@@ -2420,7 +2420,7 @@ L_3CBB33:
     ASMCALL     $BE61                       ; 3CBB33/D061BE
     SETYPOS     #$0039                      ; 3CBB36/2B3900
     SETZPOS     #$007F                      ; 3CBB39/3A7F00
-    SPRITEMAP   $3A855E                     ; 3CBB3C/1A5E853A
+    SPRITEMAP   L_3A855E                     ; 3CBB3C/1A5E853A
 L_3CBB40:
     SETPOSE     #$FF, WAIT #1               ; 3CBB40/51FF
 L_3CBB42:
@@ -2435,7 +2435,7 @@ L_3CBB4D:
     END                                     ; 3CBB4E/00
 
 L_3CBB4F:
-    SPRITEMAP   $3A9E9C                     ; 3CBB4F/1A9C9E3A
+    SPRITEMAP   L_3A9E9C                     ; 3CBB4F/1A9C9E3A
     SETXPOS     #$0080                      ; 3CBB53/2A8000
     SETYPOS     #$005E                      ; 3CBB56/2B5E00
     SETZPOS     #$0080                      ; 3CBB59/3A8000
@@ -2443,10 +2443,10 @@ L_3CBB4F:
     ASMCALL     $BE90                       ; 3CBB5F/D090BE
     SETPOSE     VAR7                        ; 3CBB62/2407
 L_3CBB64:
-    SPRITEMAP   $3A9E9C                     ; 3CBB64/1A9C9E3A
+    SPRITEMAP   L_3A9E9C                     ; 3CBB64/1A9C9E3A
     WAIT        #2                          ; 3CBB68/0602
 L_3CBB6A:
-    SPRITEMAP   $3A9EAC                     ; 3CBB6A/1AAC9E3A
+    SPRITEMAP   L_3A9EAC                     ; 3CBB6A/1AAC9E3A
     WAIT        #2                          ; 3CBB6E/0602
 L_3CBB70:
     A_JMP       L_3CBB64                    ; 3CBB70/1764BB

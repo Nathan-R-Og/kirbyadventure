@@ -215,7 +215,7 @@ L_3BA16A:
 L_3BA170:
     ASMCALL     PlayMusic                       ; 3BA170/D045DE // Unknown ASM PlayMusic
     .byte       $13                         ; 3BA173/13
-    SPRITEMAP   B3A_8160                     ; 3BA174/1A60813A
+    SPRITEMAP   L_3A8160                     ; 3BA174/1A60813A
     SETXPOS     #$0060                      ; 3BA178/2A6000
     SETYPOS     #$0032                      ; 3BA17B/2B3200
     SETZPOS     #$0080                      ; 3BA17E/3A8000
@@ -379,7 +379,7 @@ L_3BA29C:
     .byte       $11                         ; 3BA2A6/11
     ONMOVE      AS_Move_ApplyXY_Absolute                       ; 3BA2A7/2364D8
     ONPOSITION  B3E_d968                       ; 3BA2AA/2168D9
-    SPRITEMAP   B3A_825f                     ; 3BA2AD/1A5F823A
+    SPRITEMAP   L_3A825F                     ; 3BA2AD/1A5F823A
     SETPOSE     #$00, WAIT #2               ; 3BA2B1/5200
     INCPOSE     WAIT #2                     ; 3BA2B3/72
     INCPOSE     WAIT #2                     ; 3BA2B4/72
@@ -421,7 +421,7 @@ TASK_3BA2BB:
     ENDTASK                                 ; 3BA300/0C
 
 L_3BA301:
-    SPRITEMAP   B3A_8337                     ; 3BA301/1A37833A
+    SPRITEMAP   L_3A8337                     ; 3BA301/1A37833A
     SETXPOS     #$00C0                      ; 3BA305/2AC000
     SETYPOS     #$0070                      ; 3BA308/2B7000
     SETZPOS     #$0080                      ; 3BA30B/3A8000
@@ -525,7 +525,7 @@ L_3BA3C2:
     rts
 
 L_3BA3C3:
-    SPRITEMAP   B3A_855e                     ; 3BA3C3/1A5E853A
+    SPRITEMAP   L_3A855E                     ; 3BA3C3/1A5E853A
     SETXPOS     #$0058                      ; 3BA3C7/2A5800
     SETYPOS     #$0099                      ; 3BA3CA/2B9900
     SETZPOS     #$0080                      ; 3BA3CD/3A8000
@@ -576,7 +576,7 @@ L_3BA42F:
     END                                     ; 3BA42F/00
 
 L_3BA430:
-    SPRITEMAP   B3A_85de                     ; 3BA430/1ADE853A
+    SPRITEMAP   L_3A85DE                     ; 3BA430/1ADE853A
     SETXPOS     #$0068                      ; 3BA434/2A6800
     SETYPOS     #$009A                      ; 3BA437/2B9A00
     SETZPOS     #$007F                      ; 3BA43A/3A7F00
@@ -1431,7 +1431,7 @@ CraneFever_Claw:
     MOV         VAR5,#0                   ; 3BAFF7/0D0500
 
     ASMCALL     L_3BB6EA                    ; 3BAFFA/D0EAB6
-    SPRITEMAP   $3A89C0                     ; 3BAFFD/1AC0893A
+    SPRITEMAP   L_3A89C0                     ; 3BAFFD/1AC0893A
     SETPOSE     #$04                        ; 3BB001/5004
     SETXPOS     #$38                      ; 3BB003/2A3800
     SETYPOS     #$58                      ; 3BB006/2B5800
@@ -1515,7 +1515,7 @@ L_3BB06C:
 incbinRange "../split/prg/bank3b/unk0.bin", $1097, $114E
 
 CraneFever_CreditCount:
-    SPRITEMAP   $3A96EE                     ; 3BB14E/1AEE963A
+    SPRITEMAP   L_3A96EE                     ; 3BB14E/1AEE963A
     SETXPOS     #$0068                      ; 3BB152/2A6800
     SETYPOS     #$00C7                      ; 3BB155/2BC700
     ASMCALL     $B420                       ; 3BB158/D020B4
@@ -1538,7 +1538,7 @@ L_3BB16B:
     HALT                                    ; 3BB17E/09
 
 CraneFever_ButtonFlash:
-    SPRITEMAP   $3A963B                     ; 3BB17F/1A3B963A
+    SPRITEMAP   L_3A963B                     ; 3BB17F/1A3B963A
     SETXPOS     #$0088                      ; 3BB183/2A8800
     SETYPOS     #$00C8                      ; 3BB186/2BC800
 L_3BB189:
@@ -1615,7 +1615,7 @@ L_3BB220:
 
 L_3BB22D:
     SETZPOS     #$0080                      ; 3BB22D/3A8000
-    SPRITEMAP   B3A_855e                     ; 3BB230/1A5E853A
+    SPRITEMAP   L_3A855E                     ; 3BB230/1A5E853A
     SETXVEL     #$FF80                      ; 3BB234/B080FF
     SETYVEL     #$FC00                      ; 3BB237/C000FC
     SETPOSE     #$00, WAIT #2               ; 3BB23A/5200
@@ -1625,7 +1625,7 @@ L_3BB22D:
 
 L_3BB243:
     SETZPOS     #$0080                      ; 3BB243/3A8000
-    SPRITEMAP   B3A_855e                     ; 3BB246/1A5E853A
+    SPRITEMAP   L_3A855E                     ; 3BB246/1A5E853A
     SETXVEL     #$0080                      ; 3BB24A/B08000
     SETYVEL     #$FC00                      ; 3BB24D/C000FC
     SETPOSE     #$00, WAIT #2               ; 3BB250/5200
@@ -1651,7 +1651,7 @@ L_3BB270:
     JML         L_3CB28E                    ; 3BB27A/038EB23C
 
 L_3BB27E:
-    SPRITEMAP   $3A9589                     ; 3BB27E/1A89953A
+    SPRITEMAP   L_3A9589                     ; 3BB27E/1A89953A
     ASMCALL     $B53B                       ; 3BB282/D03BB5
     SETXPOS     #$0038                      ; 3BB285/2A3800
     SETYPOS     #$0150                      ; 3BB288/2B5001
@@ -1673,7 +1673,7 @@ L_3BB2A4:
     HALT                                    ; 3BB2A6/09
 
 L_3BB2A7:
-    SPRITEMAP   $3A9651                     ; 3BB2A7/1A51963A
+    SPRITEMAP   L_3A9651                     ; 3BB2A7/1A51963A
     SETXPOS     #$00A8                      ; 3BB2AB/2AA800
     SETYPOS     #$0134                      ; 3BB2AE/2B3401
 L_3BB2B1:
@@ -1698,7 +1698,7 @@ L_3BB2CC:
     A_JMP         L_3BB30C                    ; 3BB2D8/170CB3
 
 L_3BB2DB:
-    SPRITEMAP   $3A9651                     ; 3BB2DB/1A51963A
+    SPRITEMAP   L_3A9651                     ; 3BB2DB/1A51963A
     SETXPOS     #$00A8                      ; 3BB2DF/2AA800
     SETYPOS     #$0154                      ; 3BB2E2/2B5401
 L_3BB2E5:
@@ -1724,9 +1724,9 @@ L_3BB30C:
     ASMCALL     B3E_de4b                       ; 3BB30C/D04BDE // Play sound effect
     .byte       $16                         ; 3BB30F/16
 L_3BB310:
-    SPRITEMAP   $3A9651                     ; 3BB310/1A51963A
+    SPRITEMAP   L_3A9651                     ; 3BB310/1A51963A
     WAIT        #2                          ; 3BB314/0602
-    SPRITEMAP   $3A9655                     ; 3BB316/1A55963A
+    SPRITEMAP   L_3A9655                     ; 3BB316/1A55963A
     WAIT        #2                          ; 3BB31A/0602
     A_JMP         L_3BB310                    ; 3BB31C/1710B3
 
@@ -1761,7 +1761,7 @@ CraneFever_LoadStartingSplash:
     .addr CraneFever_Splash_draw_rect
     jsr B3E_c086
     lda #$fc
-    sta $01a2
+    sta palette_fade
     lda #$06
     ora a:ram_PPUMASK
     sta a:ram_PPUMASK
@@ -1799,7 +1799,7 @@ L_3BB369: ; 3BB369
     .addr CraneFever_Splash_draw_rect2
     jsr B3E_c086
     lda #$fc
-    sta $01a2
+    sta palette_fade
     lda #$06
     ora a:ram_PPUMASK
     sta a:ram_PPUMASK

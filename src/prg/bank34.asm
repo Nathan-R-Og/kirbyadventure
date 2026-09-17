@@ -54,7 +54,7 @@ L_34A04A:
     SETXPOS     #$00AC                      ; 34A053/2AAC00
     SETYPOS     #$0078                      ; 34A056/2B7800
     SETZPOS     #$000A                      ; 34A059/3A0A00
-    SPRITEMAP   $35849E                     ; 34A05C/1A9E8435
+    SPRITEMAP   L_35849E                     ; 34A05C/1A9E8435
     LOOP        #4                          ; 34A060/0104
         A_JSR       L_34A0F6                    ; 34A062/18F6A0
     ENDLOOP                                 ; 34A065/02
@@ -85,7 +85,7 @@ L_34A088:
 L_34A08B:
     ADDYPOS     #-1                         ; 34A08B/2DFFFF
     ASMCALL     $AC93                       ; 34A08E/D093AC
-    SPRITEMAP   $3593E3                     ; 34A091/1AE39335
+    SPRITEMAP   L_3593E3                     ; 34A091/1AE39335
     SETPOSE     #$00                        ; 34A095/5000
     WAIT        #62                         ; 34A097/063E
 L_34A099:
@@ -102,11 +102,11 @@ L_34A0A3:
 L_34A0A8:
     ASMCALL     $A100                       ; 34A0A8/D000A1
     ASMCALL     $AC8D                       ; 34A0AB/D08DAC
-    SPRITEMAP   $3593A5                     ; 34A0AE/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A0AE/1AA59335
     SETPOSE     #$1E, WAIT #4               ; 34A0B2/541E
 L_34A0B4:
     ASMCALL     $AC93                       ; 34A0B4/D093AC
-    SPRITEMAP   $3593E3                     ; 34A0B7/1AE39335
+    SPRITEMAP   L_3593E3                     ; 34A0B7/1AE39335
     LOOP        #3                          ; 34A0BB/0103
         SETPOSE     #$03, WAIT #2               ; 34A0BD/5203
 L_34A0BF:
@@ -114,13 +114,13 @@ L_34A0BF:
 L_34A0C0:
     ENDLOOP                                 ; 34A0C0/02
     ASMCALL     $AC8D                       ; 34A0C1/D08DAC
-    SPRITEMAP   $3593A5                     ; 34A0C4/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A0C4/1AA59335
     SETPOSE     #$08, WAIT #8               ; 34A0C8/5808
 L_34A0CA:
     SETPOSE     #$1D, WAIT #8               ; 34A0CA/581D
 L_34A0CC:
     ASMCALL     $ACA5                       ; 34A0CC/D0A5AC
-    SPRITEMAP   $359582                     ; 34A0CF/1A829535
+    SPRITEMAP   L_359582                     ; 34A0CF/1A829535
     SETPOSE     #$00, WAIT #2               ; 34A0D3/5200
 L_34A0D5:
     INCPOSE     WAIT #2                     ; 34A0D5/72
@@ -175,7 +175,7 @@ L_34A132:
     SETXPOS     #$0084                      ; 34A132/2A8400
     SETYPOS     #$0078                      ; 34A135/2B7800
     SETZPOS     #$0002                      ; 34A138/3A0200
-    SPRITEMAP   $3584B0                     ; 34A13B/1AB08435
+    SPRITEMAP   L_3584B0                     ; 34A13B/1AB08435
     LOOP        #4                          ; 34A13F/0104
         A_JSR       L_34A0F6                    ; 34A141/18F6A0
     ENDLOOP                                 ; 34A144/02
@@ -231,7 +231,7 @@ L_34A17E:
 L_34A17F:
     SETXPOS     #$0088                      ; 34A17F/2A8800
     SETYPOS     #$0068                      ; 34A182/2B6800
-    SPRITEMAP   $35849E                     ; 34A185/1A9E8435
+    SPRITEMAP   L_35849E                     ; 34A185/1A9E8435
     SETPOSE     #$04                        ; 34A189/5004
     SETXVEL     #$0140                      ; 34A18B/B04001
     SETYVEL     #$FA00, WAIT #9             ; 34A18E/C900FA
@@ -319,7 +319,7 @@ L_34A200:
     SETXPOS     #$0081                      ; 34A200/2A8100
     SETYPOS     #$0071                      ; 34A203/2B7100
     SETZPOS     #$0002                      ; 34A206/3A0200
-    SPRITEMAP   $358226                     ; 34A209/1A268235
+    SPRITEMAP   L_358226                     ; 34A209/1A268235
     SETPOSE     #$00, WAIT #8               ; 34A20D/5800
 L_34A20F:
     ONTICK      $34A384                     ; 34A20F/0884A334
@@ -375,7 +375,7 @@ L_34A24D:
 L_34A252:
     SETXPOS     #$0099                      ; 34A252/2A9900
     SETYPOS     #$0078                      ; 34A255/2B7800
-    SPRITEMAP   $358226                     ; 34A258/1A268235
+    SPRITEMAP   L_358226                     ; 34A258/1A268235
     SETPOSE     #$05                        ; 34A25C/5005
 L_34A25E:
     HALT                                    ; 34A25E/09
@@ -383,7 +383,7 @@ L_34A25E:
 L_34A25F:
     SETXPOS     #$0078                      ; 34A25F/2A7800
     SETYPOS     #$0070                      ; 34A262/2B7000
-    SPRITEMAP   $358226                     ; 34A265/1A268235
+    SPRITEMAP   L_358226                     ; 34A265/1A268235
     SETPOSE     #$04                        ; 34A269/5004
     SETXVEL     #$FFC0                      ; 34A26B/B0C0FF
     SETYVEL     #$FF00, WAIT #8             ; 34A26E/C800FF
@@ -402,7 +402,7 @@ L_34A27D:
 L_34A27F:
     SETXPOS     #$007F                      ; 34A27F/2A7F00
     SETYPOS     #$0064                      ; 34A282/2B6400
-    SPRITEMAP   $358226                     ; 34A285/1A268235
+    SPRITEMAP   L_358226                     ; 34A285/1A268235
     LOOP        #20                         ; 34A289/0114
         ZEROVEL                                 ; 34A28B/38
         SETPOSE     #$06, WAIT #15              ; 34A28C/5F06
@@ -441,7 +441,7 @@ L_34A2B8:
     SETPOSE     #$FF                        ; 34A2C2/50FF
     WAIT        #32                         ; 34A2C4/0620
 L_34A2C6:
-    SPRITEMAP   $358234                     ; 34A2C6/1A348235
+    SPRITEMAP   L_358234                     ; 34A2C6/1A348235
     SETPOSE     #$00, WAIT #15              ; 34A2CA/5F00
 L_34A2CC:
     SETPOSE     #$FF                        ; 34A2CC/50FF
@@ -476,7 +476,7 @@ L_34A2EB:
     SETPOSE     #$FF                        ; 34A2F2/50FF
     WAIT        #104                        ; 34A2F4/0668
 L_34A2F6:
-    SPRITEMAP   $358234                     ; 34A2F6/1A348235
+    SPRITEMAP   L_358234                     ; 34A2F6/1A348235
     SETPOSE     #$00, WAIT #15              ; 34A2FA/5F00
 L_34A2FC:
     SETPOSE     #$FF                        ; 34A2FC/50FF
@@ -509,7 +509,7 @@ L_34A319:
     SETPOSE     #$FF                        ; 34A31F/50FF
     WAIT        #160                        ; 34A321/06A0
 L_34A323:
-    SPRITEMAP   $358234                     ; 34A323/1A348235
+    SPRITEMAP   L_358234                     ; 34A323/1A348235
     SETPOSE     #$00, WAIT #15              ; 34A327/5F00
 L_34A329:
     SETPOSE     #$FF                        ; 34A329/50FF
@@ -543,7 +543,7 @@ L_34A34B:
     SETXPOS     #$0079                      ; 34A34B/2A7900
     SETYPOS     #$006D                      ; 34A34E/2B6D00
     ZEROVEL                                 ; 34A351/38
-    SPRITEMAP   $358234                     ; 34A352/1A348235
+    SPRITEMAP   L_358234                     ; 34A352/1A348235
     SETPOSE     #$00, WAIT #15              ; 34A356/5F00
 L_34A358:
     SETPOSE     #$FF                        ; 34A358/50FF
@@ -610,7 +610,7 @@ L_34A3AB:
     SETXPOS     #$0058                      ; 34A3BA/2A5800
     SETYPOS     #$0088                      ; 34A3BD/2B8800
     SETZPOS     #$000A                      ; 34A3C0/3A0A00
-    SPRITEMAP   $3593A5                     ; 34A3C3/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A3C3/1AA59335
     SETXVEL     #$0080                      ; 34A3C7/B08000
     SETPOSE     #$01, WAIT #8               ; 34A3CA/5801
 L_34A3CC:
@@ -647,7 +647,7 @@ L_34A3F3:
 L_34A3F6:
     ZEROVEL                                 ; 34A3F6/38
     ASMCALL     $ACAB                       ; 34A3F7/D0ABAC
-    SPRITEMAP   $358000                     ; 34A3FA/1A008035
+    SPRITEMAP   L_358000                     ; 34A3FA/1A008035
     SETPOSE     #$00                        ; 34A3FE/5000
     WAIT        #48                         ; 34A400/0630
 L_34A402:
@@ -754,7 +754,7 @@ L_34A498:
     SETXPOS     #$0030                      ; 34A498/2A3000
     SETYPOS     #$0069                      ; 34A49B/2B6900
     SETZPOS     #$0002                      ; 34A49E/3A0200
-    SPRITEMAP   $358010                     ; 34A4A1/1A108035
+    SPRITEMAP   L_358010                     ; 34A4A1/1A108035
     SETPOSE     #$FF                        ; 34A4A5/50FF
     WAIT        #16                         ; 34A4A7/0610
 L_34A4A9:
@@ -888,7 +888,7 @@ L_34A55A:
 L_34A55B:
     SETXPOS     #$0060                      ; 34A55B/2A6000
     SETYPOS     #$0070                      ; 34A55E/2B7000
-    SPRITEMAP   $358010                     ; 34A561/1A108035
+    SPRITEMAP   L_358010                     ; 34A561/1A108035
     SETXVEL     #$0100                      ; 34A565/B00001
     SETYVEL     #$FA00                      ; 34A568/C000FA
     SETPOSE     #$01, WAIT #4               ; 34A56B/5401
@@ -900,7 +900,7 @@ L_34A56E:
 L_34A56F:
     SETXPOS     #$0084                      ; 34A56F/2A8400
     SETYPOS     #$0040                      ; 34A572/2B4000
-    SPRITEMAP   $358010                     ; 34A575/1A108035
+    SPRITEMAP   L_358010                     ; 34A575/1A108035
     SETYVEL     #$0200                      ; 34A579/C00002
     SETPOSE     #$00, WAIT #4               ; 34A57C/5400
 L_34A57E:
@@ -920,7 +920,7 @@ L_34A588:
 L_34A58A:
     INC2POSE    WAIT #4                     ; 34A58A/94
 L_34A58B:
-    SPRITEMAP   $358034                     ; 34A58B/1A348035
+    SPRITEMAP   L_358034                     ; 34A58B/1A348035
     LOOP        #6                          ; 34A58F/0106
         SETPOSE     #$00, WAIT #4               ; 34A591/5400
 L_34A593:
@@ -947,7 +947,7 @@ L_34A5A9:
     MOV         VAR3,#$00                   ; 34A5AC/0D0300
     SETXPOS     #$0048                      ; 34A5AF/2A4800
     SETYPOS     #$0098                      ; 34A5B2/2B9800
-    SPRITEMAP   $3585AD                     ; 34A5B5/1AAD8535
+    SPRITEMAP   L_3585AD                     ; 34A5B5/1AAD8535
     LOOP        #2                          ; 34A5B9/0102
         SETXVEL     #$0040                      ; 34A5BB/B04000
         SETYVEL     #$FE00                      ; 34A5BE/C000FE
@@ -1062,7 +1062,7 @@ L_34A654:
 L_34A656:
     SETXPOS     #$0071                      ; 34A656/2A7100
     SETYPOS     #$0096                      ; 34A659/2B9600
-    SPRITEMAP   $3585AD                     ; 34A65C/1AAD8535
+    SPRITEMAP   L_3585AD                     ; 34A65C/1AAD8535
     SETPOSE     #$11                        ; 34A660/5011
     SETXVEL     #$0008                      ; 34A662/B00800
     SETYVEL     #$FFE0                      ; 34A665/C0E0FF
@@ -1100,7 +1100,7 @@ L_34A697:
 L_34A69C:
     SETXPOS     #$0068                      ; 34A69C/2A6800
     SETYPOS     #$0080                      ; 34A69F/2B8000
-    SPRITEMAP   $3585AD                     ; 34A6A2/1AAD8535
+    SPRITEMAP   L_3585AD                     ; 34A6A2/1AAD8535
     SETPOSE     #$0D                        ; 34A6A6/500D
     SETXVEL     #$FF80                      ; 34A6A8/B080FF
     MOV         REG,VAR0                    ; 34A6AB/1E00
@@ -1129,7 +1129,7 @@ L_34A6CE:
 L_34A6CF:
     SETXPOS     #$0085                      ; 34A6CF/2A8500
     SETYPOS     #$009E                      ; 34A6D2/2B9E00
-    SPRITEMAP   $3585AD                     ; 34A6D5/1AAD8535
+    SPRITEMAP   L_3585AD                     ; 34A6D5/1AAD8535
     LOOP        #6                          ; 34A6D9/0106
         SETPOSE     #$0F                        ; 34A6DB/500F
         SETXVEL     #$FE00                      ; 34A6DD/B000FE
@@ -1174,7 +1174,7 @@ L_34A715:
     .byte       $00                         ; 34A71C/00
     .byte       $02                         ; 34A71D/02
     MOV         VAR2,REG                    ; 34A71E/1D02
-    SPRITEMAP   $3593ED                     ; 34A720/1AED9335
+    SPRITEMAP   L_3593ED                     ; 34A720/1AED9335
     LOOP        #10                         ; 34A724/010A
         SETXVEL     #$0030                      ; 34A726/B03000
         SETYVEL     #$FFD0                      ; 34A729/C0D0FF
@@ -1188,7 +1188,7 @@ L_34A730:
 L_34A731:
     ENDLOOP                                 ; 34A731/02
     ASMCALL     $AC8D                       ; 34A732/D08DAC
-    SPRITEMAP   $3593A5                     ; 34A735/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A735/1AA59335
     SETXVEL     #$0080                      ; 34A739/B08000
     SETYVEL     #$FE00                      ; 34A73C/C000FE
     SETPOSE     #$12, WAIT #8               ; 34A73F/5812
@@ -1211,7 +1211,7 @@ L_34A757:
     SETPOSE     #$09                        ; 34A757/5009
     WAIT        #26                         ; 34A759/061A
 L_34A75B:
-    SPRITEMAP   $35872F                     ; 34A75B/1A2F8735
+    SPRITEMAP   L_35872F                     ; 34A75B/1A2F8735
     SETPOSE     #$00                        ; 34A75F/5000
     WAIT        #26                         ; 34A761/061A
 L_34A763:
@@ -1228,7 +1228,7 @@ L_34A76C:
     SETPOSE     #$05                        ; 34A76C/5005
     WAIT        #51                         ; 34A76E/0633
 L_34A770:
-    SPRITEMAP   $3593A5                     ; 34A770/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A770/1AA59335
     SETXVEL     #$0100                      ; 34A774/B00001
     SETPOSE     #$02, WAIT #6               ; 34A777/5602
 L_34A779:
@@ -1261,7 +1261,7 @@ L_34A79A:
 L_34A79F:
     SETXPOS     #$0080                      ; 34A79F/2A8000
     SETYPOS     #$0068                      ; 34A7A2/2B6800
-    SPRITEMAP   $35872F                     ; 34A7A5/1A2F8735
+    SPRITEMAP   L_35872F                     ; 34A7A5/1A2F8735
     SETPOSE     #$06                        ; 34A7A9/5006
 L_34A7AB:
     ASMCALL     $ACC2, WAIT #1              ; 34A7AB/D1C2AC
@@ -1324,7 +1324,7 @@ L_34A80B:
     MOV         VAR1,#$00                   ; 34A80B/0D0100
     SETXPOS     #$00A8                      ; 34A80E/2AA800
     SETYPOS     #$0068                      ; 34A811/2B6800
-    SPRITEMAP   $3587B0                     ; 34A814/1AB08735
+    SPRITEMAP   L_3587B0                     ; 34A814/1AB08735
     SETPOSE     #$00, WAIT #15              ; 34A818/5F00
 L_34A81A:
     INCPOSE     WAIT #15                    ; 34A81A/7F
@@ -1377,7 +1377,7 @@ L_34A84C:
     INCPOSE     WAIT #4                     ; 34A84F/74
 L_34A850:
     ZEROVEL                                 ; 34A850/38
-    SPRITEMAP   $358924                     ; 34A851/1A248935
+    SPRITEMAP   L_358924                     ; 34A851/1A248935
     SETPOSE     #$00, WAIT #4               ; 34A855/5400
 L_34A857:
     INCPOSE     WAIT #8                     ; 34A857/78
@@ -1385,7 +1385,7 @@ L_34A858:
     DECPOSE     WAIT #4                     ; 34A858/84
 L_34A859:
     ASMCALL     $A902                       ; 34A859/D002A9
-    SPRITEMAP   $358896                     ; 34A85C/1A968835
+    SPRITEMAP   L_358896                     ; 34A85C/1A968835
     SETPOSE     #$00, WAIT #8               ; 34A860/5800
 L_34A862:
     INCPOSE     WAIT #8                     ; 34A862/78
@@ -1421,7 +1421,7 @@ L_34A883:
 L_34A888:
     SETXPOS     #$0038                      ; 34A888/2A3800
     SETYPOS     #$0088                      ; 34A88B/2B8800
-    SPRITEMAP   $358896                     ; 34A88E/1A968835
+    SPRITEMAP   L_358896                     ; 34A88E/1A968835
     SETXVEL     #$0040                      ; 34A892/B04000
     LOOP        #28                         ; 34A895/011C
         ASMCALL     $A902                       ; 34A897/D002A9
@@ -1437,7 +1437,7 @@ L_34A8A0:
 L_34A8A6:
     SETXPOS     #$00A4                      ; 34A8A6/2AA400
     SETYPOS     #$0064                      ; 34A8A9/2B6400
-    SPRITEMAP   $3587B0                     ; 34A8AC/1AB08735
+    SPRITEMAP   L_3587B0                     ; 34A8AC/1AB08735
     SETXVEL     #$0080                      ; 34A8B0/B08000
     SETYVEL     #$FE00                      ; 34A8B3/C000FE
     SETPOSE     #$0C, WAIT #8               ; 34A8B6/580C
@@ -1474,7 +1474,7 @@ L_34A8DE:
 L_34A8DF:
     SETXPOS     #$00A7                      ; 34A8DF/2AA700
     SETYPOS     #$009B                      ; 34A8E2/2B9B00
-    SPRITEMAP   $358896                     ; 34A8E5/1A968835
+    SPRITEMAP   L_358896                     ; 34A8E5/1A968835
     SETPOSE     #$05                        ; 34A8E9/5005
     SETXVEL     #$FE00, WAIT #8             ; 34A8EB/B800FE
 L_34A8EE:
@@ -1523,7 +1523,7 @@ L_34A946:
     .byte       $02                         ; 34A94E/02
     SETXPOS     #$00C8                      ; 34A94F/2AC800
     SETYPOS     #$0098                      ; 34A952/2B9800
-    SPRITEMAP   $3593A5                     ; 34A955/1AA59335
+    SPRITEMAP   L_3593A5                     ; 34A955/1AA59335
     SETXVEL     #$FF80                      ; 34A959/B080FF
     ASMCALL     $AC8D                       ; 34A95C/D08DAC
     LOOP        #4                          ; 34A95F/0104
@@ -1539,7 +1539,7 @@ L_34A966:
     ZEROVEL                                 ; 34A967/38
     INCPOSE     WAIT #13                    ; 34A968/7D
 L_34A969:
-    SPRITEMAP   $35893A                     ; 34A969/1A3A8935
+    SPRITEMAP   L_35893A                     ; 34A969/1A3A8935
     LOOP        #3                          ; 34A96D/0103
         SETPOSE     #$00, WAIT #5               ; 34A96F/5500
 L_34A971:
@@ -1550,7 +1550,7 @@ L_34A972:
     WAIT        #42                         ; 34A974/062A
 L_34A976:
     ASMCALL     $AC9F                       ; 34A976/D09FAC
-    SPRITEMAP   $35990A                     ; 34A979/1A0A9935
+    SPRITEMAP   L_35990A                     ; 34A979/1A0A9935
     SETPOSE     #$00, WAIT #2               ; 34A97D/5200
 L_34A97F:
     SETYVEL     #$FE00                      ; 34A97F/C000FE
@@ -1582,7 +1582,7 @@ L_34A9A5:
 L_34A9A8:
     ENDLOOP                                 ; 34A9A8/02
     ZEROVEL                                 ; 34A9A9/38
-    SPRITEMAP   $358954                     ; 34A9AA/1A548935
+    SPRITEMAP   L_358954                     ; 34A9AA/1A548935
     LOOP        #4                          ; 34A9AE/0104
         SETPOSE     #$00, WAIT #8               ; 34A9B0/5800
 L_34A9B2:
@@ -1591,7 +1591,7 @@ L_34A9B3:
     ENDLOOP                                 ; 34A9B3/02
     MOV         VAR3,#$01                   ; 34A9B4/0D0301
     ASMCALL     $AC99                       ; 34A9B7/D099AC
-    SPRITEMAP   $359898                     ; 34A9BA/1A989835
+    SPRITEMAP   L_359898                     ; 34A9BA/1A989835
     SETPOSE     #$00, WAIT #10              ; 34A9BE/5A00
 L_34A9C0:
     INCPOSE     WAIT #2                     ; 34A9C0/72
@@ -1627,7 +1627,7 @@ L_34A9DE:
     SETXPOS     #$0080                      ; 34A9DE/2A8000
     SETYPOS     #$0060                      ; 34A9E1/2B6000
     SETZPOS     #$0002                      ; 34A9E4/3A0200
-    SPRITEMAP   $358940                     ; 34A9E7/1A408935
+    SPRITEMAP   L_358940                     ; 34A9E7/1A408935
     TASK        L_34AA02                    ; 34A9EB/0702AA
 L_34A9EE:
     ASMCALL     $ACC2, WAIT #1              ; 34A9EE/D1C2AC
@@ -1666,7 +1666,7 @@ L_34AA08:
     SETXPOS     #$0080                      ; 34AA08/2A8000
     SETYPOS     #$0090                      ; 34AA0B/2B9000
     SETZPOS     #$000A                      ; 34AA0E/3A0A00
-    SPRITEMAP   $358954                     ; 34AA11/1A548935
+    SPRITEMAP   L_358954                     ; 34AA11/1A548935
     SETXVEL     #$FA00                      ; 34AA15/B000FA
     SETYVEL     #$FE00                      ; 34AA18/C000FE
     SETPOSE     #$02, WAIT #11              ; 34AA1B/5B02
@@ -1691,7 +1691,7 @@ L_34AA32:
     SETXPOS     #$0080                      ; 34AA32/2A8000
     SETYPOS     #$0090                      ; 34AA35/2B9000
     SETZPOS     #$000A                      ; 34AA38/3A0A00
-    SPRITEMAP   $358954                     ; 34AA3B/1A548935
+    SPRITEMAP   L_358954                     ; 34AA3B/1A548935
     SETPOSE     #$FF                        ; 34AA3F/50FF
     WAIT        #16                         ; 34AA41/0610
 L_34AA43:
@@ -1710,7 +1710,7 @@ L_34AA56:
     SETXPOS     #$0080                      ; 34AA56/2A8000
     SETYPOS     #$0090                      ; 34AA59/2B9000
     SETZPOS     #$000A                      ; 34AA5C/3A0A00
-    SPRITEMAP   $358954                     ; 34AA5F/1A548935
+    SPRITEMAP   L_358954                     ; 34AA5F/1A548935
     SETPOSE     #$FF                        ; 34AA63/50FF
     WAIT        #32                         ; 34AA65/0620
 L_34AA67:
@@ -1729,7 +1729,7 @@ L_34AA7A:
     SETXPOS     #$0080                      ; 34AA7A/2A8000
     SETYPOS     #$0090                      ; 34AA7D/2B9000
     SETZPOS     #$000A                      ; 34AA80/3A0A00
-    SPRITEMAP   $358954                     ; 34AA83/1A548935
+    SPRITEMAP   L_358954                     ; 34AA83/1A548935
     SETPOSE     #$FF                        ; 34AA87/50FF
     WAIT        #51                         ; 34AA89/0633
 L_34AA8B:
@@ -1749,7 +1749,7 @@ L_34AA9E:
     SETXPOS     #$0080                      ; 34AAA1/2A8000
     SETYPOS     #$0090                      ; 34AAA4/2B9000
     SETZPOS     #$000A                      ; 34AAA7/3A0A00
-    SPRITEMAP   $358954                     ; 34AAAA/1A548935
+    SPRITEMAP   L_358954                     ; 34AAAA/1A548935
     SETPOSE     #$FF                        ; 34AAAE/50FF
     WAIT        #52                         ; 34AAB0/0634
 L_34AAB2:
@@ -1816,7 +1816,7 @@ L_34AB08:
     A_RTS                                   ; 34AB0B/19
 
 L_34AB0C:
-    MOV         $01A2,#$04                  ; 34AB0C/11A20104
+    MOV         palette_fade,#$04                  ; 34AB0C/11A20104
     LOOP        #4                          ; 34AB10/0104
         ASMCALL     $C996, WAIT #4              ; 34AB12/D496C9 // Palette fade (out?) step
 L_34AB15:

@@ -20,7 +20,7 @@ L_19A000:
     .byte       $00                         ; 19A01E/00
     ONTICK      $19ACC1                     ; 19A01F/08C1AC19
     ADDXPOS     #-8                         ; 19A023/2CF8FF
-    SPRITEMAP   $1A9910                     ; 19A026/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A026/1A10991A
     SETPOSE     #$08                        ; 19A02A/5008
     WAIT        #27                         ; 19A02C/061B
 L_19A02E:
@@ -654,7 +654,7 @@ B19_a3dc:
     rts
 
 SCR04_GoalDance:
-    SPRITEMAP   $1A9910                     ; 19A3E5/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A3E5/1A10991A
     WAIT        #32                         ; 19A3E9/0620
 L_19A3EB:
     MOV         REG,$0784                   ; 19A3EB/1C8407
@@ -693,7 +693,7 @@ L_19A424:
     ASMCALL     $9CB3                       ; 19A427/D0B39C
     ASMCALL     $E2D9                       ; 19A42A/D0D9E2 // Unknown ASM $E2D9 (Set $05A0 and $05A1)
     .byte       $01                         ; 19A42D/01
-    SPRITEMAP   $1A9910                     ; 19A42E/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A42E/1A10991A
     SETPOSE     #$08                        ; 19A432/5008
     ONTICK      $19AD9C                     ; 19A434/089CAD19
     HALT                                    ; 19A438/09
@@ -752,7 +752,7 @@ L_19A45F:
     END                                     ; 19A47F/00
 
 SCR04_BossDance:
-    SPRITEMAP   $1A9910                     ; 19A480/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A480/1A10991A
     MOV         REG,$0557                   ; 19A484/1C5705
     TABLEJSR    #7                          ; 19A487/1007
     .word       L_19A4B3                    ; 19A489/B3A4
@@ -786,7 +786,7 @@ L_19A4B3:
 L_19A4BA:
     A_JSR       L_19AABC                    ; 19A4BA/18BCAA
     ONDRAW      $DDAA                       ; 19A4BD/20AADD
-    SPRITEMAP   $1A9910                     ; 19A4C0/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A4C0/1A10991A
     A_JSR       L_19A4C8                    ; 19A4C4/18C8A4
     A_RTS                                   ; 19A4C7/19
 
@@ -889,7 +889,7 @@ L_19A53E:
 L_19A545:
     A_JSR       L_19AABC                    ; 19A545/18BCAA
     ONDRAW      $DDAA                       ; 19A548/20AADD
-    SPRITEMAP   $1A9910                     ; 19A54B/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A54B/1A10991A
     A_JSR       L_19A553                    ; 19A54F/1853A5
     A_RTS                                   ; 19A552/19
 
@@ -1033,7 +1033,7 @@ L_19A602:
 L_19A609:
     A_JSR       L_19AABC                    ; 19A609/18BCAA
     ONDRAW      $DDAA                       ; 19A60C/20AADD
-    SPRITEMAP   $1A9910                     ; 19A60F/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A60F/1A10991A
     A_JSR       L_19A617                    ; 19A613/1817A6
     A_RTS                                   ; 19A616/19
 
@@ -1134,7 +1134,7 @@ L_19A693:
 L_19A69A:
     A_JSR       L_19AABC                    ; 19A69A/18BCAA
     ONDRAW      $DDAA                       ; 19A69D/20AADD
-    SPRITEMAP   $1A9910                     ; 19A6A0/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A6A0/1A10991A
     A_JSR       L_19A6A8                    ; 19A6A4/18A8A6
     A_RTS                                   ; 19A6A7/19
 
@@ -1271,7 +1271,7 @@ L_19A758:
 L_19A75F:
     A_JSR       L_19AABC                    ; 19A75F/18BCAA
     ONDRAW      $DDAA                       ; 19A762/20AADD
-    SPRITEMAP   $1A9910                     ; 19A765/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A765/1A10991A
     A_JSR       L_19A76D                    ; 19A769/186DA7
     A_RTS                                   ; 19A76C/19
 
@@ -1470,7 +1470,7 @@ L_19A85E:
 L_19A865:
     A_JSR       L_19AABC                    ; 19A865/18BCAA
     ONDRAW      $DDAA                       ; 19A868/20AADD
-    SPRITEMAP   $1A9910                     ; 19A86B/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A86B/1A10991A
     A_JSR       L_19A873                    ; 19A86F/1873A8
     A_RTS                                   ; 19A872/19
 
@@ -1654,7 +1654,7 @@ L_19A957:
 L_19A95E:
     A_JSR       L_19AABC                    ; 19A95E/18BCAA
     ONDRAW      $DDAA                       ; 19A961/20AADD
-    SPRITEMAP   $1A9910                     ; 19A964/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19A964/1A10991A
     A_JSR       L_19A96C                    ; 19A968/186CA9
     A_RTS                                   ; 19A96B/19
 
@@ -1931,7 +1931,7 @@ L_19AABB:
     A_RTS                                   ; 19AABB/19
 
 L_19AABC:
-    SPRITEMAP   $1C9CD7                     ; 19AABC/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 19AABC/1AD79C1C
     SETPOSE     #$14, WAIT #3               ; 19AAC0/5314
 L_19AAC2:
     LOOP        #7                          ; 19AAC2/0107
@@ -1958,13 +1958,13 @@ Script04_KirbyDance:
 SCR04_GoalPlatform:
     SETXPOS     #$0080                      ; 19AAE4/2A8000
     SETYPOS     #$0421                      ; 19AAE7/2B2104
-    SPRITEMAP   $1A9910                     ; 19AAEA/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19AAEA/1A10991A
     SETPOSE     #$00                        ; 19AAEE/5000
     HALT                                    ; 19AAF0/09
 
 SCR04_KDance01:
     ONDRAW      $DA89                       ; 19AAF1/2089DA
-    SPRITEMAP   $1C9F0B                     ; 19AAF4/1A0B9F1C
+    SPRITEMAP   L_1C9F0B                     ; 19AAF4/1A0B9F1C
     SETZPOS     #$00FF                      ; 19AAF8/3AFF00
     SETPOSE     #$00                        ; 19AAFB/5000
     SETBANK     #$22                        ; 19AAFD/2822
@@ -1974,14 +1974,14 @@ SCR04_KDance01:
 
 SCR04_KDance05:
     ONDRAW      $DA89                       ; 19AB08/2089DA
-    SPRITEMAP   $1C9F0B                     ; 19AB0B/1A0B9F1C
+    SPRITEMAP   L_1C9F0B                     ; 19AB0B/1A0B9F1C
     SETZPOS     #$00FF                      ; 19AB0F/3AFF00
     SETPOSE     #$00                        ; 19AB12/5000
     MOV         VAR3,#$01                   ; 19AB14/0D0301
     JML         L_16A9CE                    ; 19AB17/03CEA916
 
 SCR04_GoalStars:
-    SPRITEMAP   $1A9910                     ; 19AB1B/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19AB1B/1A10991A
     ASMCALL     $AFF0                       ; 19AB1F/D0F0AF // Copy parent object's VAR3 to self
 L_19AB22:
     ONTICK      $19AFFC                     ; 19AB22/08FCAF19
@@ -2020,7 +2020,7 @@ SCR04_GoalKirbyHoldSign:
     ASMCALL     $AE20                       ; 19AB4A/D020AE
     JEQ         L_19ABC3                    ; 19AB4D/0AC3AB
     SETZPOS     #$007F                      ; 19AB50/3A7F00
-    SPRITEMAP   $1A9910                     ; 19AB53/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19AB53/1A10991A
     ADDXPOS     #48                         ; 19AB57/2C3000
     ADDYPOS     #96                         ; 19AB5A/2D6000
     SETXVEL     #$FC00                      ; 19AB5D/B000FC
@@ -2088,7 +2088,7 @@ L_19ABC2:
     END                                     ; 19ABC2/00
 
 L_19ABC3:
-    SPRITEMAP   $1A9910                     ; 19ABC3/1A10991A
+    SPRITEMAP   L_1A9910                     ; 19ABC3/1A10991A
     ADDXPOS     #40                         ; 19ABC7/2C2800
     ADDYPOS     #8                          ; 19ABCA/2D0800
     SETXVEL     #$FE00                      ; 19ABCD/B000FE
@@ -2147,7 +2147,7 @@ L_19AC0E:
 
 SCR04_GoalSign:
     ONDRAW      $DA89                       ; 19AC0F/2089DA
-    SPRITEMAP   $1A99DA                     ; 19AC12/1ADA991A
+    SPRITEMAP   L_1A99DA                     ; 19AC12/1ADA991A
     ASMCALL     $DE51                       ; 19AC16/D051DE // Create a child object with script `arg1` offset by (`arg2`, `arg3`, `arg4`). With VAR0=`arg5`, VAR1=(self.VAR1+`arg6`)
     .byte       $04                         ; 19AC19/04
     .byte       $00                         ; 19AC1A/00
@@ -2186,7 +2186,7 @@ L_19AC44:
 L_19AC45:
     INCPOSE     WAIT #2                     ; 19AC45/72
 L_19AC46:
-    SPRITEMAP   $1A99F2                     ; 19AC46/1AF2991A
+    SPRITEMAP   L_1A99F2                     ; 19AC46/1AF2991A
     SETPOSE     VAR1                        ; 19AC4A/2401
     ASMCALL     $ADD1                       ; 19AC4C/D0D1AD // Add score based on VAR1: [0, 100, 200, 800, 2000, 5000]
     HALT                                    ; 19AC4F/09
@@ -2197,7 +2197,7 @@ L_19AC50:
 
 SCR04_KDance08:
     ONDRAW      $DA89                       ; 19AC54/2089DA
-    SPRITEMAP   $1A99DA                     ; 19AC57/1ADA991A
+    SPRITEMAP   L_1A99DA                     ; 19AC57/1ADA991A
     ASMCALL     $AE2C                       ; 19AC5B/D02CAE // Store parent object's position in $07DE and $07E0
     LOOP        #5                          ; 19AC5E/0105
         ASMCALL     $AE4B                       ; 19AC60/D04BAE // Set position to $07DE and $07E0 (previously stored parent object's position)
@@ -2695,14 +2695,14 @@ B19_b07b:
 L_19B0AD:
     MOV         $05E0,#$02                  ; 19B0AD/11E00502
     ASMCALL     $987D                       ; 19B0B1/D07D98 // Zero Kirby's velocities
-    SPRITEMAP   $1A8676                     ; 19B0B4/1A76861A
+    SPRITEMAP   L_1A8676                     ; 19B0B4/1A76861A
     ASMCALL     $8FDC, WAIT #8              ; 19B0B8/D8DC8F // Set pose (respect facing)
     .byte       $2E                         ; 19B0BB/2E
 L_19B0BC:
     ASMCALL     $8FDC, WAIT #12             ; 19B0BC/DCDC8F // Set pose (respect facing)
     .byte       $00                         ; 19B0BF/00
 L_19B0C0:
-    SPRITEMAP   $1C8216                     ; 19B0C0/1A16821C
+    SPRITEMAP   L_1C8216                     ; 19B0C0/1A16821C
     MOV         REG,$05E3                   ; 19B0C4/1CE305
     TABLEJSR    #25                         ; 19B0C7/1019
     .word       L_19B146                    ; 19B0C9/46B1
@@ -2733,7 +2733,7 @@ L_19B0C0:
     A_RTL                                     ; 19B0FB/05
 
 L_19B0FC:
-    SPRITEMAP   $1B8000                     ; 19B0FC/1A00801B
+    SPRITEMAP   L_1B8000                     ; 19B0FC/1A00801B
     SETPOSE     #$00, WAIT #2               ; 19B100/5200
 L_19B102:
     INCPOSE     WAIT #2                     ; 19B102/72
@@ -2756,7 +2756,7 @@ L_19B10C:
     A_RTS                                   ; 19B10C/19
 
 L_19B10D:
-    SPRITEMAP   $1B88F2                     ; 19B10D/1AF2881B
+    SPRITEMAP   L_1B88F2                     ; 19B10D/1AF2881B
     ASMCALL     $8FDC, WAIT #15             ; 19B111/DFDC8F // Set pose (respect facing)
     .byte       $00                         ; 19B114/00
 L_19B115:
@@ -2782,7 +2782,7 @@ L_19B124:
     A_RTS                                   ; 19B124/19
 
 L_19B125:
-    SPRITEMAP   $1B9320                     ; 19B125/1A20931B
+    SPRITEMAP   L_1B9320                     ; 19B125/1A20931B
     ASMCALL     $8FDC, WAIT #6              ; 19B129/D6DC8F // Set pose (respect facing)
     .byte       $00                         ; 19B12C/00
 L_19B12D:
@@ -2802,7 +2802,7 @@ L_19B135:
     A_RTS                                   ; 19B135/19
 
 L_19B136:
-    SPRITEMAP   $1A8EE6                     ; 19B136/1AE68E1A
+    SPRITEMAP   L_1A8EE6                     ; 19B136/1AE68E1A
     SETPOSE     #$70, WAIT #2               ; 19B13A/5270
     INCPOSE     WAIT #2                     ; 19B13C/72
     INCPOSE     WAIT #2                     ; 19B13D/72
@@ -2929,7 +2929,7 @@ L_19B1C3:
     A_RTS                                   ; 19B1C3/19
 
 L_19B1C4:
-    SPRITEMAP   $1B9CAE                     ; 19B1C4/1AAE9C1B
+    SPRITEMAP   L_1B9CAE                     ; 19B1C4/1AAE9C1B
     LOOP        #2                          ; 19B1C8/0102
         ASMCALL     $8FDC, WAIT #2              ; 19B1CA/D2DC8F // Set pose (respect facing)
         .byte       $00                         ; 19B1CD/00
@@ -2956,11 +2956,11 @@ L_19B1DB:
 
 L_19B1DD:
     LOOP        #3                          ; 19B1DD/0103
-        SPRITEMAP   $1A8676                     ; 19B1DF/1A76861A
+        SPRITEMAP   L_1A8676                     ; 19B1DF/1A76861A
         ASMCALL     $8FDC, WAIT #2              ; 19B1E3/D2DC8F // Set pose (respect facing)
         .byte       $00                         ; 19B1E6/00
 L_19B1E7:
-        SPRITEMAP   $1C8216                     ; 19B1E7/1A16821C
+        SPRITEMAP   L_1C8216                     ; 19B1E7/1A16821C
         ASMCALL     $8FDC, WAIT #2              ; 19B1EB/D2DC8F // Set pose (respect facing)
         .byte       $40                         ; 19B1EE/40
 L_19B1EF:
@@ -3010,11 +3010,11 @@ L_19B21A:
 
 L_19B222:
     LOOP        #4                          ; 19B222/0104
-        SPRITEMAP   $1A8676                     ; 19B224/1A76861A
+        SPRITEMAP   L_1A8676                     ; 19B224/1A76861A
         ASMCALL     $8FDC, WAIT #4              ; 19B228/D4DC8F // Set pose (respect facing)
         .byte       $00                         ; 19B22B/00
 L_19B22C:
-        SPRITEMAP   $1B9DAE                     ; 19B22C/1AAE9D1B
+        SPRITEMAP   L_1B9DAE                     ; 19B22C/1AAE9D1B
         ASMCALL     $8FDC, WAIT #4              ; 19B230/D4DC8F // Set pose (respect facing)
         .byte       $02                         ; 19B233/02
 L_19B234:
@@ -3023,7 +3023,7 @@ L_19B234:
 
 L_19B236:
     LOOP        #3                          ; 19B236/0103
-        SPRITEMAP   $1B9BEE                     ; 19B238/1AEE9B1B
+        SPRITEMAP   L_1B9BEE                     ; 19B238/1AEE9B1B
         ASMCALL     $8FDC, WAIT #2              ; 19B23C/D2DC8F // Set pose (respect facing)
         .byte       $00                         ; 19B23F/00
 L_19B240:
@@ -3045,7 +3045,7 @@ L_19B247:
     A_RTS                                   ; 19B248/19
 
 L_19B249:
-    SPRITEMAP   $1B9E5A                     ; 19B249/1A5A9E1B
+    SPRITEMAP   L_1B9E5A                     ; 19B249/1A5A9E1B
     ASMCALL     $98D5                       ; 19B24D/D0D598 // Get facing as 0 or 0x80
     JNE         L_19B26E                    ; 19B250/0B6EB2
     SETPOSE     #$0F, WAIT #2               ; 19B253/520F
@@ -3152,7 +3152,7 @@ L_19B2A0:
     ASMCALL     $B2E9                       ; 19B2A6/D0E9B2 // Set object's script ID to 7 (wtf...?)
     ONTICK      $19B2E1                     ; 19B2A9/08E1B219
     ONPOSITION  $D9BB                       ; 19B2AD/21BBD9
-    SPRITEMAP   $1C9CD7                     ; 19B2B0/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 19B2B0/1AD79C1C
     SETPOSE     #$2F                        ; 19B2B4/502F
     ZEROVEL                                 ; 19B2B6/38
     LOOP        #8                          ; 19B2B7/0108
@@ -3168,7 +3168,7 @@ L_19B2C3:
     ASMCALL     $DE4B                       ; 19B2C4/D04BDE // Play sound effect
     .byte       $19                         ; 19B2C7/19
     SETZPOS     #$0080                      ; 19B2C8/3A8000
-    SPRITEMAP   $1C94CE                     ; 19B2CB/1ACE941C
+    SPRITEMAP   L_1C94CE                     ; 19B2CB/1ACE941C
     JML         SCR02_BlockDestroyed        ; 19B2CF/0372AC16
 
 L_19B2D3:
@@ -3222,7 +3222,7 @@ L_19B30A:
     .word       L_19B522                    ; 19B31B/22B5
 L_19B31D:
     MOV         $05E0,#$0B                  ; 19B31D/11E0050B
-    SPRITEMAP   $1B9BEE                     ; 19B321/1AEE9B1B
+    SPRITEMAP   L_1B9BEE                     ; 19B321/1AEE9B1B
     MOV         VAR0,#$00                   ; 19B325/0D0000
     A_RTS                                   ; 19B328/19
 
@@ -3651,7 +3651,7 @@ L_19B665:
 L_19B669:
     MOV         $05E0,#$08                  ; 19B669/11E00508
     SETZPOS     #$007F                      ; 19B66D/3A7F00
-    SPRITEMAP   $1B9DAE                     ; 19B670/1AAE9D1B
+    SPRITEMAP   L_1B9DAE                     ; 19B670/1AAE9D1B
     ASMCALL     $DE4B                       ; 19B674/D04BDE // Play sound effect
     .byte       $4C                         ; 19B677/4C
     ASMCALL     $9952                       ; 19B678/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3796,7 +3796,7 @@ L_19B765:
     JML         L_14B2D9                    ; 19B765/03D9B214
 
 Script05_Collectable:
-    SPRITEMAP   $1C9FC4                     ; 19B769/1AC49F1C
+    SPRITEMAP   L_1C9FC4                     ; 19B769/1AC49F1C
     SETBANK     #$21                        ; 19B76D/2821
     ONPOSITION  $D9BB                       ; 19B76F/21BBD9
     MOV         REG,VAR0                    ; 19B772/1E00
@@ -3918,7 +3918,7 @@ L_19B821:
 SCR05_Item04:
     SETBANK     #$22                        ; 19B830/2822
     ONPOSITION  $D97D                       ; 19B832/217DD9
-    SPRITEMAP   $308B7A                     ; 19B835/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 19B835/1A7A8B30
     MOV         VAR0,#$01                   ; 19B839/0D0001
     MOV         VAR8,#$30                   ; 19B83C/0D0830
     MOV         VAR9,#$01                   ; 19B83F/0D0901
@@ -3933,7 +3933,7 @@ L_19B851:
 
 L_19B854:
     SETBANK     #$21                        ; 19B854/2821
-    SPRITEMAP   $1C9CD7                     ; 19B856/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 19B856/1AD79C1C
     ONTICK      $19B918                     ; 19B85A/0818B919
     ASMCALL     $DE4B                       ; 19B85E/D04BDE // Play sound effect
     .byte       $1F                         ; 19B861/1F
@@ -4209,7 +4209,7 @@ B19_ba61:
 
 SCR05_MetaSword:
     ONPOSITION  $D97D                       ; 19BA6F/217DD9
-    SPRITEMAP   $318000                     ; 19BA72/1A008031
+    SPRITEMAP   L_318000                     ; 19BA72/1A008031
     SETBANK     #$22                        ; 19BA76/2822
     ONTICK      $19BAA9                     ; 19BA78/08A9BA19
     ASMCALL     $BAD4                       ; 19BA7C/D0D4BA // Set position to top center of the screen

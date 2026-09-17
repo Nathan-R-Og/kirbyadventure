@@ -2,7 +2,7 @@
 L_28A000:
     SETBANK     #$22                        ; 28A000/2822
     ONPOSITION  $D97D                       ; 28A002/217DD9
-    SPRITEMAP   $3284A2                     ; 28A005/1AA28432
+    SPRITEMAP   L_3284A2                     ; 28A005/1AA28432
     ASMCALL     $A0FA                       ; 28A009/D0FAA0
     MOV         VAR2,#$02                   ; 28A00C/0D0202
     MOV         VAR5,#$00                   ; 28A00F/0D0500
@@ -62,7 +62,7 @@ Script26_MetaKnightCandy:
     SETBANK     #$22                        ; 28A106/2822
     SETZPOS     #$00C1                      ; 28A108/3AC100
     ONPOSITION  $D97D                       ; 28A10B/217DD9
-    SPRITEMAP   $328422                     ; 28A10E/1A228432
+    SPRITEMAP   L_328422                     ; 28A10E/1A228432
     ASMCALL     $A150                       ; 28A112/D050A1
     SETXVEL     #$0140                      ; 28A115/B04001
     SETYVEL     #$FB00                      ; 28A118/C000FB
@@ -124,7 +124,7 @@ L_28A1E1:
 incbinRange "../split/prg/bank28.bin", $01E2, $026E
 
 L_28A26E:
-    SPRITEMAP   $328934                     ; 28A26E/1A348932
+    SPRITEMAP   L_328934                     ; 28A26E/1A348932
     ONPOSITION  $D9BB                       ; 28A272/21BBD9
     MOV         VAR0,#$02                   ; 28A275/0D0002
     MOV         VAR5,#$00                   ; 28A278/0D0500
@@ -169,7 +169,7 @@ Script4C_Bonkers:
     SETBANK     #$22                        ; 28A2EE/2822
     MOV         REG,VAR0                    ; 28A2F0/1E00
     JNE         L_28A26E                    ; 28A2F2/0B6EA2
-    SPRITEMAP   $328000                     ; 28A2F5/1A008032
+    SPRITEMAP   L_328000                     ; 28A2F5/1A008032
     ONPOSITION  $DA09                       ; 28A2F9/2109DA
     ASMCALL     $84A4                       ; 28A2FC/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$1B                   ; 28A2FF/0D001B
@@ -579,7 +579,7 @@ incbinRange "../split/prg/bank28.bin", $079E, $07A2
 Script25_Bomber:
     SETBANK     #$22                        ; 28A7A2/2822
     ONPOSITION  $D9BB                       ; 28A7A4/21BBD9
-    SPRITEMAP   $379342                     ; 28A7A7/1A429337
+    SPRITEMAP   L_379342                     ; 28A7A7/1A429337
     ASMCALL     $84A4                       ; 28A7AB/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$01                   ; 28A7AE/0D0001
     MOV         VAR6,#$00                   ; 28A7B1/0D0600
@@ -671,7 +671,7 @@ incbinRange "../split/prg/bank28.bin", $082B, $08EF
 Script28_UFO:
     SETBANK     #$22                        ; 28A8EF/2822
     ONPOSITION  $D9BB                       ; 28A8F1/21BBD9
-    SPRITEMAP   $3285A4                     ; 28A8F4/1AA48532
+    SPRITEMAP   L_3285A4                     ; 28A8F4/1AA48532
     MOV         VAR0,#$02                   ; 28A8F8/0D0002
     ASMCALL     $84A4                       ; 28A8FB/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR6,#$00                   ; 28A8FE/0D0600
@@ -759,7 +759,7 @@ incbinRange "../split/prg/bank28.bin", $0989, $0AEE
 Script45_MrShineAndMrBright:
     MOV         $0043,#$A6                  ; 28AAEE/114300A6
     SETBANK     #$22                        ; 28AAF2/2822
-    SPRITEMAP   $319218                     ; 28AAF4/1A189231
+    SPRITEMAP   L_319218                     ; 28AAF4/1A189231
     ONPOSITION  $D97D                       ; 28AAF8/217DD9
     MOV         REG,VAR0                    ; 28AAFB/1E00
     TABLEJMP    #4                          ; 28AAFD/0F04
@@ -1481,7 +1481,7 @@ incbinRange "../split/prg/bank28.bin", $1C40, $1D3F
 Script5C_MrShineAndMrBrightStar:
     SETBANK     #$22                        ; 28BD3F/2822
     ONPOSITION  $D9BB                       ; 28BD41/21BBD9
-    SPRITEMAP   $319218                     ; 28BD44/1A189231
+    SPRITEMAP   L_319218                     ; 28BD44/1A189231
     MOV         REG,VAR0                    ; 28BD48/1E00
     TABLEJMP    #6                          ; 28BD4A/0F06
     .word       L_28BD58                    ; 28BD4C/58BD
@@ -1583,7 +1583,7 @@ L_28BDE5:
         INCPOSE     WAIT #2                     ; 28BDE5/72
 L_28BDE6:
     ENDLOOP                                 ; 28BDE6/02
-    SPRITEMAP   $308B7A                     ; 28BDE7/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 28BDE7/1A7A8B30
     ASMCALL     $BEAB                       ; 28BDEB/D0ABBE
 L_28BDEE:
     SETPOSE     #$00                        ; 28BDEE/5000
@@ -1602,7 +1602,7 @@ L_28BDFB:
 
 L_28BDFE:
     MOV         VAR0,#$02                   ; 28BDFE/0D0002
-    SPRITEMAP   $308B7A                     ; 28BE01/1A7A8B30
+    SPRITEMAP   L_308B7A                     ; 28BE01/1A7A8B30
     SETZPOS     #$00FF                      ; 28BE05/3AFF00
     ONTICK      $28BE46                     ; 28BE08/0846BE28
     ASMCALL     $E26A                       ; 28BE0C/D06AE2 // Set X velocity (respect facing)

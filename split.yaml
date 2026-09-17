@@ -748,8 +748,14 @@ splits:
     - bank: 0x18
     - bank: 0x19
     - bank: 0x1A
+      splits:
+      - [0, spritemaps]
     - bank: 0x1B
+      splits:
+      - [0, spritemaps]
     - bank: 0x1C
+      splits:
+      - [0, spritemaps]
     - bank: 0x1D
     - bank: 0x1E
     - bank: 0x1F
@@ -770,16 +776,31 @@ splits:
     - bank: 0x2E
     - bank: 0x2F
     - bank: 0x30
+      splits:
+      - [0, spritemaps2]
     - bank: 0x31
+      splits:
+      - [0, spritemaps2]
     - bank: 0x32
+      splits:
+      - [0, spritemaps2]
     - bank: 0x33
+      splits:
+      - [0, spritemaps2]
     - bank: 0x34
     - bank: 0x35
+      splits:
+      - [0, spritemaps3]
     - bank: 0x36
     - bank: 0x37
+      splits:
+      - [0, spritemaps4]
     - bank: 0x38
     - bank: 0x39
     - bank: 0x3A
+      splits:
+      - [0]
+      - [0x160, spritemaps5]
     - bank: 0x3B
       splits:
       - [0]

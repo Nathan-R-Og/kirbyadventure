@@ -2,7 +2,7 @@
 L_2BA000:
     SETBANK     #$22                        ; 2BA000/2822
     ONPOSITION  $D9BB                       ; 2BA002/21BBD9
-    SPRITEMAP   $3284CE                     ; 2BA005/1ACE8432
+    SPRITEMAP   L_3284CE                     ; 2BA005/1ACE8432
     ASMCALL     $84A4                       ; 2BA009/D0A484 // Store VAR1 in $0784[self]
     MOV         VAR0,#$02                   ; 2BA00C/0D0002
     MOV         VAR5,#$00                   ; 2BA00F/0D0500
@@ -74,7 +74,7 @@ incbinRange "../split/prg/bank2b.bin", $0088, $0389
 Script17_Flamer:
     SETBANK     #$22                        ; 2BA389/2822
     ONPOSITION  $D9BB                       ; 2BA38B/21BBD9
-    SPRITEMAP   $3083D5                     ; 2BA38E/1AD58330
+    SPRITEMAP   L_3083D5                     ; 2BA38E/1AD58330
     ASMCALL     $84A4                       ; 2BA392/D0A484 // Store VAR1 in $0784[self]
     ASMCALL     $A50A                       ; 2BA395/D00AA5
     MOV         VAR0,#$02                   ; 2BA398/0D0002
@@ -305,7 +305,7 @@ incbinRange "../split/prg/bank2b.bin", $04F7, $0A3E
 Script23_Rocky:
     SETBANK     #$22                        ; 2BAA3E/2822
     ONPOSITION  $D9BB                       ; 2BAA40/21BBD9
-    SPRITEMAP   $328526                     ; 2BAA43/1A268532
+    SPRITEMAP   L_328526                     ; 2BAA43/1A268532
     MOV         VAR0,#$02                   ; 2BAA47/0D0002
     ASMCALL     $8851                       ; 2BAA4A/D05188 // Face towards Kirby
     SETYVEL     #$0000                      ; 2BAA4D/C00000
@@ -408,7 +408,7 @@ Script42_MetaKnightBoss:
     .word       L_2BBBF5                    ; 2BAC10/F5BB
 L_2BAC12:
     MOV         $0043,#$A4                  ; 2BAC12/114300A4
-    SPRITEMAP   $318000                     ; 2BAC16/1A008031
+    SPRITEMAP   L_318000                     ; 2BAC16/1A008031
     MOV         VAR0,#$00                   ; 2BAC1A/0D0000
     ASMCALL     $AC4D                       ; 2BAC1D/D04DAC // Set on-screen position to (0xE4, 0x30)
     SETPOSE     #$00                        ; 2BAC20/5000
@@ -819,7 +819,7 @@ MST16_17_DropSword:
     .byte       $00                         ; 2BAEA2/00
     .byte       $02                         ; 2BAEA3/02
     .byte       $00                         ; 2BAEA4/00
-    SPRITEMAP   $3180F8                     ; 2BAEA5/1AF88031
+    SPRITEMAP   L_3180F8                     ; 2BAEA5/1AF88031
     ASMCALL     $B765                       ; 2BAEA9/D065B7 // Meta Knight leap after being defeated
     ONTICK      $2BB537                     ; 2BAEAC/0837B52B
     ASMCALL     $8851                       ; 2BAEB0/D05188 // Face towards Kirby
@@ -923,7 +923,7 @@ incbinRange "../split/prg/bank2b.bin", $1A19, $1B33
 
 L_2BBB33:
     SETBANK     #$22                        ; 2BBB33/2822
-    SPRITEMAP   $318000                     ; 2BBB35/1A008031
+    SPRITEMAP   L_318000                     ; 2BBB35/1A008031
     ONPOSITION  $D9BB                       ; 2BBB39/21BBD9
     ASMCALL     $BB65                       ; 2BBB3C/D065BB
     SETZPOS     #$007F                      ; 2BBB3F/3A7F00
@@ -966,7 +966,7 @@ L_2BBBF5:
 L_2BBBF8:
     SETBANK     #$22                        ; 2BBBF8/2822
     ONPOSITION  $D9BB                       ; 2BBBFA/21BBD9
-    SPRITEMAP   $3180F8                     ; 2BBBFD/1AF88031
+    SPRITEMAP   L_3180F8                     ; 2BBBFD/1AF88031
     ASMCALL     $BC19                       ; 2BBC01/D019BC
     ONDRAW      $DDE7                       ; 2BBC04/20E7DD
     WAIT        #4                          ; 2BBC07/0604

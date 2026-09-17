@@ -4,7 +4,7 @@ Script4A_Bugzzy:
     MOV         REG,VAR0                    ; 29A002/1E00
     JNE         L_29A664                    ; 29A004/0B64A6
     MOV         VAR0,#$1E                   ; 29A007/0D001E
-    SPRITEMAP   $33838A                     ; 29A00A/1A8A8333
+    SPRITEMAP   L_33838A                     ; 29A00A/1A8A8333
     A_JSR       L_29AF71                    ; 29A00E/1871AF
     A_JMP       L_29A156                    ; 29A011/1756A1
 
@@ -447,7 +447,7 @@ L_29A593:
 L_29A596:
     ASMCALL     $A620                       ; 29A596/D020A6
     ONTICK      $29B096                     ; 29A599/0896B029
-    SPRITEMAP   $1C8DA6                     ; 29A59D/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 29A59D/1AA68D1C
     WAIT        #30                         ; 29A5A1/061E
 L_29A5A3:
     ASMCALL     $AF4D                       ; 29A5A3/D04DAF
@@ -458,7 +458,7 @@ L_29A5A3:
 incbinRange "../split/prg/bank29.bin", $05AE, $0664
 
 L_29A664:
-    SPRITEMAP   $329E22                     ; 29A664/1A229E32
+    SPRITEMAP   L_329E22                     ; 29A664/1A229E32
     ONPOSITION  $D97D                       ; 29A668/217DD9
     ONDRAW      $DA89                       ; 29A66B/2089DA
     ASMCALL     $84AD                       ; 29A66E/D0AD84 // Copy $0784[self.parent] to $0784[self]
@@ -501,7 +501,7 @@ Script4B_RollingTurtle:
     MOV         REG,VAR0                    ; 29A773/1E00
     JNE         L_29ADBA                    ; 29A775/0BBAAD
     MOV         VAR0,#$1E                   ; 29A778/0D001E
-    SPRITEMAP   $338B50                     ; 29A77B/1A508B33
+    SPRITEMAP   L_338B50                     ; 29A77B/1A508B33
     A_JSR       L_29AF71                    ; 29A77F/1871AF
     A_JMP       L_29A883                    ; 29A782/1783A8
 
@@ -1002,7 +1002,7 @@ L_29ACF0:
 L_29ACF3:
     ASMCALL     $AD5E                       ; 29ACF3/D05EAD
     ONTICK      $29B096                     ; 29ACF6/0896B029
-    SPRITEMAP   $1C8DA6                     ; 29ACFA/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 29ACFA/1AA68D1C
     WAIT        #30                         ; 29ACFE/061E
 L_29AD00:
     ASMCALL     $AF4D                       ; 29AD00/D04DAF
@@ -1012,7 +1012,7 @@ L_29AD00:
 L_29AD0B:
     ASMCALL     $AD5E                       ; 29AD0B/D05EAD
     ONTICK      $29B0BE                     ; 29AD0E/08BEB029
-    SPRITEMAP   $1C8DA6                     ; 29AD12/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 29AD12/1AA68D1C
     A_JSR       L_29AE6B                    ; 29AD16/186BAE
     ONTICK      $29B096                     ; 29AD19/0896B029
     ASMCALL     $B117                       ; 29AD1D/D017B1
@@ -1033,7 +1033,7 @@ L_29AD35:
 incbinRange "../split/prg/bank29.bin", $0D40, $0DBA
 
 L_29ADBA:
-    SPRITEMAP   $329E4E                     ; 29ADBA/1A4E9E32
+    SPRITEMAP   L_329E4E                     ; 29ADBA/1A4E9E32
     ONPOSITION  $D9BB                       ; 29ADBE/21BBD9
     ONDRAW      $DA89                       ; 29ADC1/2089DA
     MOV         VAR0,#$02                   ; 29ADC4/0D0002
@@ -1091,7 +1091,7 @@ L_29AE6D:
     A_RTS                                   ; 29AE72/19
 
 L_29AE73:
-    SPRITEMAP   $1C8DA6                     ; 29AE73/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 29AE73/1AA68D1C
     ASMCALL     $B117                       ; 29AE77/D017B1
     JEQ         L_29AE85                    ; 29AE7A/0A85AE
     MOV         $05F9,#$00                  ; 29AE7D/11F90500
@@ -1127,7 +1127,7 @@ L_29B124:
     SETBANK     #$22                        ; 29B124/2822
     ASMCALL     $B1B8                       ; 29B126/D0B8B1
     ONDRAW      $DDD9                       ; 29B129/20D9DD
-    SPRITEMAP   $328A84                     ; 29B12C/1A848A32
+    SPRITEMAP   L_328A84                     ; 29B12C/1A848A32
     ONPOSITION  $D97D                       ; 29B130/217DD9
 L_29B133:
     ASMCALL     $8A6C, WAIT #1              ; 29B133/D16C8A
@@ -1877,7 +1877,7 @@ incbinRange "../split/prg/bank29.bin", $1567, $179D
 L_29B79D:
     SETBANK     #$22                        ; 29B79D/2822
     ONDRAW      $DDD9                       ; 29B79F/20D9DD
-    SPRITEMAP   $328A84                     ; 29B7A2/1A848A32
+    SPRITEMAP   L_328A84                     ; 29B7A2/1A848A32
     ONPOSITION  $D97D                       ; 29B7A6/217DD9
     MOV         VAR9,#$00                   ; 29B7A9/0D0900
     MOV         VAR8,#$00                   ; 29B7AC/0D0800
@@ -2021,7 +2021,7 @@ incbinRange "../split/prg/bank29.bin", $188F, $19AF
 Script60_NightmareProjectile:
     SETBANK     #$22                        ; 29B9AF/2822
     ONDRAW      $DA89                       ; 29B9B1/2089DA
-    SPRITEMAP   $328A84                     ; 29B9B4/1A848A32
+    SPRITEMAP   L_328A84                     ; 29B9B4/1A848A32
     ONPOSITION  $D9BB                       ; 29B9B8/21BBD9
     MOV         REG,VAR0                    ; 29B9BB/1E00
     A_AND       REG,#$80                    ; 29B9BD/250080
@@ -2054,7 +2054,7 @@ incbinRange "../split/prg/bank29.bin", $19E3, $1B25
 Script62_NightmareWizard:
     SETBANK     #$22                        ; 29BB25/2822
     ONDRAW      $DDD9                       ; 29BB27/20D9DD
-    SPRITEMAP   $328A84                     ; 29BB2A/1A848A32
+    SPRITEMAP   L_328A84                     ; 29BB2A/1A848A32
     ONPOSITION  $D97D                       ; 29BB2E/217DD9
     MOV         VAR3,#$01                   ; 29BB31/0D0301
     MOV         VAR4,#$01                   ; 29BB34/0D0401
@@ -2114,7 +2114,7 @@ incbinRange "../split/prg/bank29.bin", $1C25, $1F14
 L_29BF14:
     MOV         $0043,#$D0                  ; 29BF14/114300D0
     SETBANK     #$22                        ; 29BF18/2822
-    SPRITEMAP   $329F37                     ; 29BF1A/1A379F32
+    SPRITEMAP   L_329F37                     ; 29BF1A/1A379F32
     ONPOSITION  $D97D                       ; 29BF1E/217DD9
     ONDRAW      $DA89                       ; 29BF21/2089DA
     MOV         VAR0,#$01                   ; 29BF24/0D0001

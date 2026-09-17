@@ -51,7 +51,7 @@ L_36A046:
     A_JMP       L_36A041                    ; 36A046/1741A0
 
 L_36A049:
-    MOV         $01A2,#$04                  ; 36A049/11A20104
+    MOV         palette_fade,#$04                  ; 36A049/11A20104
     LOOP        #4                          ; 36A04D/0104
         ASMCALL     $C996, WAIT #4              ; 36A04F/D496C9 // Palette fade (out?) step
 L_36A052:
@@ -77,12 +77,12 @@ L_36A054:
     SETZPOS     #$00FE                      ; 36A073/3AFE00
     ASMCALL     $DE45                       ; 36A076/D045DE // Play music
     .byte       $38                         ; 36A079/38
-    SPRITEMAP   $358BD9                     ; 36A07A/1AD98B35
+    SPRITEMAP   L_358BD9                     ; 36A07A/1AD98B35
     SETPOSE     #$00                        ; 36A07E/5000
     WAIT        #30                         ; 36A080/061E
 L_36A082:
     ASMCALL     $A851                       ; 36A082/D051A8
-    SPRITEMAP   $359592                     ; 36A085/1A929535
+    SPRITEMAP   L_359592                     ; 36A085/1A929535
     SETPOSE     #$00, WAIT #2               ; 36A089/5200
 L_36A08B:
     INCPOSE     WAIT #2                     ; 36A08B/72
@@ -168,7 +168,7 @@ L_36A0DB:
 L_36A0E0:
     WAIT        #30                         ; 36A0E0/061E
 L_36A0E2:
-    SPRITEMAP   $358BD9                     ; 36A0E2/1AD98B35
+    SPRITEMAP   L_358BD9                     ; 36A0E2/1AD98B35
     SETPOSE     #$00                        ; 36A0E6/5000
     WAIT        #128                        ; 36A0E8/0680
 L_36A0EA:
@@ -198,7 +198,7 @@ L_36A103:
     DECPOSE     WAIT #10                    ; 36A103/8A
 L_36A104:
     ZEROVEL                                 ; 36A104/38
-    SPRITEMAP   $359592                     ; 36A105/1A929535
+    SPRITEMAP   L_359592                     ; 36A105/1A929535
     SETPOSE     #$11                        ; 36A109/5011
     WAIT        #40                         ; 36A10B/0628
 L_36A10D:
@@ -239,7 +239,7 @@ L_36A12F:
     INCPOSE                                 ; 36A130/70
     WAIT        #64                         ; 36A131/0640
 L_36A133:
-    SPRITEMAP   $358BD9                     ; 36A133/1AD98B35
+    SPRITEMAP   L_358BD9                     ; 36A133/1AD98B35
     SETPOSE     #$08, WAIT #8               ; 36A137/5808
 L_36A139:
     ASMCALL     $DE4B                       ; 36A139/D04BDE // Play sound effect
@@ -274,7 +274,7 @@ L_36A168:
     ASMCALL     $DE4B                       ; 36A169/D04BDE // Play sound effect
     .byte       $0E                         ; 36A16C/0E
     ADDXPOS     #-2                         ; 36A16D/2CFEFF
-    SPRITEMAP   $359592                     ; 36A170/1A929535
+    SPRITEMAP   L_359592                     ; 36A170/1A929535
     SETPOSE     #$07                        ; 36A174/5007
     WAIT        #16                         ; 36A176/0610
 L_36A178:
@@ -286,7 +286,7 @@ L_36A181:
     SETYVEL     #$FF00, WAIT #8             ; 36A181/C800FF
 L_36A184:
     ZEROVEL                                 ; 36A184/38
-    SPRITEMAP   $358BD9                     ; 36A185/1AD98B35
+    SPRITEMAP   L_358BD9                     ; 36A185/1AD98B35
     SETPOSE     #$0B                        ; 36A189/500B
     SETYVEL     #$0100, WAIT #8             ; 36A18B/C80001
 L_36A18E:
@@ -340,7 +340,7 @@ L_36A1DB:
     INCPOSE     WAIT #10                    ; 36A1E0/7A
 L_36A1E1:
     ASMCALL     $A84B                       ; 36A1E1/D04BA8
-    SPRITEMAP   $358CBE                     ; 36A1E4/1ABE8C35
+    SPRITEMAP   L_358CBE                     ; 36A1E4/1ABE8C35
     SETPOSE     #$00                        ; 36A1E8/5000
     WAIT        #144                        ; 36A1EA/0690
 L_36A1EC:
@@ -372,7 +372,7 @@ L_36A216:
     ZEROVEL                                 ; 36A216/38
     WAIT        #45                         ; 36A217/062D
 L_36A219:
-    SPRITEMAP   $359592                     ; 36A219/1A929535
+    SPRITEMAP   L_359592                     ; 36A219/1A929535
     ASMCALL     $DE4B                       ; 36A21D/D04BDE // Play sound effect
     .byte       $4E                         ; 36A220/4E
     LOOP        #5                          ; 36A221/0105
@@ -482,7 +482,7 @@ L_36A291:
     SETXPOS     #$00FC                      ; 36A291/2AFC00
     SETYPOS     #$0001                      ; 36A294/2B0100
     SETZPOS     #$00FD                      ; 36A297/3AFD00
-    SPRITEMAP   $358EA6                     ; 36A29A/1AA68E35
+    SPRITEMAP   L_358EA6                     ; 36A29A/1AA68E35
     SETPOSE     #$FF, WAIT #8               ; 36A29E/58FF
 L_36A2A0:
     SETPOSE     #$00                        ; 36A2A0/5000
@@ -522,7 +522,7 @@ L_36A2C9:
     .byte       $00                         ; 36A2D8/00
     .byte       $0C                         ; 36A2D9/0C
     ASMCALL     $A845                       ; 36A2DA/D045A8
-    SPRITEMAP   $358EB6                     ; 36A2DD/1AB68E35
+    SPRITEMAP   L_358EB6                     ; 36A2DD/1AB68E35
     LOOP        #16                         ; 36A2E1/0110
         SETPOSE     #$00, WAIT #2               ; 36A2E3/5200
 L_36A2E5:
@@ -630,7 +630,7 @@ L_36A361:
     ENDLOOP                                 ; 36A361/02
     SETPOSE     #$07, WAIT #1               ; 36A362/5107
 L_36A364:
-    SPRITEMAP   $358ECA                     ; 36A364/1ACA8E35
+    SPRITEMAP   L_358ECA                     ; 36A364/1ACA8E35
     SETPOSE     #$00                        ; 36A368/5000
     WAIT        #143                        ; 36A36A/068F
 L_36A36C:
@@ -667,7 +667,7 @@ L_36A395:
     DECPOSE     WAIT #9                     ; 36A39A/89
 L_36A39B:
     ASMCALL     $A851                       ; 36A39B/D051A8
-    SPRITEMAP   $358EA6                     ; 36A39E/1AA68E35
+    SPRITEMAP   L_358EA6                     ; 36A39E/1AA68E35
     ASMCALL     $DE4B                       ; 36A3A2/D04BDE // Play sound effect
     .byte       $18                         ; 36A3A5/18
     LOOP        #5                          ; 36A3A6/0105
@@ -708,7 +708,7 @@ L_36A3D4:
     WAIT        #17                         ; 36A3D9/0611
 L_36A3DB:
     ASMCALL     $A845                       ; 36A3DB/D045A8
-    SPRITEMAP   $358EB6                     ; 36A3DE/1AB68E35
+    SPRITEMAP   L_358EB6                     ; 36A3DE/1AB68E35
     SETPOSE     #$09                        ; 36A3E2/5009
     HALT                                    ; 36A3E4/09
 
@@ -797,7 +797,7 @@ L_36A46E:
     MOV         VAR3,#$40                   ; 36A46E/0D0340
 L_36A471:
     MOV         $0044,#$00                  ; 36A471/11440000
-    SPRITEMAP   $359397                     ; 36A475/1A979335
+    SPRITEMAP   L_359397                     ; 36A475/1A979335
     SETZPOS     #$00FF                      ; 36A479/3AFF00
     MOV         REG,VAR3                    ; 36A47C/1E03
     LOOP        REG                         ; 36A47E/22
@@ -821,7 +821,7 @@ L_36A4C4:
     .byte       $34                         ; 36A4C7/34
     SETXPOS     #$0280                      ; 36A4C8/2A8002
     SETYPOS     #$007F                      ; 36A4CB/2B7F00
-    SPRITEMAP   $35918D                     ; 36A4CE/1A8D9135
+    SPRITEMAP   L_35918D                     ; 36A4CE/1A8D9135
     TASK        L_36A281                    ; 36A4D2/0781A2
     LOOP        #7                          ; 36A4D5/0107
         SETPOSE     #$00                        ; 36A4D7/5000
@@ -984,7 +984,7 @@ L_36A5D1:
     SETXPOS     #$0280                      ; 36A5D1/2A8002
     SETYPOS     #$0064                      ; 36A5D4/2B6400
     SETZPOS     #$00FF                      ; 36A5D7/3AFF00
-    SPRITEMAP   $358CFD                     ; 36A5DA/1AFD8C35
+    SPRITEMAP   L_358CFD                     ; 36A5DA/1AFD8C35
     SETPOSE     #$00                        ; 36A5DE/5000
     WAIT        #200                        ; 36A5E0/06C8
 L_36A5E2:
@@ -1118,7 +1118,7 @@ L_36A68A:
     A_JMP       L_36A68D                    ; 36A68A/178DA6
 
 L_36A68D:
-    SPRITEMAP   $359282                     ; 36A68D/1A829235
+    SPRITEMAP   L_359282                     ; 36A68D/1A829235
     ONTICK      $36A817                     ; 36A691/0817A836
 L_36A695:
     SETPOSE     #$FF, WAIT #3               ; 36A695/53FF
@@ -1179,7 +1179,7 @@ L_36A6CC:
 L_36A6CF:
     SETXPOS     #$0281                      ; 36A6CF/2A8102
     SETYPOS     #$0088                      ; 36A6D2/2B8800
-    SPRITEMAP   $359310                     ; 36A6D5/1A109335
+    SPRITEMAP   L_359310                     ; 36A6D5/1A109335
     ONTICK      $36A817                     ; 36A6D9/0817A836
 L_36A6DD:
     SETPOSE     #$00, WAIT #1               ; 36A6DD/5100
@@ -1202,7 +1202,7 @@ L_36AA8D:
     MOV         VAR9,#$02                   ; 36AA90/0D0902
     MOV         REG,$07F3                   ; 36AA93/1CF307
     JEQ         L_36AAAC                    ; 36AA96/0AACAA
-    SPRITEMAP   $37969B                     ; 36AA99/1A9B9637
+    SPRITEMAP   L_37969B                     ; 36AA99/1A9B9637
     MOV         $07F3,#$00                  ; 36AA9D/11F30700
     SETXPOS     #$007F                      ; 36AAA1/2A7F00
     SETYPOS     #$017A                      ; 36AAA4/2B7A01
@@ -1226,7 +1226,7 @@ L_36AABC:
     ENDLOOP                                 ; 36AAC0/02
     SETXPOS     #$007F                      ; 36AAC1/2A7F00
     SETYPOS     #$0100                      ; 36AAC4/2B0001
-    SPRITEMAP   $37967D                     ; 36AAC7/1A7D9637
+    SPRITEMAP   L_37967D                     ; 36AAC7/1A7D9637
     SETPOSE     #$03                        ; 36AACB/5003
     TASK        L_36AC23                    ; 36AACD/0723AC
     SETXVEL     #$F800                      ; 36AAD0/B000F8
@@ -1259,7 +1259,7 @@ L_36AAFA:
     ZEROVEL                                 ; 36AAFB/38
     SETXPOS     #$007F                      ; 36AAFC/2A7F00
     SETYPOS     #$017A                      ; 36AAFF/2B7A01
-    SPRITEMAP   $37969B                     ; 36AB02/1A9B9637
+    SPRITEMAP   L_37969B                     ; 36AB02/1A9B9637
     SETPOSE     #$00                        ; 36AB06/5000
     SETXVEL     #$0000                      ; 36AB08/B00000
     SETYVEL     #$F800, WAIT #1             ; 36AB0B/C100F8
@@ -1557,7 +1557,7 @@ incbinRange "../split/prg/bank36.bin", $0D7F, $0E0E
 L_36AE0E:
     ONMOVE      $D864                       ; 36AE0E/2364D8
     ONPOSITION  $D968                       ; 36AE11/2168D9
-    SPRITEMAP   $37969B                     ; 36AE14/1A9B9637
+    SPRITEMAP   L_37969B                     ; 36AE14/1A9B9637
     SETXPOS     #$0000                      ; 36AE18/2A0000
     SETYPOS     #$00B0                      ; 36AE1B/2BB000
     SETZPOS     #$0081                      ; 36AE1E/3A8100
@@ -1834,7 +1834,7 @@ L_36AFF6:
     ONMOVE      $D864                       ; 36AFF6/2364D8
     ONPOSITION  $D968                       ; 36AFF9/2168D9
     SETZPOS     #$0080                      ; 36AFFC/3A8000
-    SPRITEMAP   $37967D                     ; 36AFFF/1A7D9637
+    SPRITEMAP   L_37967D                     ; 36AFFF/1A7D9637
     SETPOSE     #$FF                        ; 36B003/50FF
     ASMCALL     $B0ED                       ; 36B005/D0EDB0
 L_36B008:
@@ -1851,7 +1851,7 @@ incbinRange "../split/prg/bank36.bin", $1016, $1601
 L_36B601:
     ONMOVE      $D864                       ; 36B601/2364D8
     ONPOSITION  $D968                       ; 36B604/2168D9
-    SPRITEMAP   $3796A7                     ; 36B607/1AA79637
+    SPRITEMAP   L_3796A7                     ; 36B607/1AA79637
     SETZPOS     #$0081                      ; 36B60B/3A8100
 L_36B60E:
     HALT                                    ; 36B60E/09
@@ -1862,7 +1862,7 @@ L_36B60F:
     ONPOSITION  $D97D                       ; 36B614/217DD9
     ASMCALL     $C086                       ; 36B617/D086C0 // Write 0xFF to $37 and wait a frame
     ONMOVE      $D920                       ; 36B61A/2320D9
-    SPRITEMAP   $3793F2                     ; 36B61D/1AF29337
+    SPRITEMAP   L_3793F2                     ; 36B61D/1AF29337
     MOV         REG,VAR0                    ; 36B621/1E00
     TABLEJMP    #17                         ; 36B623/0F11
     .word       L_36B8C0                    ; 36B625/C0B8
@@ -1920,7 +1920,7 @@ L_36B689:
     A_JMP       L_36B66B                    ; 36B689/176BB6
 
 L_36B68C:
-    SPRITEMAP   $1C9CD7                     ; 36B68C/1AD79C1C
+    SPRITEMAP   L_1C9CD7                     ; 36B68C/1AD79C1C
     SETPOSE     #$10, WAIT #8               ; 36B690/5810
 L_36B692:
     INCPOSE     WAIT #8                     ; 36B692/78
@@ -1946,7 +1946,7 @@ L_36B6B7:
     ASMCALL     $B897                       ; 36B6BF/D097B8
     ONPOSITION  $D9BB                       ; 36B6C2/21BBD9
     ONMOVE      $D91D                       ; 36B6C5/231DD9
-    SPRITEMAP   $3793F2                     ; 36B6C8/1AF29337
+    SPRITEMAP   L_3793F2                     ; 36B6C8/1AF29337
     SETPOSE     #$12                        ; 36B6CC/5012
     SETXVEL     #$0180                      ; 36B6CE/B08001
     SETYVEL     #$FF80, WAIT #4             ; 36B6D1/C480FF
@@ -2037,7 +2037,7 @@ L_36B7E0:
 L_36B7E1:
     ONMOVE      $D920                       ; 36B7E1/2320D9
     ONDRAW      $DA89                       ; 36B7E4/2089DA
-    SPRITEMAP   $3793F2                     ; 36B7E7/1AF29337
+    SPRITEMAP   L_3793F2                     ; 36B7E7/1AF29337
     SETXPOS     #$009E                      ; 36B7EB/2A9E00
     SETYPOS     #$0000                      ; 36B7EE/2B0000
     SETPOSE     #$18                        ; 36B7F1/5018
@@ -2091,7 +2091,7 @@ L_36B852:
     .byte       $11                         ; 36B855/11
     ONDRAW      $DA89                       ; 36B856/2089DA
     ONPOSITION  $D9BB                       ; 36B859/21BBD9
-    SPRITEMAP   $308AA2                     ; 36B85C/1AA28A30
+    SPRITEMAP   L_308AA2                     ; 36B85C/1AA28A30
     SETXVEL     #$FC00                      ; 36B860/B000FC
 L_36B863:
     SETPOSE     #$00, WAIT #1               ; 36B863/5100
@@ -2156,7 +2156,7 @@ L_36B8F2:
     .byte       $00                         ; 36B908/00
     .byte       $0D                         ; 36B909/0D
     .byte       $00                         ; 36B90A/00
-    SPRITEMAP   $3793F2                     ; 36B90B/1AF29337
+    SPRITEMAP   L_3793F2                     ; 36B90B/1AF29337
     LOOP        #6                          ; 36B90F/0106
         SETPOSE     #$12                        ; 36B911/5012
         SETXVEL     #$0080                      ; 36B913/B08000
@@ -2311,7 +2311,7 @@ L_36BA09:
     ENDLASTTASK                             ; 36BA09/12
     ZEROVEL                                 ; 36BA0A/38
     ONDRAW      $DDA3                       ; 36BA0B/20A3DD
-    SPRITEMAP   $1A8EE6                     ; 36BA0E/1AE68E1A
+    SPRITEMAP   L_1A8EE6                     ; 36BA0E/1AE68E1A
     SETPOSE     #$22                        ; 36BA12/5022
     LOOP        #26                         ; 36BA14/011A
         SETXVEL     #$0100, WAIT #2             ; 36BA16/B20001
@@ -2339,7 +2339,7 @@ L_36BA32:
     A_JMP       L_36BF79                    ; 36BA35/1779BF
 
 L_36BA38:
-    SPRITEMAP   $3793F2                     ; 36BA38/1AF29337
+    SPRITEMAP   L_3793F2                     ; 36BA38/1AF29337
     SETPOSE     #$0E, WAIT #4               ; 36BA3C/540E
 L_36BA3E:
     SETPOSE     #$0F, WAIT #4               ; 36BA3E/540F
@@ -3030,7 +3030,7 @@ L_36BF60:
     .byte       $00                         ; 36BF6A/00
     ASMCALL     $DE45                       ; 36BF6B/D045DE // Play music
     .byte       $0E                         ; 36BF6E/0E
-    MOV         $01A2,#$FC                  ; 36BF6F/11A201FC
+    MOV         palette_fade,#$FC                  ; 36BF6F/11A201FC
     LOOP        #4                          ; 36BF73/0104
         ASMCALL     $C94C, WAIT #1              ; 36BF75/D14CC9 // Palette fade dark in step
 L_36BF78:

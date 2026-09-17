@@ -3,7 +3,7 @@
 L_17A000:
     MOV         $05E0,#$06                  ; 17A000/11E00506
     OR          $05FB,#$20                  ; 17A004/16FB050120
-    SPRITEMAP   $1A8EE6                     ; 17A009/1AE68E1A
+    SPRITEMAP   L_1A8EE6                     ; 17A009/1AE68E1A
     ASMCALL     $9CB3                       ; 17A00D/D0B39C // Load some palette? (Kirby's palette?)
 L_17A010:
     ASMCALL     $9BF7                       ; 17A010/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
@@ -567,7 +567,7 @@ KirbyState96:
 
 L_17ABCF:
     MOV         $05E0,#$04                  ; 17ABCF/11E00504
-    SPRITEMAP   $1B88F2                     ; 17ABD3/1AF2881B
+    SPRITEMAP   L_1B88F2                     ; 17ABD3/1AF2881B
     ASMCALL     $9CB3                       ; 17ABD7/D0B39C // Load some palette? (Kirby's palette?)
 L_17ABDA:
     ASMCALL     $9BF7                       ; 17ABDA/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
@@ -1180,7 +1180,7 @@ L_17B800:
 
 L_17B806:
     MOV         $05E0,#$0D                  ; 17B806/11E0050D
-    SPRITEMAP   $1C800C                     ; 17B80A/1A0C801C
+    SPRITEMAP   L_1C800C                     ; 17B80A/1A0C801C
     ASMCALL     $B812                       ; 17B80E/D012B8
     A_RTS                                   ; 17B811/19
 
@@ -1388,7 +1388,7 @@ L_17BAA9:
     MOV         $05E0,#$0E                  ; 17BAA9/11E0050E
     MOV         $05E3,#$18                  ; 17BAAD/11E30518
     OR          $05FB,#$20                  ; 17BAB1/16FB050120
-    SPRITEMAP   $1C8134                     ; 17BAB6/1A34811C
+    SPRITEMAP   L_1C8134                     ; 17BAB6/1A34811C
     ASMCALL     $B812                       ; 17BABA/D012B8
     MOV         VAR2,#$09                   ; 17BABD/0D0209
     ASMCALL     $BACC                       ; 17BAC0/D0CCBA
@@ -1447,7 +1447,7 @@ L_17BC21:
 incbinRange "../split/prg/bank17.bin", $1C24, $1C40
 
 L_17BC40:
-    SPRITEMAP   $1C8DA6                     ; 17BC40/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 17BC40/1AA68D1C
     SETPOSE     #$48                        ; 17BC44/5048
     JML         KSTEE_Miss                    ; 17BC46/03F8A414
 

@@ -1,4 +1,5 @@
 .segment "PRG3A": absolute
+
 .byte $06,$10,$1A,$DE,$85,$3A,$2A,$66
 .byte $00,$2B,$9A,$00,$3A,$02,$00,$C0
 .byte $80,$FF,$01,$06,$51,$04,$71,$02
@@ -190,17 +191,4 @@ B3A_814a:
     @exit:
     rts
 
-B3A_8160:
-    incbinRange "../split/prg/bank3a.bin", $160, $25f
-
-B3A_825f:
-    incbinRange "../split/prg/bank3a.bin", $25f, $337
-
-B3A_8337:
-    incbinRange "../split/prg/bank3a.bin", $337, $55e
-
-B3A_855e:
-    incbinRange "../split/prg/bank3a.bin", $55e, $5de
-
-B3A_85de:
-    .incbin "../split/prg/bank3a.bin", $5de
+.include "spritemaps5.asm"

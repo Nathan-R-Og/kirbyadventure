@@ -40,7 +40,7 @@ L_2FA033:
     .byte       $01                         ; 2FA04E/01
     .byte       $00                         ; 2FA04F/00
     MOV         VAR2,REG                    ; 2FA050/1D02
-    SPRITEMAP   $309C7C                     ; 2FA052/1A7C9C30
+    SPRITEMAP   L_309C7C                     ; 2FA052/1A7C9C30
     ONTICK      $2FA0DC                     ; 2FA056/08DCA02F
     ASMCALL     $A683                       ; 2FA05A/D083A6
 L_2FA05D:
@@ -148,7 +148,7 @@ incbinRange "../split/prg/bank2f.bin", $014B, $068B
 
 Script3E:
     SETBANK     #$22                        ; 2FA68B/2822
-    SPRITEMAP   $309C8C                     ; 2FA68D/1A8C9C30
+    SPRITEMAP   L_309C8C                     ; 2FA68D/1A8C9C30
     ONTICK      $2FA6B8                     ; 2FA691/08B8A62F
     MOV         VAR0,#$00                   ; 2FA695/0D0000
     MOV         VAR4,#$06                   ; 2FA698/0D0406
@@ -174,7 +174,7 @@ incbinRange "../split/prg/bank2f.bin", $6B8, $750
 
 L_2FA750:
     SETZPOS     #$00FF                      ; 2FA750/3AFF00
-    SPRITEMAP   $309F66                     ; 2FA753/1A669F30
+    SPRITEMAP   L_309F66                     ; 2FA753/1A669F30
     ONTICK      $2FA77E                     ; 2FA757/087EA72F
 L_2FA75B:
     ASMCALL     $A768                       ; 2FA75B/D068A7
@@ -190,7 +190,7 @@ incbinRange "../split/prg/bank2f.bin", $0768, $0782
 
 L_2FA782:
     SETZPOS     #$00FF                      ; 2FA782/3AFF00
-    SPRITEMAP   $309F66                     ; 2FA785/1A669F30
+    SPRITEMAP   L_309F66                     ; 2FA785/1A669F30
     ONTICK      $2FA7B0                     ; 2FA789/08B0A72F
 L_2FA78D:
     ASMCALL     $A79A                       ; 2FA78D/D09AA7
@@ -206,7 +206,7 @@ incbinRange "../split/prg/bank2f.bin", $079A, $07B4
 
 L_2FA7B4:
     SETZPOS     #$00FF                      ; 2FA7B4/3AFF00
-    SPRITEMAP   $309F66                     ; 2FA7B7/1A669F30
+    SPRITEMAP   L_309F66                     ; 2FA7B7/1A669F30
     ASMCALL     $A732                       ; 2FA7BB/D032A7
     JEQ         L_2FA7DD                    ; 2FA7BE/0ADDA7
     ASMCALL     $A7ED                       ; 2FA7C1/D0EDA7
@@ -305,13 +305,13 @@ L_2FA851:
 L_2FA853:
     ENDLOOP                                 ; 2FA853/02
     LOOP        #7                          ; 2FA854/0107
-        SPRITEMAP   $309C7C                     ; 2FA856/1A7C9C30
+        SPRITEMAP   L_309C7C                     ; 2FA856/1A7C9C30
         SETYVEL     #$0080                      ; 2FA85A/C08000
         WAIT        #2                          ; 2FA85D/0602
 L_2FA85F:
         WAIT        #1                          ; 2FA85F/0601
 L_2FA861:
-        SPRITEMAP   $309C84                     ; 2FA861/1A849C30
+        SPRITEMAP   L_309C84                     ; 2FA861/1A849C30
         SETYVEL     #$0000                      ; 2FA865/C00000
         WAIT        #1                          ; 2FA868/0601
 L_2FA86A:
@@ -342,7 +342,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ;     .word       L_2FAD62                    ; 2FA90B/62AD
 ;     .word       $603D                       ; 2FA90D/3D60
 ;     .word       $0129                       ; 2FA90F/2901
-;     .word       $01A2                       ; 2FA911/A201
+;     .word       palette_fade                       ; 2FA911/A201
 ;     .word       $74BC                       ; 2FA913/BC74
 ;     .word       $C060                       ; 2FA915/60C0
 ;     .word       $F080                       ; 2FA917/80F0
@@ -698,7 +698,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ;     A_JMP       L_2FAA63                    ; 2FAA4C/1763AA
 
 ; L_2FAA4F:
-;     SPRITEMAP   $309C9C                     ; 2FAA4F/1A9C9C30
+;     SPRITEMAP   L_309C9C                     ; 2FAA4F/1A9C9C30
 ;     ONTICK      $2FAABC                     ; 2FAA53/08BCAA2F
 ; L_2FAA57:
 ;     MOV         REG,VAR4                    ; 2FAA57/1E04
@@ -708,7 +708,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ;     .word       L_2FAAA3                    ; 2FAA5F/A3AA
 ;     .word       L_2FAAAE                    ; 2FAA61/AEAA
 ; L_2FAA63:
-;     SPRITEMAP   $309CA8                     ; 2FAA63/1AA89C30
+;     SPRITEMAP   L_309CA8                     ; 2FAA63/1AA89C30
 ;     SETPOSE     #$00, WAIT #6               ; 2FAA67/5600
 ; L_2FAA69:
 ;     INCPOSE     WAIT #6                     ; 2FAA69/76
@@ -752,7 +752,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ; L_2FAA85:
 ;     ENDLOOP                                 ; 2FAA85/02
 ;     ZEROVEL                                 ; 2FAA86/38
-;     SPRITEMAP   $309C9C                     ; 2FAA87/1A9C9C30
+;     SPRITEMAP   L_309C9C                     ; 2FAA87/1A9C9C30
 ;     MOV         VAR4,#$01                   ; 2FAA8B/0D0401
 ;     MOV         VAR5,#$01                   ; 2FAA8E/0D0501
 ;     A_JMP       L_2FAA4F                    ; 2FAA91/174FAA
@@ -804,7 +804,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ;     ADDPOSE     #-66, WAIT #14              ; 2FAB0F/6EBE
 ; L_2FAB17:
 ;     SETBANK     #$22                        ; 2FAB17/2822
-;     SPRITEMAP   $309C84                     ; 2FAB19/1A849C30
+;     SPRITEMAP   L_309C84                     ; 2FAB19/1A849C30
 ;     ONTICK      $2FAE4C                     ; 2FAB1D/084CAE2F
 ;     MOV         VAR3,#$00                   ; 2FAB21/0D0300
 ;     MOV         VAR4,#$01                   ; 2FAB24/0D0401
@@ -1604,7 +1604,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ; L_2FB143:
 ;     SETBANK     #$22                        ; 2FB143/2822
 ;     ONTICK      $2FB161                     ; 2FB145/0861B12F
-;     SPRITEMAP   $309CBC                     ; 2FB149/1ABC9C30
+;     SPRITEMAP   L_309CBC                     ; 2FB149/1ABC9C30
 ;     ASMCALL     $B169                       ; 2FB14D/D069B1
 ;     ASMCALL     $DED0                       ; 2FB150/D0D0DE // Create in any slot between `arg1` and `arg2` a child object with script `arg3` offset by (`arg4`, `arg5`, `arg6`). With VAR0=`arg7`, VAR1=(self.VAR1+`arg8`)
 ;     .byte       $09                         ; 2FB153/09
@@ -1629,7 +1629,7 @@ incbinRange "../split/prg/bank2f.bin", $0877, $11C2
 ; L_2FB195:
 ;         SETBANK     #$22                        ; 2FB195/2822
 ;         ONTICK      $2FB161                     ; 2FB197/0861B12F
-;         SPRITEMAP   $309CBC                     ; 2FB19B/1ABC9C30
+;         SPRITEMAP   L_309CBC                     ; 2FB19B/1ABC9C30
 ;         ASMCALL     $B1B3                       ; 2FB19F/D0B3B1
 ;         ASMCALL     $DED0                       ; 2FB1A2/D0D0DE // Create in any slot between `arg1` and `arg2` a child object with script `arg3` offset by (`arg4`, `arg5`, `arg6`). With VAR0=`arg7`, VAR1=(self.VAR1+`arg8`)
 ;         .byte       $09                         ; 2FB1A5/09
@@ -1657,7 +1657,7 @@ incbinRange "../split/prg/bank2f.bin", $11C3, $11C5
 L_2FB1C5:
     SETBANK     #$22                        ; 2FB1C5/2822
     ONTICK      $2FB161                     ; 2FB1C7/0861B12F
-    SPRITEMAP   $309CBC                     ; 2FB1CB/1ABC9C30
+    SPRITEMAP   L_309CBC                     ; 2FB1CB/1ABC9C30
     SETPOSE     #$0C                        ; 2FB1CF/500C
     ASMCALL     $B1DA                       ; 2FB1D1/D0DAB1
     MOV         VAR0,#$7F                   ; 2FB1D4/0D007F
@@ -1677,7 +1677,7 @@ incbinRange "../split/prg/bank2f.bin", $11FB, $121F
 
 L_2FB21F:
     SETBANK     #$22                        ; 2FB21F/2822
-    SPRITEMAP   $308FB2                     ; 2FB221/1AB28F30
+    SPRITEMAP   L_308FB2                     ; 2FB221/1AB28F30
     ONTICK      $2FB25A                     ; 2FB225/085AB22F
     ASMCALL     $84A4                       ; 2FB229/D0A484 // Store VAR1 in $0784[self]
     ADD         $0789,#1                    ; 2FB22C/1689070201
@@ -1740,7 +1740,7 @@ SCR3F_MainObject:
     ASMCALL     $8851                       ; 2FB2EC/D05188 // Face towards Kirby
     ASMCALL     $B8B2                       ; 2FB2EF/D0B2B8
     ONTICK      $2FB6C4                     ; 2FB2F2/08C4B62F
-    SPRITEMAP   $329C84                     ; 2FB2F6/1A849C32
+    SPRITEMAP   L_329C84                     ; 2FB2F6/1A849C32
     TASK        $846C                       ; 2FB2FA/076C84
     SETXPOS     #$00C0                      ; 2FB2FD/2AC000
     SETYPOS     #$0060                      ; 2FB300/2B6000
@@ -2247,7 +2247,7 @@ L_2FB6B4:
 incbinRange "../split/prg/bank2f.bin", $16B5, $199B
 
 SCR3F_0C:
-            SPRITEMAP   $329C94                     ; 2FB99B/1A949C32
+            SPRITEMAP   L_329C94                     ; 2FB99B/1A949C32
             ONTICK      $2FB9B1                     ; 2FB99F/08B1B92F
             ASMCALL     $DE4B                       ; 2FB9A3/D04BDE // Play sound effect
             .byte       $0C                         ; 2FB9A6/0C
@@ -2350,7 +2350,7 @@ L_2FBA59:
 
 L_2FBA60:
     MOV         VAR0,#$01                   ; 2FBA60/0D0001
-    SPRITEMAP   $329C98                     ; 2FBA63/1A989C32
+    SPRITEMAP   L_329C98                     ; 2FBA63/1A989C32
     ONTICK      $2FBA73                     ; 2FBA67/0873BA2F
     MOV         REG,#$00                    ; 2FBA6B/1B00
     ASMCALL     $96B9                       ; 2FBA6D/D0B996 // Unknown ASM $2296B9
@@ -2528,7 +2528,7 @@ L_2FBBE1:
     A_JMP       L_2FBB38                    ; 2FBBE1/1738BB
 
 L_2FBBE4:
-    SPRITEMAP   $329C98                     ; 2FBBE4/1A989C32
+    SPRITEMAP   L_329C98                     ; 2FBBE4/1A989C32
     ONTICK      $2FBBF0                     ; 2FBBE8/08F0BB2F
     MOV         VAR0,#$01                   ; 2FBBEC/0D0001
     A_RTS                                   ; 2FBBEF/19
@@ -2537,7 +2537,7 @@ L_2FBBE4:
 incbinRange "../split/prg/bank2f.bin", $1BF0, $1C07
 
 L_2FBC07:
-    SPRITEMAP   $329C84                     ; 2FBC07/1A849C32
+    SPRITEMAP   L_329C84                     ; 2FBC07/1A849C32
     SETPOSE     #$FF                        ; 2FBC0B/50FF
     MOV         VAR1,#$40                   ; 2FBC0D/0D0140
     MOV         $0789,#$00                  ; 2FBC10/11890700
@@ -2765,7 +2765,7 @@ SCR3F_0D:
     MOV         $0042,#$CE                  ; 2FBD09/114200CE
 L_2FBD0D:
     ONDRAW      $DDAA                       ; 2FBD0D/20AADD
-    SPRITEMAP   $1C8134                     ; 2FBD10/1A34811C
+    SPRITEMAP   L_1C8134                     ; 2FBD10/1A34811C
     MOV         VAR1,#$40                   ; 2FBD14/0D0140
     SETPOSE     #$FF                        ; 2FBD17/50FF
     ASMCALL     $E2F1                       ; 2FBD19/D0F1E2 // Unknown ASM $E2F1
@@ -2916,7 +2916,7 @@ L_2FBDB7:
 L_2FBDE0:
     MOV         $0043,#$D6                  ; 2FBDE0/114300D6
     ONTICK      $2FBDFB                     ; 2FBDE4/08FBBD2F
-    SPRITEMAP   $329C84                     ; 2FBDE8/1A849C32
+    SPRITEMAP   L_329C84                     ; 2FBDE8/1A849C32
     MOV         VAR3,#$00                   ; 2FBDEC/0D0300
     MOV         REG,#$34                    ; 2FBDEF/1B34
     ASMCALL     $B8DE                       ; 2FBDF1/D0DEB8

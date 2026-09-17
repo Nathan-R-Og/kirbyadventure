@@ -3,7 +3,7 @@ Script44_PaintRoller:
     MOV         $0043,#$B0                  ; 2CA000/114300B0
     SETBANK     #$22                        ; 2CA004/2822
     ONPOSITION  $D9BB                       ; 2CA006/21BBD9
-    SPRITEMAP   $318E17                     ; 2CA009/1A178E31
+    SPRITEMAP   L_318E17                     ; 2CA009/1A178E31
     MOV         REG,VAR0                    ; 2CA00D/1E00
     JNE         L_2CA0EB                    ; 2CA00F/0BEBA0
     MOV         VAR5,#$00                   ; 2CA012/0D0500
@@ -173,7 +173,7 @@ incbinRange "../split/prg/bank2c.bin", $012C, $06E4
 Script5B_PaintRollerDrawing:
     SETBANK     #$22                        ; 2CA6E4/2822
     ONPOSITION  $D9BB                       ; 2CA6E6/21BBD9
-    SPRITEMAP   $318E17                     ; 2CA6E9/1A178E31
+    SPRITEMAP   L_318E17                     ; 2CA6E9/1A178E31
     MOV         REG,VAR0                    ; 2CA6ED/1E00
     JNE         L_2CA825                    ; 2CA6EF/0B25A8
     SETZPOS     #$007D                      ; 2CA6F2/3A7D00
@@ -368,7 +368,7 @@ Script43_WhispyWoods:
     SETZPOS     #$00FF                      ; 2CA9B3/3AFF00
     SETBANK     #$22                        ; 2CA9B6/2822
     ONPOSITION  $D97D                       ; 2CA9B8/217DD9
-    SPRITEMAP   $308BC6                     ; 2CA9BB/1AC68B30
+    SPRITEMAP   L_308BC6                     ; 2CA9BB/1AC68B30
     SETPOSE     #$00                        ; 2CA9BF/5000
 L_2CA9C1:
     ASMCALL     $AB6E, WAIT #1              ; 2CA9C1/D16EAB
@@ -515,7 +515,7 @@ L_2CAA6A:
     .byte       $02                         ; 2CAA8A/02
     .byte       $00                         ; 2CAA8B/00
     SETZPOS     #$00FF                      ; 2CAA8C/3AFF00
-    SPRITEMAP   $308BC6                     ; 2CAA8F/1AC68B30
+    SPRITEMAP   L_308BC6                     ; 2CAA8F/1AC68B30
     SETPOSE     #$06, WAIT #8               ; 2CAA93/5806
 L_2CAA95:
     DECPOSE     WAIT #15                    ; 2CAA95/8F
@@ -542,14 +542,14 @@ L_2CAB85:
     ASMCALL     $AD0F                       ; 2CAB93/D00FAD
     MOV         VAR3,#$05                   ; 2CAB96/0D0305
     MOV         VAR2,#$00                   ; 2CAB99/0D0200
-    SPRITEMAP   $308BC6                     ; 2CAB9C/1AC68B30
+    SPRITEMAP   L_308BC6                     ; 2CAB9C/1AC68B30
     SETPOSE     #$0A                        ; 2CABA0/500A
     HALT                                    ; 2CABA2/09
 
 L_2CABA3:
     SETZPOS     #$0080                      ; 2CABA3/3A8000
     ONTICK      $2CAC9F                     ; 2CABA6/089FAC2C
-    SPRITEMAP   $308294                     ; 2CABAA/1A948230
+    SPRITEMAP   L_308294                     ; 2CABAA/1A948230
     ASMCALL     $AD06                       ; 2CABAE/D006AD
     ASMCALL     $AD21                       ; 2CABB1/D021AD
     LOOP        #4                          ; 2CABB4/0104
@@ -630,7 +630,7 @@ incbinRange "../split/prg/bank2c.bin", $0C31, $0D63
 Script46_HeavyMole:
     MOV         $0043,#$B2                  ; 2CAD63/114300B2
     SETBANK     #$22                        ; 2CAD67/2822
-    SPRITEMAP   $319B35                     ; 2CAD69/1A359B31
+    SPRITEMAP   L_319B35                     ; 2CAD69/1A359B31
     ONPOSITION  $D97D                       ; 2CAD6D/217DD9
     MOV         REG,VAR0                    ; 2CAD70/1E00
     TABLEJMP    #5                          ; 2CAD72/0F05
@@ -846,7 +846,7 @@ L_2CBE7F:
     .byte       $36                         ; 2CBE82/36
     SETBANK     #$22                        ; 2CBE83/2822
     ONPOSITION  $D9BB                       ; 2CBE85/21BBD9
-    SPRITEMAP   $319B35                     ; 2CBE88/1A359B31
+    SPRITEMAP   L_319B35                     ; 2CBE88/1A359B31
     MOV         VAR0,#$02                   ; 2CBE8C/0D0002
     MOV         VAR1,#$80                   ; 2CBE8F/0D0180
     SETXVEL     #$FE00                      ; 2CBE92/B000FE

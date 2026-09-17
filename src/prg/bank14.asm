@@ -7,11 +7,11 @@ Script01_Kirby:
     MOV         REG, UNK_7F5
     TABLECALL   #6
     _is_faraddr    L_14A017 ;normal proc
-    _is_faraddr    $2EB055 ;ending 1
-    _is_faraddr    $2EB4F1 ;ending 2
-    _is_faraddr    $2EB8E8 ;ending 3
-    _is_faraddr    $36B60F ;nightmare intro
-    _is_faraddr    $36BF60 ;nightmare intro 2
+    _is_faraddr    L_2EB055 ;ending 1
+    _is_faraddr    L_2EB4F1 ;ending 2
+    _is_faraddr    L_2EB8E8 ;ending 3
+    _is_faraddr    L_36B60F ;nightmare intro
+    _is_faraddr    L_36BF60 ;nightmare intro 2
 L_14A017:
     ;check warpstar/movement curve
     MOV         REG, UNK_7DA
@@ -20,7 +20,7 @@ L_14A017:
     SETBANK     #$21
     ASMCALL     $987D, WAIT #0 ; Zero Kirby's velocities
     ASMCALL     $95CD, WAIT #0
-    JML         $23B0D5
+    JML         L_23B0D5
 
 L_14A029:
     SETBANK     #$21
@@ -48,19 +48,19 @@ L_14A051:
 L_14A060:
     ASMCALL     B14_a15c, WAIT #0
     JEQ         L_14A06A
-    JML         $15BC07
+    JML         L_15BC07
 
 L_14A06A:
     ASMCALL     $9CB3, WAIT #0
     ASMCALL     B14_a162, WAIT #0
     JEQ         L_14A077
-    JML         $15BA9D
+    JML         L_15BA9D
 
 L_14A077:
     ASMCALL     UnfreezeAllObjects, WAIT #0 ; Clear MSB of OBJ_tick_bank for all other objects
     ASMCALL     B14_a173, WAIT #0
     JEQ         L_14A099
-    JML         $19A000
+    JML         L_19A000
 
 L_14A084:
     SETBANK     #$21
@@ -80,20 +80,20 @@ L_14A0A3:
     MOV         REG, kirby_05E0
     TABLECALL   #15
     _is_faraddr    KST01_DiscardAbility
-    _is_faraddr    $18AF50
+    _is_faraddr    L_18AF50
     _is_faraddr    L_14B2D9
-    _is_faraddr    $15A000
-    _is_faraddr    $17ABCF
-    _is_faraddr    $15AC09
-    _is_faraddr    $17A000
-    _is_faraddr    $18AB7C
-    _is_faraddr    $19B669
-    _is_faraddr    $18ABDB
-    _is_faraddr    $18A847
-    _is_faraddr    $19B307
-    _is_faraddr    $18AAEC
-    _is_faraddr    $17B800
-    _is_faraddr    $17BAA9
+    _is_faraddr    L_15A000
+    _is_faraddr    L_17ABCF
+    _is_faraddr    L_15AC09
+    _is_faraddr    L_17A000
+    _is_faraddr    L_18AB7C
+    _is_faraddr    L_19B669
+    _is_faraddr    L_18ABDB
+    _is_faraddr    L_18A847
+    _is_faraddr    L_19B307
+    _is_faraddr    L_18AAEC
+    _is_faraddr    L_17B800
+    _is_faraddr    L_17BAA9
 
 InitVariables:
     lda #$40
@@ -140,7 +140,7 @@ InitVariables:
     sta kirby_flags
 B14_a138:
     ldx kirby_05E0
-    lda B14_a14d,x
+    lda B14_a14d, x
     sta kirby_05E0
     cmp #$00
     bne B14_a14a
@@ -170,10 +170,10 @@ B14_a162:
     rts
 B14_a173:
     ldy #$00
-    lda $055e
+    lda current_room
     cmp #$2a
     bne B14_a184
-    lda $055f
+    lda current_room+1
     cmp #$00
     bne B14_a184
     iny
@@ -183,18 +183,18 @@ B14_a184:
 B14_a186:
     ldx #$09
 B14_a188:
-    lda $62a2,x
+    lda OBJ_tick_bank, x
     ora #$80
-    sta $62a2,x
+    sta OBJ_tick_bank, x
     inx
     cpx #$12
     bcc B14_a188
     rts
 B14_a196:
-    lda $01a2
+    lda palette_fade
     bne B14_a1a1
     ldx curr_script_slot
-    sta $6360,x
+    sta SCR_sleep_timer, x
     rts
 B14_a1a1:
     bmi B14_a1a9
@@ -207,7 +207,7 @@ B14_a1a9:
     rts
 B14_a1af:
     ldx #$00
-    lda $0597
+    lda kirby_health
     cmp #$08
     bcs B14_a1b9
     inx
@@ -230,7 +230,7 @@ KSTED_SpikeDamage:
     .byte       $00                         ; 14A1D0/00
     .byte       $1A                         ; 14A1D1/1A
     .byte       $00                         ; 14A1D2/00
-    SPRITEMAP   $1C8DA6                     ; 14A1D3/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 14A1D3/1AA68D1C
     ASMCALL     B14_a1e8                    ; 14A1D7/D0E8A1 // Unknown ASM $14A1E8 (return VAR0 if `kirby_05E0 != 0x0E`, otherwise return 5)
     TABLEJMP    #6                          ; 14A1DA/0F06
     .word       L_14A1F6                    ; 14A1DC/F6A1
@@ -302,7 +302,7 @@ KSTEB_Unknown:
 
 B14_a24a:
     ldx $05f7
-    ldy B14_a26c,x
+    ldy B14_a26c, x
     jsr $87ba
     jsr $95cd
     jsr $9021
@@ -315,15 +315,15 @@ B14_a26c:
 
 B14_a26e:
     ldy #$01
-    lda (script_ptr+0),y
+    lda (script_ptr), y
     sta $05bb
     iny
-    lda (script_ptr+0),y
+    lda (script_ptr), y
     sta $05bc
     tya
     clc
-    adc script_ptr+0
-    sta script_ptr+0
+    adc script_ptr
+    sta script_ptr
     bcc B14_a285
     inc script_ptr+1
 B14_a285:
@@ -423,9 +423,9 @@ B14_a331:
     bpl B14_a339
     inx
 B14_a339:
-    lda B14_a346,x
+    lda B14_a346, x
     sta $05bd
-    lda B14_a348,x
+    lda B14_a348, x
     sta $05be
     rts
 B14_a346:
@@ -496,7 +496,7 @@ TASK_14A3A8:
 
 B14_a3b2:
     ldx $05f7
-    ldy B14_a3e5,x
+    ldy B14_a3e5, x
     jsr $87ba
     jsr $95cd
     jsr $9021
@@ -509,7 +509,7 @@ B14_a3e5:
     .byte $09,$0A
 B14_a3e7:
     ldx $05f7
-    ldy B14_a41a,x
+    ldy B14_a41a, x
     jsr $87ba
     jsr $95cd
     jsr $9021
@@ -616,7 +616,7 @@ KSTE8_SpecialDamageEnd:
 
 B14_a4c3:
     ldx $05f7
-    ldy B14_a4f6,x
+    ldy B14_a4f6, x
     jsr $87ba
     jsr $95cd
     STATE_TRANSITION_IF $9016, $ea
@@ -634,7 +634,7 @@ KSTEE_Miss:
     ENDTICK                                 ; 14A4F9/0E
     MOV         kirby_05E0,#$00                  ; 14A4FA/11E00500
     A_AND       $05FB,#$BF                  ; 14A4FE/16FB0500BF
-    MOV         $0597,#$FF                  ; 14A503/119705FF
+    MOV         kirby_health,#$FF                  ; 14A503/119705FF
     MOV         $059F,#$FF                  ; 14A507/119F05FF
     MOV         $05FC,#$04                  ; 14A50B/11FC0504
     ASMCALL     B14_a186                    ; 14A50F/D086A1 // Freeze all objects in slots 9 through 17 (enemies, enemy projectiles and misc)
@@ -668,7 +668,7 @@ KSTEE_Miss:
     ENDLOOP                                 ; 14A54C/02
     ASMCALL     PlayMusic                       ; 14A54D/D045DE // Play music
     .byte       $27                         ; 14A550/27
-    SPRITEMAP   $1C8DA6                     ; 14A551/1AA68D1C
+    SPRITEMAP   L_1C8DA6                     ; 14A551/1AA68D1C
     TASK        TASK_14A575                 ; 14A555/0775A5
     TASK        TASK_14A56D                 ; 14A558/076DA5
     TASK        TASK_14A580                 ; 14A55B/0780A5
@@ -752,7 +752,7 @@ L_14A5CB:
     .word       kirby_05E0                       ; 14A5E3/E005
     .byte       $0D                         ; 14A5E5/0D
     JEQ         L_14A5FF                    ; 14A5E6/0AFFA5
-    SPRITEMAP   $1C9F16                     ; 14A5E9/1A169F1C
+    SPRITEMAP   L_1C9F16                     ; 14A5E9/1A169F1C
     MOV         $6620,#$01                  ; 14A5ED/11206601
     SETPOSE     #$00, WAIT #2               ; 14A5F1/5200
     MOV         $6620,#$02                  ; 14A5F3/11206602
@@ -881,7 +881,7 @@ L_14A69F:
     .byte       $03                         ; 14A6A4/03
     .byte       $00                         ; 14A6A5/00
     WAIT        #16                         ; 14A6A6/0610
-    SPRITEMAP   $1A8676                     ; 14A6A8/1A76861A
+    SPRITEMAP   L_1A8676                     ; 14A6A8/1A76861A
     ASMCALL     $8FDC                       ; 14A6AC/D0DC8F // Set pose (respect facing)
     .byte       $00                         ; 14A6AF/00
     MOV         kirby_05E0,#$02                  ; 14A6B0/11E00502
@@ -945,7 +945,7 @@ L_14A703:
     ASMCALL     $9CB3                       ; 14A706/D0B39C // Load some palette? (Kirby's palette?)
     ASMCALL     $DE4B                       ; 14A709/D04BDE // Play sound effect
     .byte       $29                         ; 14A70C/29
-    SPRITEMAP   $1A8846                     ; 14A70D/1A46881A
+    SPRITEMAP   L_1A8846                     ; 14A70D/1A46881A
     JML         L_18B3B8                    ; 14A711/03B8B318
 
 B14_a715:
@@ -963,10 +963,10 @@ B14_a72a:
     sta $05fb
     ldx #$03
 B14_a734:
-    lda $6128,x
+    lda $6128, x
     cmp #$02
     bne B14_a745
-    lda $6200,x
+    lda $6200, x
     cmp #$19
     bne B14_a745
     jsr OBJ_Destroy
@@ -992,7 +992,7 @@ KST02_Land:
 L_14A763:
     MOV         kirby_05E0,#$00             ; 14A763/11E00500
     MOV         kirby_copy_ability,#$FF     ; 14A767/11E305FF
-    SPRITEMAP   $1A8000                     ; 14A76B/1A00801A
+    SPRITEMAP   L_1A8000                     ; 14A76B/1A00801A
     ASMCALL     $9CB3                       ; 14A76F/D0B39C // Load some palette? (Kirby's palette?)
     A_RTS                                   ; 14A772/19
 
@@ -1474,8 +1474,8 @@ B14_ad5e:
     sec
     sbc #$38
     tax
-    lda B14_ad70,x
-    ldy B14_ad72,x
+    lda B14_ad70, x
+    ldy B14_ad72, x
     ldx #$02
     jmp $9c72
 
@@ -1523,11 +1523,11 @@ B14_ad96:
     sta $6201
 B14_adc8:
     ldx $6201
-    lda B14_ae3e,x
+    lda B14_ae3e, x
     sta $61ef
 B14_add1:
     ldx $6201
-    ldy B14_ae42,x
+    ldy B14_ae42, x
     ldx #$00
     beq B14_adeb
 B14_addb:
@@ -1545,9 +1545,9 @@ B14_adeb:
 B14_adee:
     txa
     pha
-    lda B14_ae46,x
+    lda B14_ae46, x
     sta $05bd
-    lda B14_ae49,x
+    lda B14_ae49, x
     sta $05be
     jsr $95cd
     pla
@@ -1556,10 +1556,10 @@ B14_adee:
     tax
     lda $6099
     clc
-    adc B14_ae4c,x
+    adc B14_ae4c, x
     tay
     lda $60ab
-    adc B14_ae4e,x
+    adc B14_ae4e, x
     sta temp_y_hi
     ldx $6075
     lda $6087
@@ -1820,7 +1820,7 @@ B14_b082:
     adc #$0e
     tay
     lda temp_pad1_hold
-    and $8000,x
+    and $8000, x
     jsr $8597
     jsr $95cd
     STATE_TRANSITION_IF $8bfa, $18
@@ -2009,18 +2009,18 @@ B14_b218:
     sec
     sbc #$56
     tax
-    ldy B14_b278,x
+    ldy B14_b278, x
     beq B14_b261
-    lda B14_b262,x
+    lda B14_b262, x
     ldx #$02
     jmp $9c72
 B14_b250:
     sec
     sbc #$70
     tax
-    ldy B14_b298,x
+    ldy B14_b298, x
     beq B14_b261
-    lda B14_b28e,x
+    lda B14_b28e, x
     ldx #$02
     jmp $9c72
 B14_b261:
@@ -2074,7 +2074,7 @@ KST1E_CopyLand:
     .word       L_14BBB5                    ; 14B2EF/B5BB
 L_14B2F1:
     MOV         kirby_05E0,#$02                  ; 14B2F1/11E00502
-    SPRITEMAP   $1A8676                     ; 14B2F5/1A76861A
+    SPRITEMAP   L_1A8676                     ; 14B2F5/1A76861A
     ASMCALL     $9CB3                       ; 14B2F9/D0B39C // Load some palette? (Kirby's palette?)
     SETZPOS     #$00C0                      ; 14B2FC/3AC000
     A_RTS                                   ; 14B2FF/19
@@ -2115,7 +2115,7 @@ B14_b38d:
     beq B14_b39f
     ldx #$06
 B14_b395:
-    lda $6128,x
+    lda $6128, x
     bmi B14_b3a1
     inx
     cpx #$09
@@ -2143,7 +2143,7 @@ B14_b3bc:
     jsr $8ffb
     pha
     tax
-    lda B14_b3cb,x
+    lda B14_b3cb, x
     sta $62c7
     pla
     rts
@@ -2382,7 +2382,7 @@ B14_b62c:
     jmp $805b
 
 L_14B68C:
-    SPRITEMAP   $1A8676                     ; 14B68C/1A76861A
+    SPRITEMAP   L_1A8676                     ; 14B68C/1A76861A
     MOV         $05E1,#$04                  ; 14B690/11E10504
     ASMCALL     $9A6A                       ; 14B694/D06A9A // Unknown ASM $219A6A
     .word       $9B6C                       ; 14B697/6C9B
@@ -2446,7 +2446,7 @@ B14_b732:
     bcc B14_b73d
     ldx #$02
 B14_b73d:
-    lda B14_b75f,x
+    lda B14_b75f, x
     sta $62c7
     rts
 
@@ -2463,7 +2463,7 @@ B14_b744:
     lda #$02
     B14_b757:
     tax
-    lda B14_b762,x
+    lda B14_b762, x
     sta $62c7
     rts
 
@@ -2688,8 +2688,8 @@ B14_ba39:
     sec
     sbc #$38
     tax
-    lda B14_ba4b,x
-    ldy B14_ba4d,x
+    lda B14_ba4b, x
+    ldy B14_ba4d, x
     ldx #$02
     jmp $9c72
 
@@ -2735,11 +2735,11 @@ B14_ba71:
     sta $6201
 B14_baa3:
     ldx $6201
-    lda B14_bb19,x
+    lda B14_bb19, x
     sta $61ef
 B14_baac:
     ldx $6201
-    ldy B14_bb1d,x
+    ldy B14_bb1d, x
     ldx #$00
     beq B14_bac6
 B14_bab6:
@@ -2757,9 +2757,9 @@ B14_bac6:
 B14_bac9:
     txa
     pha
-    lda B14_bb21,x
+    lda B14_bb21, x
     sta $05bd
-    lda B14_bb24,x
+    lda B14_bb24, x
     sta $05be
     jsr $95cd
     pla
@@ -2768,10 +2768,10 @@ B14_bac9:
     tax
     lda $6099
     clc
-    adc B14_bb27,x
+    adc B14_bb27, x
     tay
     lda $60ab
-    adc B14_bb29,x
+    adc B14_bb29, x
     sta temp_y_hi
     ldx $6075
     lda $6087
@@ -3022,7 +3022,7 @@ B14_bd59:
     adc #$0e
     tay
     lda temp_pad1_hold
-    and $8000,x
+    and $8000, x
     jsr $8597
     jsr $95cd
     STATE_TRANSITION_IF $8bfa, $34
@@ -3214,18 +3214,18 @@ B14_bf23:
     sec
     sbc #$56
     tax
-    ldy B14_bf63,x
+    ldy B14_bf63, x
     beq B14_bf4c
-    lda B14_bf4d,x
+    lda B14_bf4d, x
     ldx #$02
     jmp $9c72
 B14_bf3b:
     sec
     sbc #$75
     tax
-    ldy B14_bf83,x
+    ldy B14_bf83, x
     beq B14_bf4c
-    lda B14_bf79,x
+    lda B14_bf79, x
     ldx #$02
     jmp $9c72
 B14_bf4c:

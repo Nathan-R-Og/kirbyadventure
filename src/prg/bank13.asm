@@ -972,7 +972,7 @@ L_13A8CC:
     .byte       $00                         ; 13A8D3/00
     ZEROVEL                                 ; 13A8D4/38
     SETZPOS     #$00FF                      ; 13A8D5/3AFF00
-    SPRITEMAP   $308AA2                     ; 13A8D8/1AA28A30
+    SPRITEMAP   L_308AA2                     ; 13A8D8/1AA28A30
     LOOP        #3                          ; 13A8DC/0103
         SETPOSE     #$00, WAIT #1               ; 13A8DE/5100
 L_13A8E0:

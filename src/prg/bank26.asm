@@ -2,7 +2,7 @@
 Script1D_Squishy:
     SETBANK     #$22                        ; 26A000/2822
     ONPOSITION  $D9BB                       ; 26A002/21BBD9
-    SPRITEMAP   $32888F                     ; 26A005/1A8F8832
+    SPRITEMAP   L_32888F                     ; 26A005/1A8F8832
     ASMCALL     $84A4                       ; 26A009/D0A484 // Store VAR1 in $0784[self]
     ASMCALL     $8851                       ; 26A00C/D05188 // Face towards Kirby
     MOV         REG,VAR0                    ; 26A00F/1E00
@@ -124,10 +124,10 @@ Script1E_BirdEnemy:
     SETBANK     #$22                        ; 26A3C9/2822
     ONPOSITION  $D9BB                       ; 26A3CB/21BBD9
     ASMCALL     $84A4                       ; 26A3CE/D0A484 // Store VAR1 in $0784[self]
-    SPRITEMAP   $32889F                     ; 26A3D1/1A9F8832
+    SPRITEMAP   L_32889F                     ; 26A3D1/1A9F8832
     ASMCALL     $A493                       ; 26A3D5/D093A4
     JEQ         L_26A7F5                    ; 26A3D8/0AF5A7
-    SPRITEMAP   $32888F                     ; 26A3DB/1A8F8832
+    SPRITEMAP   L_32888F                     ; 26A3DB/1A8F8832
     ASMCALL     $8851                       ; 26A3DF/D05188 // Face towards Kirby
     MOV         VAR0,#$02                   ; 26A3E2/0D0002
     MOV         REG,VAR2                    ; 26A3E5/1E02
@@ -237,7 +237,7 @@ incbinRange "../split/prg/bank26.bin", $064F, $066C
 Script1F_Glunk:
     SETBANK     #$22                        ; 26A66C/2822
     ONPOSITION  $D9BB                       ; 26A66E/21BBD9
-    SPRITEMAP   $32888F                     ; 26A671/1A8F8832
+    SPRITEMAP   L_32888F                     ; 26A671/1A8F8832
     ASMCALL     $84A4                       ; 26A675/D0A484 // Store VAR1 in $0784[self]
     MOV         REG,VAR0                    ; 26A678/1E00
     JNE         L_26A7BC                    ; 26A67A/0BBCA7
@@ -291,7 +291,7 @@ L_26A6B9:
 incbinRange "../split/prg/bank26.bin", $06BD, $07BC
 
 L_26A7BC:
-    SPRITEMAP   $308C96                     ; 26A7BC/1A968C30
+    SPRITEMAP   L_308C96                     ; 26A7BC/1A968C30
     ONTICK      $26A7CE                     ; 26A7C0/08CEA726
     SETYVEL     #$FA00                      ; 26A7C4/C000FA
     SETPOSE     #$00, WAIT #2               ; 26A7C7/5200
@@ -311,7 +311,7 @@ Script38_BrontoBurt:
     SETBANK     #$22                        ; 26A7E9/2822
     ONPOSITION  $D9BB                       ; 26A7EB/21BBD9
     ASMCALL     $84A4                       ; 26A7EE/D0A484 // Store VAR1 in $0784[self]
-    SPRITEMAP   $309C24                     ; 26A7F1/1A249C30
+    SPRITEMAP   L_309C24                     ; 26A7F1/1A249C30
 L_26A7F5:
     MOV         REG,VAR0                    ; 26A7F5/1E00
     MOV         VAR2,REG                    ; 26A7F7/1D02
@@ -733,7 +733,7 @@ Script39_Gordo:
     MOV         REG,#$00                    ; 26B09D/1B00
     ASMCALL     $96B9                       ; 26B09F/D0B996 // Unknown ASM $2296B9
     .word       $B16D                       ; 26B0A2/6DB1
-    SPRITEMAP   $309C50                     ; 26B0A4/1A509C30
+    SPRITEMAP   L_309C50                     ; 26B0A4/1A509C30
     ASMCALL     $8851                       ; 26B0A8/D05188 // Face towards Kirby
     MOV         REG,VAR2                    ; 26B0AB/1E02
     TABLEJMP    #4                          ; 26B0AD/0F04
@@ -832,7 +832,7 @@ Script3A_Pengi:
     .word       L_26B44A                    ; 26B251/4AB4
 L_26B253:
     MOV         VAR0,#$02                   ; 26B253/0D0002
-    SPRITEMAP   $3285E6                     ; 26B256/1AE68532
+    SPRITEMAP   L_3285E6                     ; 26B256/1AE68532
     ASMCALL     $8851                       ; 26B25A/D05188 // Face towards Kirby
     ASMCALL     $8829                       ; 26B25D/D02988 // Set pose to 0 (respect facing)
     MOV         REG,VAR1                    ; 26B260/1E01
@@ -940,7 +940,7 @@ L_26B31B:
 incbinRange "../split/prg/bank26.bin", $1327, $144A
 
 L_26B44A:
-    SPRITEMAP   $3285FA                     ; 26B44A/1AFA8532
+    SPRITEMAP   L_3285FA                     ; 26B44A/1AFA8532
     ONTICK      $26B46A                     ; 26B44E/086AB426
     ASMCALL     $8C05                       ; 26B452/D0058C // Unknown ASM $228C05
     .byte       $0C                         ; 26B455/0C
@@ -982,7 +982,7 @@ L_26B4CA:
     .word       L_26B4EC                    ; 26B4EA/ECB4
 L_26B4EC:
     MOV         VAR3,#$00                   ; 26B4EC/0D0300
-    SPRITEMAP   $32868D                     ; 26B4EF/1A8D8632
+    SPRITEMAP   L_32868D                     ; 26B4EF/1A8D8632
     ASMCALL     $8851                       ; 26B4F3/D05188 // Face towards Kirby
     LOOP        #4                          ; 26B4F6/0104
         ASMCALL     $8829, WAIT #3              ; 26B4F8/D32988 // Set pose to 0 (respect facing)
@@ -1006,12 +1006,12 @@ L_26B506:
 
 L_26B51C:
     MOV         VAR3,#$02                   ; 26B51C/0D0302
-    SPRITEMAP   $328699                     ; 26B51F/1A998632
+    SPRITEMAP   L_328699                     ; 26B51F/1A998632
     A_JSR       L_26B557                    ; 26B523/1857B5
 L_26B526:
     MOV         VAR3,#$03                   ; 26B526/0D0303
     ZEROVEL                                 ; 26B529/38
-    SPRITEMAP   $3286BD                     ; 26B52A/1ABD8632
+    SPRITEMAP   L_3286BD                     ; 26B52A/1ABD8632
     ASMCALL     $8851                       ; 26B52E/D05188 // Face towards Kirby
     ASMCALL     $8829                       ; 26B531/D02988 // Set pose to 0 (respect facing)
     LOOP        #15                         ; 26B534/010F
@@ -1110,7 +1110,7 @@ L_26B5B7:
 incbinRange "../split/prg/bank26.bin", $15B9, $166B
 
 L_26B66B:
-    SPRITEMAP   $3286C5                     ; 26B66B/1AC58632
+    SPRITEMAP   L_3286C5                     ; 26B66B/1AC58632
     ONTICK      $26B697                     ; 26B66F/0897B626
     ASMCALL     $DE4B                       ; 26B673/D04BDE // Play sound effect
     .byte       $44                         ; 26B676/44
@@ -1148,7 +1148,7 @@ Script0C:
     ONPOSITION  $D9BB                       ; 26B6D4/21BBD9
     ENDTICK                                 ; 26B6D7/0E
     SETZPOS     #$00FF                      ; 26B6D8/3AFF00
-    SPRITEMAP   $3085E8                     ; 26B6DB/1AE88530
+    SPRITEMAP   L_3085E8                     ; 26B6DB/1AE88530
     SETPOSE     #$00                        ; 26B6DF/5000
     LOOP        #48                         ; 26B6E1/0130
         INCPOSE     WAIT #1                     ; 26B6E3/71
@@ -1172,7 +1172,7 @@ Script3C_Togezo:
     MOV         VAR3,#$02                   ; 26B70C/0D0302
 L_26B70F:
     ONTICK      $26B7C1                     ; 26B70F/08C1B726
-    SPRITEMAP   $3287AB                     ; 26B713/1AAB8732
+    SPRITEMAP   L_3287AB                     ; 26B713/1AAB8732
     MOV         REG,VAR3                    ; 26B717/1E03
     TABLEJMP    #5                          ; 26B719/0F05
     .word       L_26B725                    ; 26B71B/25B7
@@ -1209,7 +1209,7 @@ L_26B74B:
     .byte       $4C                         ; 26B74E/4C
     SETYVEL     #$FF00                      ; 26B74F/C000FF
 L_26B752:
-    SPRITEMAP   $3287B3                     ; 26B752/1AB38732
+    SPRITEMAP   L_3287B3                     ; 26B752/1AB38732
     ASMCALL     $8851                       ; 26B756/D05188 // Face towards Kirby
 L_26B759:
     ASMCALL     $8829, WAIT #3              ; 26B759/D32988 // Set pose to 0 (respect facing)
@@ -1223,7 +1223,7 @@ L_26B75F:
     A_JMP       L_26B759                    ; 26B75F/1759B7
 
 L_26B762:
-    SPRITEMAP   $3287B3                     ; 26B762/1AB38732
+    SPRITEMAP   L_3287B3                     ; 26B762/1AB38732
     MOV         VAR4,#$3C                   ; 26B766/0D043C
     MOV         VAR5,#$00                   ; 26B769/0D0500
     MOV         VAR6,#$96                   ; 26B76C/0D0696
@@ -1253,7 +1253,7 @@ incbinRange "../split/prg/bank26.bin", $1787, $199B
 L_26B99B:
     SETBANK     #$22                        ; 26B99B/2822
     SETZPOS     #$00FF                      ; 26B99D/3AFF00
-    SPRITEMAP   $308B84                     ; 26B9A0/1A848B30
+    SPRITEMAP   L_308B84                     ; 26B9A0/1A848B30
     MOV         REG,VAR0                    ; 26B9A4/1E00
     TABLEJMP    #3                          ; 26B9A6/0F03
     .word       L_26B9AE                    ; 26B9A8/AEB9
@@ -1299,7 +1299,7 @@ incbinRange "../split/prg/bank26.bin", $19D4, $1A73
 Script40_Scarfy:
     SETBANK     #$22                        ; 26BA73/2822
     ONPOSITION  $D9BB                       ; 26BA75/21BBD9
-    SPRITEMAP   $32880B                     ; 26BA78/1A0B8832
+    SPRITEMAP   L_32880B                     ; 26BA78/1A0B8832
     MOV         REG,VAR0                    ; 26BA7C/1E00
     MOV         VAR2,REG                    ; 26BA7E/1D02
     ASMCALL     $84A4                       ; 26BA80/D0A484 // Store VAR1 in $0784[self]
@@ -1450,7 +1450,7 @@ L_26BB70:
 L_26BB78:
         ASMCALL     $90C8                       ; 26BB78/D0C890
     ENDLOOP                                 ; 26BB7B/02
-    SPRITEMAP   $328813                     ; 26BB7C/1A138832
+    SPRITEMAP   L_328813                     ; 26BB7C/1A138832
     MOV         REG,#$07                    ; 26BB80/1B07
     ASMCALL     $96B9                       ; 26BB82/D0B996 // Unknown ASM $2296B9
     .word       $BD3B                       ; 26BB85/3BBD
