@@ -97,5 +97,35 @@ skip:
 
 .endenum
 
+.enum CopyAbility
+    NONE     = $FF ; no copy ability
+    FIRE     = $00
+    SPARK    = $01
+    CUTTER   = $02
+    SWORD    = $03
+    FIREBALL = $04 ; aka burning
+    LASER    = $05
+    MIKE     = $06
+    WHEEL    = $07
+    HAMMER   = $08
+    PARASOL  = $09
+    SLEEP    = $0A
+    NEEDLE   = $0B
+    ICE      = $0C
+    FREEZE   = $0D
+    HIJUMP   = $0E
+    BEAM     = $0F
+    STONE    = $10
+    BALL     = $11
+    TORNADO  = $12
+    CRASH    = $13
+    LIGHT    = $14
+    BACKDROP = $15
+    THROW    = $16
+    UFO      = $17
+    STARROD  = $18
+    BYEBYE   = $19 ; for HUD graphic at end of game
+.endenum
+
 .enum SoundEffect
 .endenum
