@@ -610,7 +610,7 @@
     B15_a724:
        .byte $00,$00
 
-    KST70_SwordSlash:
+    KST70_SwordAttack:
         MOV         $05E1,#$0C                  ; 15A726/11E1050C
         ASMCALL     $DE4B                       ; 15A72A/D04BDE // Play sound effect
         .byte       $3A                         ; 15A72D/3A

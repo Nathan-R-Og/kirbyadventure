@@ -87,9 +87,9 @@ L_14A0A3:
     _is_faraddr    L_15AC09
     _is_faraddr    L_17A000
     _is_faraddr    L_18AB7C
-    _is_faraddr    L_19B669
-    _is_faraddr    L_18ABDB
-    _is_faraddr    L_18A847
+    _is_faraddr    CopyAttack_Stone
+    _is_faraddr    CopyAttack_Fireball
+    _is_faraddr    CopyAttack_Wheel
     _is_faraddr    L_19B307
     _is_faraddr    L_18AAEC
     _is_faraddr    L_17B800
@@ -2381,7 +2381,7 @@ B14_b62c:
     STATE_TRANSITION_IF $8a15, $00
     jmp $805b
 
-L_14B68C:
+CopyAttack_HiJump:
     SPRITEMAP   L_1A8676                     ; 14B68C/1A76861A
     MOV         $05E1,#$04                  ; 14B690/11E10504
     ASMCALL     $9A6A                       ; 14B694/D06A9A // Unknown ASM $219A6A

@@ -5,18 +5,18 @@ L_17A000:
     OR          $05FB,#$20                  ; 17A004/16FB050120
     SPRITEMAP   L_1A8EE6                     ; 17A009/1AE68E1A
     ASMCALL     $9CB3                       ; 17A00D/D0B39C // Load some palette? (Kirby's palette?)
-L_17A010:
+KST7C_StarRodLand:
     ASMCALL     $9BF7                       ; 17A010/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
     TABLEJMP    #8                          ; 17A013/0F08
-    .word       L_17A025                    ; 17A015/25A0
-    .word       L_17A0BE                    ; 17A017/BEA0
-    .word       KirbyState81                ; 17A019/F7A1
-    .word       KirbyState85                ; 17A01B/05A4
-    .word       KirbyState93                ; 17A01D/22AA
-    .word       KirbyState94                ; 17A01F/7DAA
-    .word       KirbyState95                ; 17A021/33AB
+    .word       KST7D_StarRodIdle                    ; 17A015/25A0
+    .word       KST7E_StarRodBeginWalk                    ; 17A017/BEA0
+    .word       KST81_StarRodDash                ; 17A019/F7A1
+    .word       KST85_StarRodFall                ; 17A01B/05A4
+    .word       KST93_StarRodWaterIdle                ; 17A01D/22AA
+    .word       KST94_StarRodWaterWalk                ; 17A01F/7DAA
+    .word       KST95_StarRodWaterSwim                ; 17A021/33AB
     .word       L_17A91C                    ; 17A023/1CA9
-L_17A025:
+KST7D_StarRodIdle:
     MOV         $05E1,#$00                  ; 17A025/11E10500
     ONTICK      $17A03F                     ; 17A029/083FA017
     ASMCALL     $8015                       ; 17A02D/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -30,15 +30,15 @@ L_17A03B:
 L_17A03E:
     HALT                                    ; 17A03E/09
 
-; CODE OR DATA -- $17A03F .. $17A0BE
+; CODE OR DATA -- $17A03F .. KST7E_StarRodBeginWalk
 incbinRange "../split/prg/bank17.bin", $003F, $00BE
 
-L_17A0BE:
+KST7E_StarRodBeginWalk:
     MOV         REG,$05F8                   ; 17A0BE/1CF805
-    JEQ         KirbyState7F                ; 17A0C1/0AC8A0
+    JEQ         KST7F_StarRodWalk                ; 17A0C1/0AC8A0
     ASMCALL     $DE4B                       ; 17A0C4/D04BDE // Play sound effect
     .byte       $31                         ; 17A0C7/31
-KirbyState7F:
+KST7F_StarRodWalk:
     MOV         $05E1,#$01                  ; 17A0C8/11E10501
     MOV         $05BF,#$00                  ; 17A0CC/11BF0500
     ONTICK      $17A161                     ; 17A0D0/0861A117
@@ -148,10 +148,10 @@ L_17A15A:
     DEC2POSE    WAIT #3                     ; 17A15D/A3
     A_JMP       L_17A15A                    ; 17A15E/175AA1
 
-; CODE OR DATA -- $17A161 .. $17A1EC
+; CODE OR DATA -- $17A161 .. KST80_StarRodBeginDash
 incbinRange "../split/prg/bank17.bin", $0161, $01EC
 
-L_17A1EC:
+KST80_StarRodBeginDash:
     ASMCALL     $DE4B                       ; 17A1EC/D04BDE // Play sound effect
     .byte       $37                         ; 17A1EF/37
     ASMCALL     $9952                       ; 17A1F0/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -159,7 +159,7 @@ L_17A1EC:
     .byte       $00                         ; 17A1F4/00
     .byte       $01                         ; 17A1F5/01
     .byte       $00                         ; 17A1F6/00
-KirbyState81:
+KST81_StarRodDash:
     MOV         $05E1,#$02                  ; 17A1F7/11E10502
     ONTICK      $17A213                     ; 17A1FB/0813A217
     ASMCALL     $8015                       ; 17A1FF/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -172,10 +172,10 @@ L_17A20D:
     ASMCALL     $9BAA                       ; 17A20D/D0AA9B
     A_JMP       L_17A0E5                    ; 17A210/17E5A0
 
-; CODE OR DATA -- $17A213 .. $17A294
+; CODE OR DATA -- $17A213 .. KST82_StarRodSkid
 incbinRange "../split/prg/bank17.bin", $0213, $0294
 
-L_17A294:
+KST82_StarRodSkid:
     MOV         $05E1,#$03                  ; 17A294/11E10503
     ASMCALL     $DE4B                       ; 17A298/D04BDE // Play sound effect
     .byte       $31                         ; 17A29B/31
@@ -189,10 +189,10 @@ L_17A294:
     .byte       $00                         ; 17A2AA/00
     HALT                                    ; 17A2AB/09
 
-; CODE OR DATA -- $17A2AC .. $17A2E7
+; CODE OR DATA -- $17A2AC .. KST83_StarRodJump
 incbinRange "../split/prg/bank17.bin", $02AC, $02E7
 
-L_17A2E7:
+KST83_StarRodJump:
     MOV         $05E1,#$04                  ; 17A2E7/11E10504
     ONTICK      $17A30C                     ; 17A2EB/080CA317
     MOV         VAR0,#$00                   ; 17A2EF/0D0000
@@ -201,7 +201,7 @@ L_17A2E7:
     ASMCALL     $DE4B                       ; 17A2F7/D04BDE // Play sound effect
     .byte       $04                         ; 17A2FA/04
     WAIT        #30                         ; 17A2FB/061E
-L_17A2FD:
+KST84_StarRodJumpPeak:
     ASMCALL     $885C                       ; 17A2FD/D05C88 // Set Kirby's Y velocity
     .word       $FF50                       ; 17A300/50FF
     ONTICK      $17A316                     ; 17A302/0816A317
@@ -210,10 +210,10 @@ L_17A308:
     ASMCALL     $884D                       ; 17A308/D04D88 // Zero Kirby's Y velocity
     HALT                                    ; 17A30B/09
 
-; CODE OR DATA -- $17A30C .. $17A405
+; CODE OR DATA -- $17A30C .. KST85_StarRodFall
 incbinRange "../split/prg/bank17.bin", $030C, $0405
 
-KirbyState85:
+KST85_StarRodFall:
     MOV         $05E1,#$05                  ; 17A405/11E10505
     ONTICK      $17A428                     ; 17A409/0828A417
     ASMCALL     $8015                       ; 17A40D/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -242,20 +242,20 @@ L_17A49C:
     SETPOSE     #$22                        ; 17A4A7/5022
     HALT                                    ; 17A4A9/09
 
-; CODE OR DATA -- $17A4AA .. $17A52B
+; CODE OR DATA -- $17A4AA .. KST86_StarRodLandHeadEnemy
 incbinRange "../split/prg/bank17.bin", $04AA, $052B
 
-KirbyState86:
+KST86_StarRodLandHeadEnemy:
     ASMCALL     $885C                       ; 17A52B/D05C88 // Set Kirby's Y velocity
     .word       $FD40                       ; 17A52E/40FD
     ONTICK      $17A537                     ; 17A530/0837A517
     SETPOSE     #$22                        ; 17A534/5022
     HALT                                    ; 17A536/09
 
-; CODE OR DATA -- $17A537 .. $17A5AB
+; CODE OR DATA -- $17A537 .. KST87_StarRodLandHead
 incbinRange "../split/prg/bank17.bin", $0537, $05AB
 
-L_17A5AB:
+KST87_StarRodLandHead:
     MOV         $05E1,#$05                  ; 17A5AB/11E10505
     MOV         $05E4,#$FF                  ; 17A5AF/11E405FF
     ONTICK      $17A5CC                     ; 17A5B3/08CCA517
@@ -272,31 +272,31 @@ L_17A5AB:
     .word       $FD40                       ; 17A5C9/40FD
     HALT                                    ; 17A5CB/09
 
-; CODE OR DATA -- $17A5CC .. $17A5F8
+; CODE OR DATA -- $17A5CC .. KST88_StarRodDropThrough
 incbinRange "../split/prg/bank17.bin", $05CC, $05F8
 
-KirbyState88:
+KST88_StarRodDropThrough:
     MOV         $05E1,#$05                  ; 17A5F8/11E10505
     ONTICK      $17A609                     ; 17A5FC/0809A617
     ASMCALL     $8FDC                       ; 17A600/D0DC8F // Set pose (respect facing)
     .byte       $20                         ; 17A603/20
     WAIT        #16                         ; 17A604/0610
-    A_JMP       L_17A010                    ; 17A606/1710A0
+    A_JMP       KST7C_StarRodLand                    ; 17A606/1710A0
 
-; CODE OR DATA -- $17A609 .. $17A617
+; CODE OR DATA -- $17A609 .. KST89_StarRodCrouch
 incbinRange "../split/prg/bank17.bin", $0609, $0617
 
-L_17A617:
+KST89_StarRodCrouch:
     MOV         $05E1,#$06                  ; 17A617/11E10506
     ASMCALL     $DE4B                       ; 17A61B/D04BDE // Play sound effect
     .byte       $0D                         ; 17A61E/0D
     ONTICK      $17A624                     ; 17A61F/0824A617
     HALT                                    ; 17A623/09
 
-; CODE OR DATA -- $17A624 .. $17A66C
+; CODE OR DATA -- $17A624 .. KST8A_StarRodSlideAttack
 incbinRange "../split/prg/bank17.bin", $0624, $066C
 
-L_17A66C:
+KST8A_StarRodSlideAttack:
     MOV         $05E1,#$07                  ; 17A66C/11E10507
     ASMCALL     $DE4B                       ; 17A670/D04BDE // Play sound effect
     .byte       $38                         ; 17A673/38
@@ -314,10 +314,10 @@ L_17A688:
     INC2POSE                                ; 17A688/90
     HALT                                    ; 17A689/09
 
-; CODE OR DATA -- $17A68A .. $17A6F5
+; CODE OR DATA -- $17A68A .. KST8B_StarRodLadder
 incbinRange "../split/prg/bank17.bin", $068A, $06F5
 
-KirbyState8B:
+KST8B_StarRodLadder:
     MOV         $05E1,#$08                  ; 17A6F5/11E10508
     ONTICK      $17A709                     ; 17A6F9/0809A717
     ASMCALL     $86FB                       ; 17A6FD/D0FB86 // Zero Kirby's X velocity
@@ -326,10 +326,10 @@ KirbyState8B:
     SETPOSE     #$7A                        ; 17A706/507A
     HALT                                    ; 17A708/09
 
-; CODE OR DATA -- $17A709 .. $17A7C3
+; CODE OR DATA -- $17A709 .. KST8C_StarRodAttack
 incbinRange "../split/prg/bank17.bin", $0709, $07C3
 
-L_17A7C3:
+KST8C_StarRodAttack:
     MOV         $05E1,#$0C                  ; 17A7C3/11E1050C
     ONTICK      $17A7FB                     ; 17A7C7/08FBA717
     ASMCALL     $8FDC, WAIT #2              ; 17A7CB/D2DC8F // Set pose (respect facing)
@@ -366,12 +366,12 @@ L_17A7EC:
 L_17A7ED:
     DEC2POSE    WAIT #2                     ; 17A7ED/A2
 L_17A7EE:
-    A_JMP       L_17A010                    ; 17A7EE/1710A0
+    A_JMP       KST7C_StarRodLand                    ; 17A7EE/1710A0
 
-; CODE OR DATA -- $17A7F1 .. $17A892
+; CODE OR DATA -- $17A7F1 .. KST8D_StarRodHoverBegin
 incbinRange "../split/prg/bank17.bin", $07F1, $0892
 
-L_17A892:
+KST8D_StarRodHoverBegin:
     ASMCALL     $DE4B                       ; 17A892/D04BDE // Play sound effect
     .byte       $30                         ; 17A895/30
     ONTICK      $17A8A2                     ; 17A896/08A2A817
@@ -385,10 +385,10 @@ L_17A89E:
 L_17A89F:
     A_JMP       L_17A91C                    ; 17A89F/171CA9
 
-; CODE OR DATA -- $17A8A2 .. $17A8CA
+; CODE OR DATA -- $17A8A2 .. KST8E_StarRodHoverRise
 incbinRange "../split/prg/bank17.bin", $08A2, $08CA
 
-KirbyState8E:
+KST8E_StarRodHoverRise:
     MOV         $05E1,#$0D                  ; 17A8CA/11E1050D
     ONTICK      $17A8DE                     ; 17A8CE/08DEA817
 L_17A8D2:
@@ -411,24 +411,24 @@ L_17A924:
     WAIT        #20                         ; 17A929/0614
     A_JMP       L_17A924                    ; 17A92B/1724A9
 
-; CODE OR DATA -- $17A92E .. $17A976
+; CODE OR DATA -- $17A92E .. KST8F_StarRodHoverUnderwater
 incbinRange "../split/prg/bank17.bin", $092E, $0976
 
-KirbyState8F:
+KST8F_StarRodHoverUnderwater:
     MOV         $05E1,#$0D                  ; 17A976/11E1050D
     ASMCALL     $988D                       ; 17A97A/D08D98 // Set Kirby's underwater flag
     ONTICK      $17A98A                     ; 17A97D/088AA917
     SETPOSE     #$6E                        ; 17A981/506E
     HALT                                    ; 17A983/09
 
-KirbyState90:
+KST90_StarRodHoverWaterSurface:
     ASMCALL     $9893                       ; 17A984/D09398 // Clear Kirby's underwater flag
     A_JMP       L_17A91C                    ; 17A987/171CA9
 
-; CODE OR DATA -- $17A98A .. $17A9C8
+; CODE OR DATA -- $17A98A .. KST91_StarRodHoverSpit
 incbinRange "../split/prg/bank17.bin", $098A, $09C8
 
-L_17A9C8:
+KST91_StarRodHoverSpit:
     MOV         $05E1,#$0A                  ; 17A9C8/11E1050A
     ONTICK      $17A9EB                     ; 17A9CC/08EBA917
     ASMCALL     $99EA                       ; 17A9D0/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -448,32 +448,32 @@ L_17A9E1:
     DEC2POSE    WAIT #4                     ; 17A9E1/A4
 L_17A9E2:
     ASMCALL     $9D72                       ; 17A9E2/D0729D // Is holding Up outside water
-    JNE         L_17A892                    ; 17A9E5/0B92A8
-    A_JMP       L_17A010                    ; 17A9E8/1710A0
+    JNE         KST8D_StarRodHoverBegin                    ; 17A9E5/0B92A8
+    A_JMP       KST7C_StarRodLand                    ; 17A9E8/1710A0
 
-; CODE OR DATA -- $17A9EB .. $17AA15
+; CODE OR DATA -- $17A9EB .. KST92_StarRodWaterEnter
 incbinRange "../split/prg/bank17.bin", $09EB, $0A15
 
-KirbyState92:
+KST92_StarRodWaterEnter:
     ASMCALL     $9883                       ; 17AA15/D08398 // Set swimming flag??
     ASMCALL     $9952                       ; 17AA18/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 17AA1B/00
     .byte       $F8                         ; 17AA1C/F8
     .byte       $04                         ; 17AA1D/04
     .byte       $00                         ; 17AA1E/00
-    A_JMP       L_17A010                    ; 17AA1F/1710A0
+    A_JMP       KST7C_StarRodLand                    ; 17AA1F/1710A0
 
-KirbyState93:
+KST93_StarRodWaterIdle:
     MOV         $05E1,#$00                  ; 17AA22/11E10500
     MOV         $05E4,#$FF                  ; 17AA26/11E405FF
     ONTICK      $17AA32                     ; 17AA2A/0832AA17
     ASMCALL     $A0B2                       ; 17AA2E/D0B2A0 // Set Kirby's idle pose (star rod)
     HALT                                    ; 17AA31/09
 
-; CODE OR DATA -- $17AA32 .. $17AA7D
+; CODE OR DATA -- $17AA32 .. KST94_StarRodWaterWalk
 incbinRange "../split/prg/bank17.bin", $0A32, $0A7D
 
-KirbyState94:
+KST94_StarRodWaterWalk:
     MOV         $05E1,#$01                  ; 17AA7D/11E10501
     MOV         $05E4,#$FF                  ; 17AA81/11E405FF
     ONTICK      $17AABD                     ; 17AA85/08BDAA17
@@ -514,10 +514,10 @@ L_17AAB8:
     .byte       $1C                         ; 17AABB/1C
     HALT                                    ; 17AABC/09
 
-; CODE OR DATA -- $17AABD .. $17AB33
+; CODE OR DATA -- $17AABD .. KST95_StarRodWaterSwim
 incbinRange "../split/prg/bank17.bin", $0ABD, $0B33
 
-KirbyState95:
+KST95_StarRodWaterSwim:
     MOV         $05E1,#$05                  ; 17AB33/11E10505
     MOV         $05E4,#$FF                  ; 17AB37/11E405FF
     ONTICK      $17AB6B                     ; 17AB3B/086BAB17
@@ -553,34 +553,34 @@ L_17AB5F:
     INC2POSE    WAIT #10                    ; 17AB67/9A
     A_JMP       L_17AB5F                    ; 17AB68/175FAB
 
-; CODE OR DATA -- $17AB6B .. $17ABC2
+; CODE OR DATA -- $17AB6B .. KST96_StarRodWaterSurface
 incbinRange "../split/prg/bank17.bin", $0B6B, $0BC2
 
-KirbyState96:
+KST96_StarRodWaterSurface:
     ASMCALL     $9893                       ; 17ABC2/D09398 // Clear Kirby's underwater flag
     ASMCALL     $9952                       ; 17ABC5/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 17ABC8/00
     .byte       $F8                         ; 17ABC9/F8
     .byte       $05                         ; 17ABCA/05
     .byte       $00                         ; 17ABCB/00
-    A_JMP       L_17A2E7                    ; 17ABCC/17E7A2
+    A_JMP       KST83_StarRodJump                    ; 17ABCC/17E7A2
 
 L_17ABCF:
     MOV         $05E0,#$04                  ; 17ABCF/11E00504
     SPRITEMAP   L_1B88F2                     ; 17ABD3/1AF2881B
     ASMCALL     $9CB3                       ; 17ABD7/D0B39C // Load some palette? (Kirby's palette?)
-L_17ABDA:
+KST97_HammerLand:
     ASMCALL     $9BF7                       ; 17ABDA/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
     TABLEJMP    #8                          ; 17ABDD/0F08
-    .word       L_17ABEF                    ; 17ABDF/EFAB
-    .word       L_17AC88                    ; 17ABE1/88AC
-    .word       L_17ADC4                    ; 17ABE3/C4AD
-    .word       L_17AF3D                    ; 17ABE5/3DAF
-    .word       L_17B63F                    ; 17ABE7/3FB6
-    .word       L_17B69A                    ; 17ABE9/9AB6
-    .word       L_17B751                    ; 17ABEB/51B7
+    .word       KST98_HammerIdle                    ; 17ABDF/EFAB
+    .word       KST99_HammerBeginWalk                    ; 17ABE1/88AC
+    .word       KST9C_HammerDash                    ; 17ABE3/C4AD
+    .word       KSTA0_HammerFall                    ; 17ABE5/3DAF
+    .word       KSTAF_HammerWaterIdle                    ; 17ABE7/3FB6
+    .word       KSTB0_HammerWaterWalk                    ; 17ABE9/9AB6
+    .word       KSTB1_HammerWaterSwim                    ; 17ABEB/51B7
     .word       L_17B539                    ; 17ABED/39B5
-L_17ABEF:
+KST98_HammerIdle:
     MOV         $05E1,#$00                  ; 17ABEF/11E10500
     ONTICK      $17AC09                     ; 17ABF3/0809AC17
     ASMCALL     $8015                       ; 17ABF7/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -593,15 +593,15 @@ L_17AC05:
     ASMCALL     $AC7C                       ; 17AC05/D07CAC // Set Kirby's idle pose (hammer)
     HALT                                    ; 17AC08/09
 
-; CODE OR DATA -- $17AC09 .. $17AC88
+; CODE OR DATA -- $17AC09 .. KST99_HammerBeginWalk
 incbinRange "../split/prg/bank17.bin", $0C09, $0C88
 
-L_17AC88:
+KST99_HammerBeginWalk:
     MOV         REG,$05F8                   ; 17AC88/1CF805
-    JEQ         L_17AC92                    ; 17AC8B/0A92AC
+    JEQ         KST9A_HammerWalk                    ; 17AC8B/0A92AC
     ASMCALL     $DE4B                       ; 17AC8E/D04BDE // Play sound effect
     .byte       $31                         ; 17AC91/31
-L_17AC92:
+KST9A_HammerWalk:
     MOV         $05E1,#$01                  ; 17AC92/11E10501
     MOV         $05BF,#$00                  ; 17AC96/11BF0500
     ONTICK      $17AD2E                     ; 17AC9A/082EAD17
@@ -717,10 +717,10 @@ L_17AD26:
     ADDPOSE     #-6, WAIT #3                ; 17AD29/63FA
     A_JMP       L_17AD26                    ; 17AD2B/1726AD
 
-; CODE OR DATA -- $17AD2E .. $17ADB9
+; CODE OR DATA -- $17AD2E .. KST9B_HammerBeginDash
 incbinRange "../split/prg/bank17.bin", $0D2E, $0DB9
 
-L_17ADB9:
+KST9B_HammerBeginDash:
     ASMCALL     $DE4B                       ; 17ADB9/D04BDE // Play sound effect
     .byte       $37                         ; 17ADBC/37
     ASMCALL     $9952                       ; 17ADBD/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -728,7 +728,7 @@ L_17ADB9:
     .byte       $00                         ; 17ADC1/00
     .byte       $01                         ; 17ADC2/01
     .byte       $00                         ; 17ADC3/00
-L_17ADC4:
+KST9C_HammerDash:
     MOV         $05E1,#$02                  ; 17ADC4/11E10502
     ONTICK      $17ADE0                     ; 17ADC8/08E0AD17
     ASMCALL     $8015                       ; 17ADCC/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -741,10 +741,10 @@ L_17ADDA:
     ASMCALL     $9BAA                       ; 17ADDA/D0AA9B
     A_JMP       L_17ACAF                    ; 17ADDD/17AFAC
 
-; CODE OR DATA -- $17ADE0 .. $17AE61
+; CODE OR DATA -- $17ADE0 .. KST9D_HammerSkid
 incbinRange "../split/prg/bank17.bin", $0DE0, $0E61
 
-L_17AE61:
+KST9D_HammerSkid:
     MOV         $05E1,#$03                  ; 17AE61/11E10503
     ASMCALL     $DE4B                       ; 17AE65/D04BDE // Play sound effect
     .byte       $31                         ; 17AE68/31
@@ -758,10 +758,10 @@ L_17AE61:
     .byte       $00                         ; 17AE77/00
     HALT                                    ; 17AE78/09
 
-; CODE OR DATA -- $17AE79 .. $17AEB4
+; CODE OR DATA -- $17AE79 .. KST9E_HammerJump
 incbinRange "../split/prg/bank17.bin", $0E79, $0EB4
 
-L_17AEB4:
+KST9E_HammerJump:
     MOV         $05E1,#$04                  ; 17AEB4/11E10504
     ONTICK      $17AEDD                     ; 17AEB8/08DDAE17
     ASMCALL     $885C                       ; 17AEBC/D05C88 // Set Kirby's Y velocity
@@ -770,7 +770,7 @@ L_17AEB4:
     .byte       $04                         ; 17AEC4/04
     SETPOSE     #$30                        ; 17AEC5/5030
     WAIT        #23                         ; 17AEC7/0617
-L_17AEC9:
+KST9F_HammerJumpPeak:
     ASMCALL     $885C                       ; 17AEC9/D05C88 // Set Kirby's Y velocity
     .word       $FF50                       ; 17AECC/50FF
     ONTICK      $17AEE7                     ; 17AECE/08E7AE17
@@ -780,10 +780,10 @@ L_17AED4:
     MOV         VAR0,#$1D                   ; 17AED7/0D001D
     A_JMP       L_17AF40                    ; 17AEDA/1740AF
 
-; CODE OR DATA -- $17AEDD .. $17AF3D
+; CODE OR DATA -- $17AEDD .. KSTA0_HammerFall
 incbinRange "../split/prg/bank17.bin", $0EDD, $0F3D
 
-L_17AF3D:
+KSTA0_HammerFall:
     MOV         VAR0,#$1C                   ; 17AF3D/0D001C
 L_17AF40:
     MOV         $05E1,#$05                  ; 17AF40/11E10505
@@ -814,20 +814,20 @@ L_17AFD7:
     SETPOSE     #$34                        ; 17AFE2/5034
     HALT                                    ; 17AFE4/09
 
-; CODE OR DATA -- $17AFE5 .. $17B060
+; CODE OR DATA -- $17AFE5 .. KSTA1_HammerLandHeadEnemy
 incbinRange "../split/prg/bank17.bin", $0FE5, $1060
 
-KirbyStateA1:
+KSTA1_HammerLandHeadEnemy:
     ASMCALL     $885C                       ; 17B060/D05C88 // Set Kirby's Y velocity
     .word       $FD40                       ; 17B063/40FD
     ONTICK      $17B06C                     ; 17B065/086CB017
     SETPOSE     #$34                        ; 17B069/5034
     HALT                                    ; 17B06B/09
 
-; CODE OR DATA -- $17B06C .. $17B0E0
+; CODE OR DATA -- $17B06C .. KSTA2_HammerLandHead
 incbinRange "../split/prg/bank17.bin", $106C, $10E0
 
-L_17B0E0:
+KSTA2_HammerLandHead:
     MOV         $05E1,#$05                  ; 17B0E0/11E10505
     MOV         $05E4,#$FF                  ; 17B0E4/11E405FF
     ONTICK      $17B101                     ; 17B0E8/0801B117
@@ -844,31 +844,31 @@ L_17B0E0:
     .word       $FD40                       ; 17B0FE/40FD
     HALT                                    ; 17B100/09
 
-; CODE OR DATA -- $17B101 .. $17B12D
+; CODE OR DATA -- $17B101 .. KSTA3_HammerDropThrough
 incbinRange "../split/prg/bank17.bin", $1101, $112D
 
-KirbyStateA3:
+KSTA3_HammerDropThrough:
     MOV         $05E1,#$05                  ; 17B12D/11E10505
     ONTICK      $17B13E                     ; 17B131/083EB117
     ASMCALL     $8FDC                       ; 17B135/D0DC8F // Set pose (respect facing)
     .byte       $32                         ; 17B138/32
     WAIT        #16                         ; 17B139/0610
-    A_JMP       L_17ABDA                    ; 17B13B/17DAAB
+    A_JMP       KST97_HammerLand                    ; 17B13B/17DAAB
 
-; CODE OR DATA -- $17B13E .. $17B14C
+; CODE OR DATA -- $17B13E .. KSTA4_HammerCrouch
 incbinRange "../split/prg/bank17.bin", $113E, $114C
 
-L_17B14C:
+KSTA4_HammerCrouch:
     MOV         $05E1,#$06                  ; 17B14C/11E10506
     ASMCALL     $DE4B                       ; 17B150/D04BDE // Play sound effect
     .byte       $0D                         ; 17B153/0D
     ONTICK      $17B159                     ; 17B154/0859B117
     HALT                                    ; 17B158/09
 
-; CODE OR DATA -- $17B159 .. $17B1A1
+; CODE OR DATA -- $17B159 .. KSTA5_HammerSlideAttack
 incbinRange "../split/prg/bank17.bin", $1159, $11A1
 
-L_17B1A1:
+KSTA5_HammerSlideAttack:
     MOV         $05E1,#$07                  ; 17B1A1/11E10507
     ASMCALL     $DE4B                       ; 17B1A5/D04BDE // Play sound effect
     .byte       $38                         ; 17B1A8/38
@@ -886,10 +886,10 @@ L_17B1BD:
     INC2POSE                                ; 17B1BD/90
     HALT                                    ; 17B1BE/09
 
-; CODE OR DATA -- $17B1BF .. $17B22A
+; CODE OR DATA -- $17B1BF .. KSTA6_HammerLadder
 incbinRange "../split/prg/bank17.bin", $11BF, $122A
 
-L_17B22A:
+KSTA6_HammerLadder:
     MOV         $05E1,#$08                  ; 17B22A/11E10508
     ONTICK      $17B23E                     ; 17B22E/083EB217
     ASMCALL     $86FB                       ; 17B232/D0FB86 // Zero Kirby's X velocity
@@ -898,10 +898,10 @@ L_17B22A:
     SETPOSE     #$83                        ; 17B23B/5083
     HALT                                    ; 17B23D/09
 
-; CODE OR DATA -- $17B23E .. $17B2F8
+; CODE OR DATA -- $17B23E .. KSTA7_HammerAttack
 incbinRange "../split/prg/bank17.bin", $123E, $12F8
 
-L_17B2F8:
+KSTA7_HammerAttack:
     MOV         $05E1,#$0C                  ; 17B2F8/11E1050C
     ASMCALL     $DE4B                       ; 17B2FC/D04BDE // Play sound effect
     .byte       $46                         ; 17B2FF/46
@@ -931,12 +931,12 @@ L_17B313:
 L_17B315:
     INC2POSE    WAIT #1                     ; 17B315/91
 L_17B316:
-    A_JMP       L_17ABDA                    ; 17B316/17DAAB
+    A_JMP       KST97_HammerLand                    ; 17B316/17DAAB
 
-; CODE OR DATA -- $17B319 .. $17B3D0
+; CODE OR DATA -- $17B319 .. KSTA8_HammerSpin
 incbinRange "../split/prg/bank17.bin", $1319, $13D0
 
-L_17B3D0:
+KSTA8_HammerSpin:
     MOV         $05E1,#$0C                  ; 17B3D0/11E1050C
     ASMCALL     $DE4B                       ; 17B3D4/D04BDE // Play sound effect
     .byte       $46                         ; 17B3D7/46
@@ -947,12 +947,12 @@ L_17B3DE:
         INC2POSE    WAIT #2                     ; 17B3E0/92
 L_17B3E1:
     ENDLOOP                                 ; 17B3E1/02
-    A_JMP       L_17ABDA                    ; 17B3E2/17DAAB
+    A_JMP       KST97_HammerLand                    ; 17B3E2/17DAAB
 
-; CODE OR DATA -- $17B3E5 .. $17B4AD
+; CODE OR DATA -- $17B3E5 .. KSTA9_HammerHoverBegin
 incbinRange "../split/prg/bank17.bin", $13E5, $14AD
 
-L_17B4AD:
+KSTA9_HammerHoverBegin:
     ASMCALL     $DE4B                       ; 17B4AD/D04BDE // Play sound effect
     .byte       $30                         ; 17B4B0/30
     ONTICK      $17B4BD                     ; 17B4B1/08BDB417
@@ -966,10 +966,10 @@ L_17B4B9:
 L_17B4BA:
     A_JMP       L_17B539                    ; 17B4BA/1739B5
 
-; CODE OR DATA -- $17B4BD .. $17B4E7
+; CODE OR DATA -- $17B4BD .. KSTAA_HammerHoverRise
 incbinRange "../split/prg/bank17.bin", $14BD, $14E7
 
-L_17B4E7:
+KSTAA_HammerHoverRise:
     MOV         $05E1,#$0D                  ; 17B4E7/11E1050D
     ONTICK      $17B4FB                     ; 17B4EB/08FBB417
 L_17B4EF:
@@ -996,24 +996,24 @@ L_17B545:
 L_17B548:
     A_JMP       L_17B541                    ; 17B548/1741B5
 
-; CODE OR DATA -- $17B54B .. $17B593
+; CODE OR DATA -- $17B54B .. KSTAB_HammerHoverUnderwater
 incbinRange "../split/prg/bank17.bin", $154B, $1593
 
-L_17B593:
+KSTAB_HammerHoverUnderwater:
     MOV         $05E1,#$0D                  ; 17B593/11E1050D
     ASMCALL     $988D                       ; 17B597/D08D98 // Set Kirby's underwater flag
     ONTICK      $17B5A7                     ; 17B59A/08A7B517
     SETPOSE     #$7E                        ; 17B59E/507E
     HALT                                    ; 17B5A0/09
 
-L_17B5A1:
+KSTAC_HammerHoverWaterSurface:
     ASMCALL     $9893                       ; 17B5A1/D09398 // Clear Kirby's underwater flag
     A_JMP       L_17B539                    ; 17B5A4/1739B5
 
-; CODE OR DATA -- $17B5A7 .. $17B5E5
+; CODE OR DATA -- $17B5A7 .. KSTAD_HammerHoverSpit
 incbinRange "../split/prg/bank17.bin", $15A7, $15E5
 
-L_17B5E5:
+KSTAD_HammerHoverSpit:
     MOV         $05E1,#$0A                  ; 17B5E5/11E1050A
     ONTICK      $17B608                     ; 17B5E9/0808B617
     ASMCALL     $99EA                       ; 17B5ED/D0EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -1033,32 +1033,32 @@ L_17B5FE:
     DEC2POSE    WAIT #4                     ; 17B5FE/A4
 L_17B5FF:
     ASMCALL     $9D72                       ; 17B5FF/D0729D // Is holding Up outside water
-    JNE         L_17B4AD                    ; 17B602/0BADB4
-    A_JMP       L_17ABDA                    ; 17B605/17DAAB
+    JNE         KSTA9_HammerHoverBegin                    ; 17B602/0BADB4
+    A_JMP       KST97_HammerLand                    ; 17B605/17DAAB
 
-; CODE OR DATA -- $17B608 .. $17B632
+; CODE OR DATA -- $17B608 .. KSTAE_HammerWaterEnter
 incbinRange "../split/prg/bank17.bin", $1608, $1632
 
-L_17B632:
+KSTAE_HammerWaterEnter:
     ASMCALL     $9883                       ; 17B632/D08398 // Set swimming flag??
     ASMCALL     $9952                       ; 17B635/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 17B638/00
     .byte       $F8                         ; 17B639/F8
     .byte       $04                         ; 17B63A/04
     .byte       $00                         ; 17B63B/00
-    A_JMP       L_17ABDA                    ; 17B63C/17DAAB
+    A_JMP       KST97_HammerLand                    ; 17B63C/17DAAB
 
-L_17B63F:
+KSTAF_HammerWaterIdle:
     MOV         $05E1,#$00                  ; 17B63F/11E10500
     MOV         $05E4,#$FF                  ; 17B643/11E405FF
     ONTICK      $17B64F                     ; 17B647/084FB617
     ASMCALL     $AC7C                       ; 17B64B/D07CAC // Set Kirby's idle pose (hammer)
     HALT                                    ; 17B64E/09
 
-; CODE OR DATA -- $17B64F .. $17B69A
+; CODE OR DATA -- $17B64F .. KSTB0_HammerWaterWalk
 incbinRange "../split/prg/bank17.bin", $164F, $169A
 
-L_17B69A:
+KSTB0_HammerWaterWalk:
     MOV         $05E1,#$01                  ; 17B69A/11E10501
     MOV         $05E4,#$FF                  ; 17B69E/11E405FF
     ONTICK      $17B6DB                     ; 17B6A2/08DBB617
@@ -1103,10 +1103,10 @@ L_17B6D6:
     .byte       $2C                         ; 17B6D9/2C
     HALT                                    ; 17B6DA/09
 
-; CODE OR DATA -- $17B6DB .. $17B751
+; CODE OR DATA -- $17B6DB .. KSTB1_HammerWaterSwim
 incbinRange "../split/prg/bank17.bin", $16DB, $1751
 
-L_17B751:
+KSTB1_HammerWaterSwim:
     MOV         $05E1,#$05                  ; 17B751/11E10505
     MOV         $05E4,#$FF                  ; 17B755/11E405FF
     ONTICK      $17B789                     ; 17B759/0889B717
@@ -1149,17 +1149,17 @@ L_17B785:
 L_17B786:
     A_JMP       L_17B77D                    ; 17B786/177DB7
 
-; CODE OR DATA -- $17B789 .. $17B7E0
+; CODE OR DATA -- $17B789 .. KSTB1_HammerWaterSurface
 incbinRange "../split/prg/bank17.bin", $1789, $17E0
 
-L_17B7E0:
+KSTB1_HammerWaterSurface:
     ASMCALL     $9893                       ; 17B7E0/D09398 // Clear Kirby's underwater flag
     ASMCALL     $9952                       ; 17B7E3/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
     .byte       $00                         ; 17B7E6/00
     .byte       $F8                         ; 17B7E7/F8
     .byte       $05                         ; 17B7E8/05
     .byte       $00                         ; 17B7E9/00
-    A_JMP       L_17AEB4                    ; 17B7EA/17B4AE
+    A_JMP       KST9E_HammerJump                    ; 17B7EA/17B4AE
 
 L_17B7ED:
     A_JSR       L_17B806                    ; 17B7ED/1806B8
@@ -1172,11 +1172,11 @@ L_17B7ED:
     .byte       $00                         ; 17B7FA/00
     WAIT        #16                         ; 17B7FB/0610
 L_17B7FD:
-    A_JMP       L_17B81E                    ; 17B7FD/171EB8
+    A_JMP       KSTDA_UFOIdle                    ; 17B7FD/171EB8
 
 L_17B800:
     A_JSR       L_17B806                    ; 17B800/1806B8
-    A_JMP       L_17B81E                    ; 17B803/171EB8
+    A_JMP       KSTDA_UFOIdle                    ; 17B803/171EB8
 
 L_17B806:
     MOV         $05E0,#$0D                  ; 17B806/11E0050D
@@ -1184,10 +1184,10 @@ L_17B806:
     ASMCALL     $B812                       ; 17B80E/D012B8
     A_RTS                                   ; 17B811/19
 
-; CODE OR DATA -- $17B812 .. $17B81E
+; CODE OR DATA -- $17B812 .. KSTDA_UFOIdle
 incbinRange "../split/prg/bank17.bin", $1812, $181E
 
-L_17B81E:
+KSTDA_UFOIdle:
     MOV         $05E1,#$00                  ; 17B81E/11E10500
     MOV         VAR2,#$00                   ; 17B822/0D0200
     ASMCALL     $987D                       ; 17B825/D07D98 // Zero Kirby's velocities
@@ -1204,10 +1204,10 @@ L_17B832:
 L_17B833:
     A_JMP       L_17B82C                    ; 17B833/172CB8
 
-; CODE OR DATA -- $17B836 .. $17B8C9
+; CODE OR DATA -- $17B836 .. KSTDB_UFOMove
 incbinRange "../split/prg/bank17.bin", $1836, $18C9
 
-L_17B8C9:
+KSTDB_UFOMove:
     MOV         $05E1,#$01                  ; 17B8C9/11E10501
     ONTICK      $17B8E5                     ; 17B8CD/08E5B817
     MOV         REG,VAR2                    ; 17B8D1/1E02
@@ -1228,10 +1228,10 @@ L_17B8E1:
 L_17B8E2:
     A_JMP       L_17B8DB                    ; 17B8E2/17DBB8
 
-; CODE OR DATA -- $17B8E5 .. $17B938
+; CODE OR DATA -- $17B8E5 .. KSTDC_UFOCharge
 incbinRange "../split/prg/bank17.bin", $18E5, $1938
 
-L_17B938:
+KSTDC_UFOCharge:
     MOV         $05E1,#$0C                  ; 17B938/11E1050C
     ONTICK      $17B9FB                     ; 17B93C/08FBB917
     MOV         VAR3,#$00                   ; 17B940/0D0300
@@ -1256,14 +1256,14 @@ L_17B95A:
 L_17B95C:
     A_JMP       L_17B958                    ; 17B95C/1758B9
 
-L_17B95F:
+KSTDD_UFOShoot:
     ASMCALL     $BA3C                       ; 17B95F/D03CBA
     TABLEJSR    #4                          ; 17B962/1004
     .word       L_17B96F                    ; 17B964/6FB9
     .word       L_17B9D7                    ; 17B966/D7B9
     .word       L_17B9E3                    ; 17B968/E3B9
     .word       L_17B9EF                    ; 17B96A/EFB9
-    A_JMP       L_17B81E                    ; 17B96C/171EB8
+    A_JMP       KSTDA_UFOIdle                    ; 17B96C/171EB8
 
 L_17B96F:
     ONTICK      $17BA05                     ; 17B96F/0805BA17
@@ -1413,10 +1413,10 @@ L_17BB38:
 L_17BB39:
     A_JMP       L_17BB32                    ; 17BB39/1732BB
 
-; CODE OR DATA -- $17BB3C .. $17BC09
+; CODE OR DATA -- $17BB3C .. KSTDE_StarRodFlyingShoot
 incbinRange "../split/prg/bank17.bin", $1B3C, $1C09
 
-L_17BC09:
+KSTDE_StarRodFlyingShoot:
     ONTICK      $17BC24                     ; 17BC09/0824BC17
     SETPOSE     #$03, WAIT #2               ; 17BC0D/5203
 L_17BC0F:
@@ -1443,10 +1443,10 @@ L_17BC20:
 L_17BC21:
     A_JMP       L_17BB2E                    ; 17BC21/172EBB
 
-; CODE OR DATA -- $17BC24 .. $17BC40
+; CODE OR DATA -- $17BC24 .. KSTEC_Unknown
 incbinRange "../split/prg/bank17.bin", $1C24, $1C40
 
-L_17BC40:
+KSTEC_Unknown:
     SPRITEMAP   L_1C8DA6                     ; 17BC40/1AA68D1C
     SETPOSE     #$48                        ; 17BC44/5048
     JML         KSTEE_Miss                    ; 17BC46/03F8A414

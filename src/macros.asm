@@ -126,6 +126,7 @@ skip:
     STARROD  = $18
     BYEBYE   = $19 ; for HUD graphic at end of game
 .endenum
+.define COPY_ABILITY_COUNT 26 ; Bye Bye is often not accounted for, so you might need to subtract 1
 
 .enum SoundEffect
 .endenum

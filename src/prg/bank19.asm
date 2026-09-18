@@ -2692,7 +2692,7 @@ B19_b07b:
     ldy #$ab
     jmp OBJ_TryReplaceScriptPc
 
-L_19B0AD:
+PerformCopyGetDemo:
     MOV         $05E0,#$02                  ; 19B0AD/11E00502
     ASMCALL     $987D                       ; 19B0B1/D07D98 // Zero Kirby's velocities
     SPRITEMAP   L_1A8676                     ; 19B0B4/1A76861A
@@ -2702,37 +2702,37 @@ L_19B0BC:
     ASMCALL     $8FDC, WAIT #12             ; 19B0BC/DCDC8F // Set pose (respect facing)
     .byte       $00                         ; 19B0BF/00
 L_19B0C0:
-    SPRITEMAP   L_1C8216                     ; 19B0C0/1A16821C
-    MOV         REG,$05E3                   ; 19B0C4/1CE305
-    TABLEJSR    #25                         ; 19B0C7/1019
-    .word       L_19B146                    ; 19B0C9/46B1
-    .word       L_19B177                    ; 19B0CB/77B1
-    .word       L_19B19C                    ; 19B0CD/9CB1
-    .word       L_19B0FC                    ; 19B0CF/FCB0
-    .word       L_19B1A6                    ; 19B0D1/A6B1
-    .word       L_19B1A1                    ; 19B0D3/A1B1
-    .word       L_19B298                    ; 19B0D5/98B2
-    .word       L_19B1C4                    ; 19B0D7/C4B1
-    .word       L_19B10D                    ; 19B0D9/0DB1
-    .word       L_19B125                    ; 19B0DB/25B1
-    .word       L_19B29F                    ; 19B0DD/9FB2
-    .word       L_19B1DD                    ; 19B0DF/DDB1
-    .word       L_19B1F3                    ; 19B0E1/F3B1
-    .word       L_19B204                    ; 19B0E3/04B2
-    .word       L_19B298                    ; 19B0E5/98B2
-    .word       L_19B21A                    ; 19B0E7/1AB2
-    .word       L_19B222                    ; 19B0E9/22B2
-    .word       L_19B236                    ; 19B0EB/36B2
-    .word       L_19B249                    ; 19B0ED/49B2
-    .word       L_19B289                    ; 19B0EF/89B2
-    .word       L_19B298                    ; 19B0F1/98B2
-    .word       L_19B298                    ; 19B0F3/98B2
-    .word       L_19B298                    ; 19B0F5/98B2
-    .word       L_19B298                    ; 19B0F7/98B2
-    .word       L_19B136                    ; 19B0F9/36B1
-    A_RTL                                     ; 19B0FB/05
+    SPRITEMAP   L_1C8216                       ; 19B0C0/1A16821C
+    MOV         REG,$05E3                      ; 19B0C4/1CE305
+    TABLEJSR    #COPY_ABILITY_COUNT-1          ; 19B0C7/1019
+    .word       CopyGetDemo_Fire               ; 19B0C9/46B1
+    .word       CopyGetDemo_Spark              ; 19B0CB/77B1
+    .word       CopyGetDemo_Cutter             ; 19B0CD/9CB1
+    .word       CopyGetDemo_Sword              ; 19B0CF/FCB0
+    .word       CopyGetDemo_Fireball           ; 19B0D1/A6B1
+    .word       CopyGetDemo_Laser              ; 19B0D3/A1B1
+    .word       CopyGetDemo_Generic ; Mike     ; 19B0D5/98B2
+    .word       CopyGetDemo_Wheel              ; 19B0D7/C4B1
+    .word       CopyGetDemo_Hammer             ; 19B0D9/0DB1
+    .word       CopyGetDemo_Parasol            ; 19B0DB/25B1
+    .word       CopyGetDemo_Sleep              ; 19B0DD/9FB2
+    .word       CopyGetDemo_Needle             ; 19B0DF/DDB1
+    .word       CopyGetDemo_Ice                ; 19B0E1/F3B1
+    .word       CopyGetDemo_Freeze             ; 19B0E3/04B2
+    .word       CopyGetDemo_Generic ; HiJump   ; 19B0E5/98B2
+    .word       CopyGetDemo_Beam               ; 19B0E7/1AB2
+    .word       CopyGetDemo_Stone              ; 19B0E9/22B2
+    .word       CopyGetDemo_Ball               ; 19B0EB/36B2
+    .word       CopyGetDemo_Tornado            ; 19B0ED/49B2
+    .word       CopyGetDemo_Crash              ; 19B0EF/89B2
+    .word       CopyGetDemo_Generic ; Light    ; 19B0F1/98B2
+    .word       CopyGetDemo_Generic ; Backdrop ; 19B0F3/98B2
+    .word       CopyGetDemo_Generic ; Throw    ; 19B0F5/98B2
+    .word       CopyGetDemo_Generic ; UFO      ; 19B0F7/98B2
+    .word       CopyGetDemo_StarRod            ; 19B0F9/36B1
+    A_RTL                                      ; 19B0FB/05
 
-L_19B0FC:
+CopyGetDemo_Sword:
     SPRITEMAP   L_1B8000                     ; 19B0FC/1A00801B
     SETPOSE     #$00, WAIT #2               ; 19B100/5200
 L_19B102:
@@ -2755,7 +2755,7 @@ L_19B109:
 L_19B10C:
     A_RTS                                   ; 19B10C/19
 
-L_19B10D:
+CopyGetDemo_Hammer:
     SPRITEMAP   L_1B88F2                     ; 19B10D/1AF2881B
     ASMCALL     $8FDC, WAIT #15             ; 19B111/DFDC8F // Set pose (respect facing)
     .byte       $00                         ; 19B114/00
@@ -2781,7 +2781,7 @@ L_19B121:
 L_19B124:
     A_RTS                                   ; 19B124/19
 
-L_19B125:
+CopyGetDemo_Parasol:
     SPRITEMAP   L_1B9320                     ; 19B125/1A20931B
     ASMCALL     $8FDC, WAIT #6              ; 19B129/D6DC8F // Set pose (respect facing)
     .byte       $00                         ; 19B12C/00
@@ -2801,7 +2801,7 @@ L_19B132:
 L_19B135:
     A_RTS                                   ; 19B135/19
 
-L_19B136:
+CopyGetDemo_StarRod:
     SPRITEMAP   L_1A8EE6                     ; 19B136/1AE68E1A
     SETPOSE     #$70, WAIT #2               ; 19B13A/5270
     INCPOSE     WAIT #2                     ; 19B13C/72
@@ -2814,7 +2814,7 @@ L_19B136:
     WAIT        #32                         ; 19B143/0620
     A_RTS                                   ; 19B145/19
 
-L_19B146:
+CopyGetDemo_Fire:
     ASMCALL     $8FDC, WAIT #1              ; 19B146/D1DC8F // Set pose (respect facing)
     .byte       $04                         ; 19B149/04
 L_19B14A:
@@ -2860,7 +2860,7 @@ L_19B16F:
 L_19B176:
     ENDTASK                                 ; 19B176/0C
 
-L_19B177:
+CopyGetDemo_Spark:
     ASMCALL     $8FDC, WAIT #8              ; 19B177/D8DC8F // Set pose (respect facing)
     .byte       $08                         ; 19B17A/08
 L_19B17B:
@@ -2890,15 +2890,15 @@ L_19B191:
 L_19B19B:
     A_RTS                                   ; 19B19B/19
 
-L_19B19C:
+CopyGetDemo_Cutter:
     JSL         L_16A1CC                    ; 19B19C/04CCA116
     A_RTS                                   ; 19B1A0/19
 
-L_19B1A1:
+CopyGetDemo_Laser:
     JSL         L_16A1EC                    ; 19B1A1/04ECA116
     A_RTS                                   ; 19B1A5/19
 
-L_19B1A6:
+CopyGetDemo_Fireball:
     ASMCALL     $9A6A                       ; 19B1A6/D06A9A // Unknown ASM $219A6A
     .word       $9B06                       ; 19B1A9/069B
     .word       $0100                       ; 19B1AB/0001
@@ -2928,7 +2928,7 @@ L_19B1C2:
 L_19B1C3:
     A_RTS                                   ; 19B1C3/19
 
-L_19B1C4:
+CopyGetDemo_Wheel:
     SPRITEMAP   L_1B9CAE                     ; 19B1C4/1AAE9C1B
     LOOP        #2                          ; 19B1C8/0102
         ASMCALL     $8FDC, WAIT #2              ; 19B1CA/D2DC8F // Set pose (respect facing)
@@ -2954,7 +2954,7 @@ L_19B1DB:
     ENDLOOP                                 ; 19B1DB/02
     A_RTS                                   ; 19B1DC/19
 
-L_19B1DD:
+CopyGetDemo_Needle:
     LOOP        #3                          ; 19B1DD/0103
         SPRITEMAP   L_1A8676                     ; 19B1DF/1A76861A
         ASMCALL     $8FDC, WAIT #2              ; 19B1E3/D2DC8F // Set pose (respect facing)
@@ -2971,7 +2971,7 @@ L_19B1F1:
     ENDLOOP                                 ; 19B1F1/02
     A_RTS                                   ; 19B1F2/19
 
-L_19B1F3:
+CopyGetDemo_Ice:
     ASMCALL     $DE4B                       ; 19B1F3/D04BDE // Play sound effect
     .byte       $44                         ; 19B1F6/44
     ASMCALL     $8FDC                       ; 19B1F7/D0DC8F // Set pose (respect facing)
@@ -2985,7 +2985,7 @@ L_19B200:
     ADDPOSE     #-10                        ; 19B201/60F6
     A_RTS                                   ; 19B203/19
 
-L_19B204:
+CopyGetDemo_Freeze:
     ASMCALL     $DE4B                       ; 19B204/D04BDE // Play sound effect
     .byte       $44                         ; 19B207/44
     ASMCALL     $8FDC, WAIT #8              ; 19B208/D8DC8F // Set pose (respect facing)
@@ -3003,12 +3003,12 @@ L_19B211:
 L_19B219:
     A_RTS                                   ; 19B219/19
 
-L_19B21A:
+CopyGetDemo_Beam:
     MOV         VAR0,#$03                   ; 19B21A/0D0003
     JSL         L_16A0E1                    ; 19B21D/04E1A016
     A_RTS                                   ; 19B221/19
 
-L_19B222:
+CopyGetDemo_Stone:
     LOOP        #4                          ; 19B222/0104
         SPRITEMAP   L_1A8676                     ; 19B224/1A76861A
         ASMCALL     $8FDC, WAIT #4              ; 19B228/D4DC8F // Set pose (respect facing)
@@ -3021,7 +3021,7 @@ L_19B234:
     ENDLOOP                                 ; 19B234/02
     A_RTS                                   ; 19B235/19
 
-L_19B236:
+CopyGetDemo_Ball:
     LOOP        #3                          ; 19B236/0103
         SPRITEMAP   L_1B9BEE                     ; 19B238/1AEE9B1B
         ASMCALL     $8FDC, WAIT #2              ; 19B23C/D2DC8F // Set pose (respect facing)
@@ -3044,7 +3044,7 @@ L_19B247:
     ENDLOOP                                 ; 19B247/02
     A_RTS                                   ; 19B248/19
 
-L_19B249:
+CopyGetDemo_Tornado:
     SPRITEMAP   L_1B9E5A                     ; 19B249/1A5A9E1B
     ASMCALL     $98D5                       ; 19B24D/D0D598 // Get facing as 0 or 0x80
     JNE         L_19B26E                    ; 19B250/0B6EB2
@@ -3125,7 +3125,7 @@ L_19B287:
     ENDLOOP                                 ; 19B287/02
     A_RTS                                   ; 19B288/19
 
-L_19B289:
+CopyGetDemo_Crash:
     ASMCALL     $8FDC, WAIT #8              ; 19B289/D8DC8F // Set pose (respect facing)
     .byte       $00                         ; 19B28C/00
 L_19B28D:
@@ -3137,13 +3137,13 @@ L_19B290:
     .word       $0000                       ; 19B295/0000
     A_RTS                                   ; 19B297/19
 
-L_19B298:
+CopyGetDemo_Generic:
     ASMCALL     $8FDC, WAIT #8              ; 19B298/D8DC8F // Set pose (respect facing)
     .byte       $00                         ; 19B29B/00
 L_19B29C:
     INC2POSE                                ; 19B29C/90
     WAIT        #24                         ; 19B29D/0618
-L_19B29F:
+CopyGetDemo_Sleep:
     A_RTS                                   ; 19B29F/19
 
 L_19B2A0:
@@ -3194,7 +3194,7 @@ B19_b2e9:
     sta OBJ_script, x
     rts
 
-L_19B2F1:
+CopyAttack_Ball:
     A_JSR       L_19B31D                    ; 19B2F1/181DB3
     ASMCALL     $DE4B                       ; 19B2F4/D04BDE // Play sound effect
     .byte       $4C                         ; 19B2F7/4C
@@ -3213,20 +3213,20 @@ L_19B307:
 L_19B30A:
     ASMCALL     $9BF7                       ; 19B30A/D0F79B // Get Kirby's sub-state (0=STOP, 1=WALK, 2=DASH, 3=FALL, 4=WATER_STOP, 5=WATER_WALK, 6=SWIM, 7=LEAVE_WATER)
     TABLEJMP    #7                          ; 19B30D/0F07
-    .word       L_19B329                    ; 19B30F/29B3
-    .word       L_19B3A5                    ; 19B311/A5B3
-    .word       L_19B3A5                    ; 19B313/A5B3
-    .word       L_19B522                    ; 19B315/22B5
-    .word       L_19B329                    ; 19B317/29B3
-    .word       L_19B3A5                    ; 19B319/A5B3
-    .word       L_19B522                    ; 19B31B/22B5
+    .word       KSTD2_BallIdle                    ; 19B30F/29B3
+    .word       KSTD3_BallRoll                    ; 19B311/A5B3
+    .word       KSTD3_BallRoll                    ; 19B313/A5B3
+    .word       KSTD7_BallFall                    ; 19B315/22B5
+    .word       KSTD2_BallIdle                    ; 19B317/29B3
+    .word       KSTD3_BallRoll                    ; 19B319/A5B3
+    .word       KSTD7_BallFall                    ; 19B31B/22B5
 L_19B31D:
     MOV         $05E0,#$0B                  ; 19B31D/11E0050B
     SPRITEMAP   L_1B9BEE                     ; 19B321/1AEE9B1B
     MOV         VAR0,#$00                   ; 19B325/0D0000
     A_RTS                                   ; 19B328/19
 
-L_19B329:
+KSTD2_BallIdle:
     MOV         $05E1,#$00                  ; 19B329/11E10500
     ONTICK      $19B342                     ; 19B32D/0842B319
     ASMCALL     $8015                       ; 19B331/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -3288,7 +3288,7 @@ B19_b397:
     adc tmp0
     jmp $8fe6
 
-L_19B3A5:
+KSTD3_BallRoll:
     MOV         $05E1,#$01                  ; 19B3A5/11E10501
     ONTICK      $19B3C0                     ; 19B3A9/08C0B319
     ASMCALL     $8015                       ; 19B3AD/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -3370,7 +3370,7 @@ B19_b428:
     sec
     rts
 
-L_19B44A:
+KSTD4_BallSkid:
     MOV         $05E1,#$03                  ; 19B44A/11E10503
     ONTICK      $19B46A                     ; 19B44E/086AB419
     ASMCALL     $9952                       ; 19B452/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3421,7 +3421,7 @@ B19_b4a9:
     jmp $805b
 
 
-L_19B4AC:
+KSTD5_BallJump:
     MOV         $05E1,#$04                  ; 19B4AC/11E10504
     ONTICK      $19B4D3                     ; 19B4B0/08D3B419
     ASMCALL     $885C                       ; 19B4B4/D05C88 // Set Kirby's Y velocity
@@ -3430,14 +3430,14 @@ L_19B4AC:
     .byte       $04                         ; 19B4BC/04
     ASMCALL     $B38E                       ; 19B4BD/D08EB3 // Set pose to (VAR0 << 1) respecting facing
     WAIT        #23                         ; 19B4C0/0617
-L_19B4C2:
+KSTD6_BallJumpPeak:
     ASMCALL     $885C                       ; 19B4C2/D05C88 // Set Kirby's Y velocity
     .word       $FF50                       ; 19B4C5/50FF
     ONTICK      $19B4DD                     ; 19B4C7/08DDB419
     WAIT        #5                          ; 19B4CB/0605
 L_19B4CD:
     ASMCALL     $884D                       ; 19B4CD/D04D88 // Zero Kirby's Y velocity
-    A_JMP       L_19B522                    ; 19B4D0/1722B5
+    A_JMP       KSTD7_BallFall                    ; 19B4D0/1722B5
 
 B19_b4d3:
     jsr $8a40
@@ -3477,7 +3477,7 @@ B19_b51c:
     jmp $805b
 
 
-L_19B522:
+KSTD7_BallFall:
     MOV         $05E1,#$05                  ; 19B522/11E10505
     ONTICK      $19B546                     ; 19B526/0846B519
     ASMCALL     $8015                       ; 19B52A/D01580 // Return 0 if MSB of $05E4 is set, otherwise return 1
@@ -3489,12 +3489,12 @@ L_19B537:
     ASMCALL     $B38E                       ; 19B537/D08EB3 // Set pose to (VAR0 << 1) respecting facing
     HALT                                    ; 19B53A/09
 
-L_19B53B:
+KSTD8_BallBounce:
     ASMCALL     $B642                       ; 19B53B/D042B6 // Return 0 if Kirby is not moving, 1 if moving only on the X axis, 2 if moving on the Y axis
     TABLEJMP    #3                          ; 19B53E/0F03
-    .word       L_19B329                    ; 19B540/29B3
-    .word       L_19B3A5                    ; 19B542/A5B3
-    .word       L_19B522                    ; 19B544/22B5
+    .word       KSTD2_BallIdle                    ; 19B540/29B3
+    .word       KSTD3_BallRoll                    ; 19B542/A5B3
+    .word       KSTD7_BallFall                    ; 19B544/22B5
 
 B19_b546:
     ldy #$05
@@ -3636,7 +3636,7 @@ B19_b656:
     rts
 
 
-L_19B658:
+KSTD9_BallEnd:
     ASMCALL     $DE4B                       ; 19B658/D04BDE // Play sound effect
     .byte       $4C                         ; 19B65B/4C
     ASMCALL     $9952                       ; 19B65C/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3648,7 +3648,7 @@ L_19B658:
 L_19B665:
     JML         L_14B2D9                    ; 19B665/03D9B214
 
-L_19B669:
+CopyAttack_Stone:
     MOV         $05E0,#$08                  ; 19B669/11E00508
     SETZPOS     #$007F                      ; 19B66D/3A7F00
     SPRITEMAP   L_1B9DAE                     ; 19B670/1AAE9D1B
@@ -3739,7 +3739,7 @@ B19_b708:
     jmp $9c72
 .byte $04,$00,$00,$00,$00,$08,$08
 
-L_19B718:
+KSTD0_StoneLand:
     ASMCALL     $DE4B                       ; 19B718/D04BDE // Play sound effect
     .byte       $40                         ; 19B71B/40
     ASMCALL     $9952                       ; 19B71C/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -3770,7 +3770,7 @@ B19_b742:
     adc #$08
     jmp $8fe6
 
-L_19B74B:
+KSTD1_StoneEnd:
     ASMCALL     $DE4B                       ; 19B74B/D04BDE // Play sound effect
     .byte       $4C                         ; 19B74E/4C
     ASMCALL     $9952                       ; 19B74F/D05299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`

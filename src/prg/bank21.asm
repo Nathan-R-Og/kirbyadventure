@@ -1223,44 +1223,44 @@ B21_8cee:
         KST37_CopyWaterGun,\
         KST38_CopyWaterGunChangeDir,\
         KST39_CopyWaterSurface,\
-        $16A000,\
-        $16A054,\
-        $16A05C,\
-        $16A064,\
-        $16A06C,\
-        $18AC39,\
-        $18AC4A,\
+        KST3A_UseCopyAbility,\
+        KST3B_CopyUnknownSplash,\
+        KST3C_CopyUnknownWaterSurface,\
+        KST3D_CopyUnknownLadder,\
+        KST3E_CopyUnknownLand,\
+        KST3F_FireballBonkWall,\
+        KST40_FireballBonkSlope,\
         KST41_HiJumpCancel,\
-        $16A16F,\
-        $16A29A,\
-        $16A317,\
-        $18A892,\
-        $18A977,\
-        $18A922,\
-        $18A9D2,\
-        $18AA05,\
-        $16A3D9,\
-        $18ACD7,\
-        $18AEC1,\
-        $18AEE1,\
-        $18AF74,\
-        $18AFE4,\
-        $18AFEE,\
-        $18B0E1,\
-        $18B0EC,\
-        $18B160,\
-        $18B1BD,\
-        $18B1D4,\
-        $18B23D,\
-        $18B24D,\
-        $18B29D,\
-        $18B32E,\
-        $18B4A8,\
-        $18B4B8,\
-        $18B512,\
-        $18B5C3,\
-        $18B5E8,\
-        $18B66D,\
+        KST42_SparkEnd,\
+        KST43_MikeEnd,\
+        KST44_NeedleEnd,\
+        KST45_WheelLand,\
+        KST46_WheelFall,\
+        KST47_WheelTurn,\
+        KST48_WheelEnd,\
+        KST49_WheelBonk,\
+        KST4A_FreezeEnd,\
+        KST4B_Inhale,\
+        KST4C_InhaleEnd,\
+        KST4D_MouthfulGrab,\
+        KST4E_MouthfulIdle,\
+        KST4F_MouthfulWalk,\
+        KST50_MouthfulWalkSlopeChange,\
+        KST51_MouthfulDash,\
+        KST52_MouthfulDashSlopeChange,\
+        KST53_MouthfulSkid,\
+        KST54_MouthfulJump,\
+        KST55_MouthfulJumpPeak,\
+        KST56_MouthfulFall,\
+        KST57_MouthfulLand,\
+        KST58_MouthfulSpit,\
+        KST59_Swallow,\
+        KST5A_MouthfulWaterEnter,\
+        KST5B_MouthfulWaterIdle,\
+        KST5C_MouthfulWaterWalk,\
+        KST5D_MouthfulWaterSwim,\
+        KST5E_MouthfulWaterLand,\
+        KST5F_MouthfulWaterSurface,\
         KST60_SwordLand,\
         KST61_SwordIdle,\
         KST62_SwordBeginWalk,\
@@ -1277,7 +1277,7 @@ B21_8cee:
         KST6D_SwordCrouch,\
         KST6E_SwordSlideAttack,\
         KST6F_SwordLadder,\
-        KST70_SwordSlash,\
+        KST70_SwordAttack,\
         KST71_SwordSpin,\
         KST72_SwordHoverBegin,\
         KST73_SwordHoverRise,\
@@ -1289,61 +1289,61 @@ B21_8cee:
         KST79_SwordWaterWalk,\
         KST7A_SwordWaterSwim,\
         KST7B_SwordWaterSurface,\
-        $17A010,\
-        $17A025,\
-        $17A0BE,\
-        $17A0C8,\
-        $17A1EC,\
-        $17A1F7,\
-        $17A294,\
-        $17A2E7,\
-        $17A2FD,\
-        $17A405,\
-        $17A52B,\
-        $17A5AB,\
-        $17A5F8,\
-        $17A617,\
-        $17A66C,\
-        $17A6F5,\
-        $17A7C3,\
-        $17A892,\
-        $17A8CA,\
-        $17A976,\
-        $17A984,\
-        $17A9C8,\
-        $17AA15,\
-        $17AA22,\
-        $17AA7D,\
-        $17AB33,\
-        $17ABC2,\
-        $17ABDA,\
-        $17ABEF,\
-        $17AC88,\
-        $17AC92,\
-        $17ADB9,\
-        $17ADC4,\
-        $17AE61,\
-        $17AEB4,\
-        $17AEC9,\
-        $17AF3D,\
-        $17B060,\
-        $17B0E0,\
-        $17B12D,\
-        $17B14C,\
-        $17B1A1,\
-        $17B22A,\
-        $17B2F8,\
-        $17B3D0,\
-        $17B4AD,\
-        $17B4E7,\
-        $17B593,\
-        $17B5A1,\
-        $17B5E5,\
-        $17B632,\
-        $17B63F,\
-        $17B69A,\
-        $17B751,\
-        $17B7E0,\
+        KST7C_StarRodLand,\
+        KST7D_StarRodIdle,\
+        KST7E_StarRodBeginWalk,\
+        KST7F_StarRodWalk,\
+        KST80_StarRodBeginDash,\
+        KST81_StarRodDash,\
+        KST82_StarRodSkid,\
+        KST83_StarRodJump,\
+        KST84_StarRodJumpPeak,\
+        KST85_StarRodFall,\
+        KST86_StarRodLandHeadEnemy,\
+        KST87_StarRodLandHead,\
+        KST88_StarRodDropThrough,\
+        KST89_StarRodCrouch,\
+        KST8A_StarRodSlideAttack,\
+        KST8B_StarRodLadder,\
+        KST8C_StarRodAttack,\
+        KST8D_StarRodHoverBegin,\
+        KST8E_StarRodHoverRise,\
+        KST8F_StarRodHoverUnderwater,\
+        KST90_StarRodHoverWaterSurface,\
+        KST91_StarRodHoverSpit,\
+        KST92_StarRodWaterEnter,\
+        KST93_StarRodWaterIdle,\
+        KST94_StarRodWaterWalk,\
+        KST95_StarRodWaterSwim,\
+        KST96_StarRodWaterSurface,\
+        KST97_HammerLand,\
+        KST98_HammerIdle,\
+        KST99_HammerBeginWalk,\
+        KST9A_HammerWalk,\
+        KST9B_HammerBeginDash,\
+        KST9C_HammerDash,\
+        KST9D_HammerSkid,\
+        KST9E_HammerJump,\
+        KST9F_HammerJumpPeak,\
+        KSTA0_HammerFall,\
+        KSTA1_HammerLandHeadEnemy,\
+        KSTA2_HammerLandHead,\
+        KSTA3_HammerDropThrough,\
+        KSTA4_HammerCrouch,\
+        KSTA5_HammerSlideAttack,\
+        KSTA6_HammerLadder,\
+        KSTA7_HammerAttack,\
+        KSTA8_HammerSpin,\
+        KSTA9_HammerHoverBegin,\
+        KSTAA_HammerHoverRise,\
+        KSTAB_HammerHoverUnderwater,\
+        KSTAC_HammerHoverWaterSurface,\
+        KSTAD_HammerHoverSpit,\
+        KSTAE_HammerWaterEnter,\
+        KSTAF_HammerWaterIdle,\
+        KSTB0_HammerWaterWalk,\
+        KSTB1_HammerWaterSwim,\
+        KSTB1_HammerWaterSurface,\
         KSTB3_ParasolLand,\
         KSTB4_ParasolIdle,\
         KSTB5_ParasolBeginWalk,\
@@ -1373,35 +1373,35 @@ B21_8cee:
         KSTCD_ParasolWaterWalk,\
         KSTCE_ParasolWaterSwim,\
         KSTCF_ParasolWaterSurface,\
-        $19B718,\
-        $19B74B,\
-        $19B329,\
-        $19B3A5,\
-        $19B44A,\
-        $19B4AC,\
-        $19B4C2,\
-        $19B522,\
-        $19B53B,\
-        $19B658,\
-        $17B81E,\
-        $17B8C9,\
-        $17B938,\
-        $17B95F,\
-        $17BC09,\
-        $16A5DF,\
-        $16A5FF,\
-        $16A9C7,\
-        $16A785,\
-        $16A7ED,\
-        $16A845,\
-        $16A89A,\
-        $16A8FF,\
-        $16A90B,\
+        KSTD0_StoneLand,\
+        KSTD1_StoneEnd,\
+        KSTD2_BallIdle,\
+        KSTD3_BallRoll,\
+        KSTD4_BallSkid,\
+        KSTD5_BallJump,\
+        KSTD6_BallJumpPeak,\
+        KSTD7_BallFall,\
+        KSTD8_BallBounce,\
+        KSTD9_BallEnd,\
+        KSTDA_UFOIdle,\
+        KSTDB_UFOMove,\
+        KSTDC_UFOCharge,\
+        KSTDD_UFOShoot,\
+        KSTDE_StarRodFlyingShoot,\
+        KSTDF_ThrowBackdropInhaleEnd,\
+        KSTE0_ThrowBackdropGrab,\
+        KSTE1_BackdropWater,\
+        KSTE2_BackdropImpactForward,\
+        KSTE3_BackdropImpactBackward,\
+        KSTE4_BackdropImpactDown,\
+        KSTE5_BackdropImpactUp,\
+        KSTE6_BackdropImpactJump,\
+        KSTE7_BackdropImapctJumpCeiling,\
         KSTE8_SpecialDamageEnd,\
         KSTE9_CharredKnockbackBounce,\
         KSTEA_IceDamageLand,\
         KSTEB_Unknown,\
-        $17BC40,\
+        KSTEC_Unknown,\
         KSTED_SpikeDamage,\
         KSTEE_Miss
 

@@ -1,50 +1,51 @@
 .segment "PRG16": absolute
 
-L_16A000:
+KST3A_UseCopyAbility:
     SPRITEMAP   L_1C8216                     ; 16A000/1A16821C
     MOV         REG,$05E3                   ; 16A004/1CE305
-    TABLECALL   #25                         ; 16A007/2919
-    _is_faraddr L_16A070                    ; 16A009/70A016
-    _is_faraddr L_16A144                    ; 16A00C/44A116
-    _is_faraddr L_16A1BD                    ; 16A00F/BDA116
-    _is_faraddr $000000                     ; 16A012/000000
-    _is_faraddr L_18ABDB                    ; 16A015/DBAB18
-    _is_faraddr L_16A1DD                    ; 16A018/DDA116
-    _is_faraddr L_16A202                    ; 16A01B/02A216
-    _is_faraddr L_18A847                    ; 16A01E/47A818
-    _is_faraddr $000000                     ; 16A021/000000
-    _is_faraddr $000000                     ; 16A024/000000
-    _is_faraddr $000000                     ; 16A027/000000
-    _is_faraddr L_16A2F2                    ; 16A02A/F2A216
-    _is_faraddr L_16A364                    ; 16A02D/64A316
-    _is_faraddr L_16A3B9                    ; 16A030/B9A316
-    _is_faraddr L_14B68C                    ; 16A033/8CB614
-    _is_faraddr L_16A0CF                    ; 16A036/CFA016
-    _is_faraddr L_19B669                    ; 16A039/69B619
-    _is_faraddr L_19B2F1                    ; 16A03C/F1B219
-    _is_faraddr L_18AA17                    ; 16A03F/17AA18
-    _is_faraddr L_16A414                    ; 16A042/14A416
-    _is_faraddr L_16A516                    ; 16A045/16A516
-    _is_faraddr L_16A55A                    ; 16A048/5AA516
-    _is_faraddr L_16A55A                    ; 16A04B/5AA516
-    _is_faraddr $000000                     ; 16A04E/000000
-    _is_faraddr $000000                     ; 16A051/000000
-L_16A054:
+    TABLECALL   #COPY_ABILITY_COUNT-1         ; 16A007/2919
+    _is_faraddr CopyAttack_Fire             ; 16A009/70A016
+    _is_faraddr CopyAttack_Spark            ; 16A00C/44A116
+    _is_faraddr CopyAttack_Cutter           ; 16A00F/BDA116
+    _is_faraddr $000000  ; Sword            ; 16A012/000000
+    _is_faraddr CopyAttack_Fireball         ; 16A015/DBAB18
+    _is_faraddr CopyAttack_Laser            ; 16A018/DDA116
+    _is_faraddr CopyAttack_Mike             ; 16A01B/02A216
+    _is_faraddr CopyAttack_Wheel            ; 16A01E/47A818
+    _is_faraddr $000000  ; Hammer           ; 16A021/000000
+    _is_faraddr $000000  ; Parasol          ; 16A024/000000
+    _is_faraddr $000000  ; Sleep            ; 16A027/000000
+    _is_faraddr CopyAttack_Needle           ; 16A02A/F2A216
+    _is_faraddr CopyAttack_Ice              ; 16A02D/64A316
+    _is_faraddr CopyAttack_Freeze           ; 16A030/B9A316
+    _is_faraddr CopyAttack_HiJump           ; 16A033/8CB614
+    _is_faraddr CopyAttack_Beam             ; 16A036/CFA016
+    _is_faraddr CopyAttack_Stone            ; 16A039/69B619
+    _is_faraddr CopyAttack_Ball             ; 16A03C/F1B219
+    _is_faraddr CopyAttack_Tornado          ; 16A03F/17AA18
+    _is_faraddr CopyAttack_Crash            ; 16A042/14A416
+    _is_faraddr CopyAttack_Light            ; 16A045/16A516
+    _is_faraddr CopyAttack_BackdropThrow    ; 16A048/5AA516
+    _is_faraddr CopyAttack_BackdropThrow    ; 16A04B/5AA516
+    _is_faraddr $000000  ; UFO              ; 16A04E/000000
+    _is_faraddr $000000  ; StarRod          ; 16A051/000000
+KST3B_CopyUnknownSplash: ; The 'splash' effect when you do the copy ability drop bug. Don't know its intended purpose
     SPRITEMAP   L_1A8676                     ; 16A054/1A76861A
     JML         KST33_CopyWaterEnter                    ; 16A058/03AEBC14
 
-KirbyState3C:
+KST3C_CopyUnknownWaterSurface:
     SPRITEMAP   L_1A8676                     ; 16A05C/1A76861A
     JML         KST39_CopyWaterSurface                    ; 16A060/03B7BF14
 
-KirbyState3D:
+KST3D_CopyUnknownLadder:
     SPRITEMAP   L_1A8676                     ; 16A064/1A76861A
     JML         KST2D_Ladder                    ; 16A068/035DBA14
 
-KirbyState3E:
+KST3E_CopyUnknownLand: ; Does some stuff and then goes to state 1E (copy land)
+    ; Probably just a "go back to default state" state
     JML         L_14B2D9                    ; 16A06C/03D9B214
 
-L_16A070:
+CopyAttack_Fire:
     MOV         $05E1,#$0C                  ; 16A070/11E1050C
     ONTICK      $16A0B4                     ; 16A074/08B4A016
     ASMCALL     $8FDC, WAIT #1              ; 16A078/D1DC8F // Set pose (respect facing)
@@ -61,7 +62,7 @@ L_16A083:
     ASMCALL     $A0C4                       ; 16A084/D0C4A0 // Check if player is not holding the B Button
     JEQ         L_16A07F                    ; 16A087/0A7FA0
     ENDLASTTASK                             ; 16A08A/12
-    A_JMP       KirbyState3E                ; 16A08B/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A08B/176CA0
 
 L_16A08E:
     ASMCALL     $99EA, WAIT #4              ; 16A08E/D4EA99 // Create kirby projectile (slots 6 through 8) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -99,12 +100,12 @@ L_16A0B1:
 ; CODE OR DATA -- $16A0B4 .. $16A0CF
 incbinRange "../split/prg/bank16.bin", $00B4, $00CF
 
-L_16A0CF:
+CopyAttack_Beam:
     MOV         $05E1,#$0C                  ; 16A0CF/11E1050C
     ONTICK      $16A0B4                     ; 16A0D3/08B4A016
     MOV         VAR0,#$08                   ; 16A0D7/0D0008
     JSL         L_16A0E1                    ; 16A0DA/04E1A016
-    A_JMP       KirbyState3E                ; 16A0DE/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A0DE/176CA0
 
 L_16A0E1:
     TASK        L_16A0F3                    ; 16A0E1/07F3A0
@@ -188,7 +189,7 @@ L_16A142:
     ENDLOOP                                 ; 16A142/02
     ENDTASK                                 ; 16A143/0C
 
-L_16A144:
+CopyAttack_Spark:
     MOV         $05E1,#$0C                  ; 16A144/11E1050C
     MOV         VAR2,#$1A                   ; 16A148/0D021A
     ONTICK      $16A0B4                     ; 16A14B/08B4A016
@@ -216,23 +217,23 @@ L_16A16B:
     DEC2POSE                                ; 16A16B/A0
     A_JMP       L_16A158                    ; 16A16C/1758A1
 
-L_16A16F:
+KST42_SparkEnd:
     ASMCALL     $DE4B                       ; 16A16F/D04BDE // Play sound effect
     .byte       $FF                         ; 16A172/FF
     ONTICK      $16A0B4                     ; 16A173/08B4A016
     ASMCALL     $8FDC, WAIT #8              ; 16A177/D8DC8F // Set pose (respect facing)
     .byte       $08                         ; 16A17A/08
 L_16A17B:
-    A_JMP       KirbyState3E                ; 16A17B/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A17B/176CA0
 
 ; CODE OR DATA -- $16A17E .. $16A1BD
 incbinRange "../split/prg/bank16.bin", $017E, $01BD
 
-L_16A1BD:
+CopyAttack_Cutter:
     MOV         $05E1,#$0C                  ; 16A1BD/11E1050C
     ONTICK      $16A0B4                     ; 16A1C1/08B4A016
     JSL         L_16A1CC                    ; 16A1C5/04CCA116
-    A_JMP       KirbyState3E                ; 16A1C9/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A1C9/176CA0
 
 L_16A1CC:
     ASMCALL     $DE4B                       ; 16A1CC/D04BDE // Play sound effect
@@ -249,11 +250,11 @@ L_16A1D4:
 L_16A1DC:
     A_RTL                                   ; 16A1DC/05
 
-L_16A1DD:
+CopyAttack_Laser:
     MOV         $05E1,#$0C                  ; 16A1DD/11E1050C
     ONTICK      $16A0B4                     ; 16A1E1/08B4A016
     JSL         L_16A1EC                    ; 16A1E5/04ECA116
-    A_JMP       KirbyState3E                ; 16A1E9/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A1E9/176CA0
 
 L_16A1EC:
     ASMCALL     $DE4B                       ; 16A1EC/D04BDE // Play sound effect
@@ -280,7 +281,7 @@ L_16A200:
 L_16A201:
     A_RTL                                   ; 16A201/05
 
-L_16A202:
+CopyAttack_Mike:
     MOV         $05E1,#$0C                  ; 16A202/11E1050C
     MOV         $05F9,#$80                  ; 16A206/11F90580
     ASMCALL     $9EEA                       ; 16A20A/D0EA9E // Freeze all objects and set kirby flag 0x80 (can't pause flag?)
@@ -370,13 +371,13 @@ L_16A294:
 L_16A299:
     A_RTS                                   ; 16A299/19
 
-L_16A29A:
+KST43_MikeEnd:
     ASMCALL     $A2DA                       ; 16A29A/D0DAA2 // Restore Kirby's X position from VAR2 and VAR3
     ASMCALL     $9EF6                       ; 16A29D/D0F69E // Unfreeze all objects and clear kirby flag 0x80 (can't pause flag?)
     MOV         $05F9,#$00                  ; 16A2A0/11F90500
     ASMCALL     $A2E7                       ; 16A2A4/D0E7A2 // Remove ability if all uses depleted (return 0 if all uses depleted)
     JEQ         L_16A2AD                    ; 16A2A7/0AADA2
-    A_JMP       KirbyState3E                ; 16A2AA/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A2AA/176CA0
 
 L_16A2AD:
     JML         KST01_DiscardAbility        ; 16A2AD/034BA714
@@ -384,7 +385,7 @@ L_16A2AD:
 ; CODE OR DATA -- $16A2B1 .. $16A2F2
 incbinRange "../split/prg/bank16.bin", $02B1, $02F2
 
-L_16A2F2:
+CopyAttack_Needle:
     MOV         $05E1,#$0C                  ; 16A2F2/11E1050C
     ASMCALL     $DE4B                       ; 16A2F6/D04BDE // Play sound effect
     .byte       $4D                         ; 16A2F9/4D
@@ -414,19 +415,19 @@ L_16A310:
     DEC2POSE                                ; 16A310/A0
     ONTICK      $16A324                     ; 16A311/0824A316
     WAIT        #60                         ; 16A315/063C
-L_16A317:
+KST44_NeedleEnd:
     ONTICK      $16A344                     ; 16A317/0844A316
     ASMCALL     $8FDC, WAIT #4              ; 16A31B/D4DC8F // Set pose (respect facing)
     .byte       $3E                         ; 16A31E/3E
 L_16A31F:
     ADDPOSE     #-4, WAIT #5                ; 16A31F/65FC
 L_16A321:
-    A_JMP       KirbyState3E                ; 16A321/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A321/176CA0
 
 ; CODE OR DATA -- $16A324 .. $16A364
 incbinRange "../split/prg/bank16.bin", $0324, $0364
 
-L_16A364:
+CopyAttack_Ice:
     MOV         $05E1,#$0C                  ; 16A364/11E1050C
     ASMCALL     $DE4B                       ; 16A368/D04BDE // Play sound effect
     .byte       $44                         ; 16A36B/44
@@ -443,12 +444,12 @@ L_16A379:
     ADDPOSE     #-10                        ; 16A37A/60F6
     ASMCALL     $A3AE                       ; 16A37C/D0AEA3 // Check if player is not holding the B Button (duplicate of ASM $16A0C4)
     JEQ         L_16A374                    ; 16A37F/0A74A3
-    A_JMP       KirbyState3E                ; 16A382/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A382/176CA0
 
 ; CODE OR DATA -- $16A385 .. $16A3B9
 incbinRange "../split/prg/bank16.bin", $0385, $03B9
 
-L_16A3B9:
+CopyAttack_Freeze:
     MOV         $05E1,#$0C                  ; 16A3B9/11E1050C
     MOV         VAR2,#$1A                   ; 16A3BD/0D021A
     ASMCALL     $DE4B                       ; 16A3C0/D04BDE // Play sound effect
@@ -466,17 +467,17 @@ L_16A3D3:
     ADDPOSE     #-32                        ; 16A3D4/60E0
     A_JMP       L_16A3D0                    ; 16A3D6/17D0A3
 
-L_16A3D9:
+KST4A_FreezeEnd:
     ONTICK      $16A0B4                     ; 16A3D9/08B4A016
     ASMCALL     $8FDC, WAIT #8              ; 16A3DD/D8DC8F // Set pose (respect facing)
     .byte       $56                         ; 16A3E0/56
 L_16A3E1:
-    A_JMP       KirbyState3E                ; 16A3E1/176CA0
+    A_JMP       KST3E_CopyUnknownLand                ; 16A3E1/176CA0
 
 ; CODE OR DATA -- $16A3E4 .. $16A414
 incbinRange "../split/prg/bank16.bin", $03E4, $0414
 
-L_16A414:
+CopyAttack_Crash:
     MOV         $05E1,#$0C                  ; 16A414/11E1050C
     ASMCALL     $9EEA                       ; 16A418/D0EA9E // Freeze all objects and set kirby flag 0x80 (can't pause flag?)
     ASMCALL     $DE4B                       ; 16A41B/D04BDE // Play sound effect
@@ -586,7 +587,7 @@ L_16A4CB:
 ; CODE OR DATA -- $16A4CE .. $16A516
 incbinRange "../split/prg/bank16.bin", $04CE, $0516
 
-L_16A516:
+CopyAttack_Light:
     MOV         $05E1,#$0C                  ; 16A516/11E1050C
     ONTICK      $16A548                     ; 16A51A/0848A516
     ASMCALL     $9EEA                       ; 16A51E/D0EA9E // Freeze all objects and set kirby flag 0x80 (can't pause flag?)
@@ -613,7 +614,7 @@ L_16A538:
 ; CODE OR DATA -- $16A548 .. $16A55A
 incbinRange "../split/prg/bank16.bin", $0548, $055A
 
-L_16A55A:
+CopyAttack_BackdropThrow:
     SPRITEMAP   L_1A8846                     ; 16A55A/1A46881A
     MOV         $05E1,#$09                  ; 16A55E/11E10509
     MOV         $05FC,#$00                  ; 16A562/11FC0500
@@ -630,10 +631,10 @@ L_16A57E:
     INC2POSE                                ; 16A57E/90
     HALT                                    ; 16A57F/09
 
-; CODE OR DATA -- $16A580 .. $16A5DF
+; CODE OR DATA -- $16A580 .. KSTDF_ThrowBackdropInhaleEnd
 incbinRange "../split/prg/bank16.bin", $0580, $05DF
 
-L_16A5DF:
+KSTDF_ThrowBackdropInhaleEnd:
     ASMCALL     $DE4B                       ; 16A5DF/D04BDE // Play sound effect
     .byte       $FF                         ; 16A5E2/FF
     ONTICK      $16A5EF                     ; 16A5E3/08EFA516
@@ -642,10 +643,10 @@ L_16A5DF:
 L_16A5EB:
     JML         L_14B2D9                    ; 16A5EB/03D9B214
 
-; CODE OR DATA -- $16A5EF .. $16A5FF
+; CODE OR DATA -- $16A5EF .. KSTE0_ThrowBackdropGrab
 incbinRange "../split/prg/bank16.bin", $05EF, $05FF
 
-L_16A5FF:
+KSTE0_ThrowBackdropGrab:
     MOV         $05E1,#$0C                  ; 16A5FF/11E1050C
     MOV         $05F9,#$80                  ; 16A603/11F90580
     MOV         VAR2,#$78                   ; 16A607/0D0278
@@ -677,7 +678,7 @@ L_16A63B:
     ASMCALL     $DFA3                       ; 16A63B/D0A3DF // SUB reg, #arg2, arg1
     .word       $05F7                       ; 16A63E/F705
     .byte       $00                         ; 16A640/00
-    JNE         KirbyStateE1                ; 16A641/0BC7A9
+    JNE         KSTE1_BackdropWater                ; 16A641/0BC7A9
     ASMCALL     $DFA3                       ; 16A644/D0A3DF // SUB reg, #arg2, arg1
     .word       $05E3                       ; 16A647/E305
     .byte       $16                         ; 16A649/16
@@ -864,7 +865,7 @@ L_16A777:
     .word       $0100                       ; 16A782/0001
     HALT                                    ; 16A784/09
 
-L_16A785:
+KSTE2_BackdropImpactForward:
     MOV         $05FC,#$01                  ; 16A785/11FC0501
     ASMCALL     $987D                       ; 16A789/D07D98 // Zero Kirby's velocities
     ASMCALL     $8FDC                       ; 16A78C/D0DC8F // Set pose (respect facing)
@@ -899,7 +900,7 @@ L_16A7BD:
     .word       $FF00                       ; 16A7EA/00FF
     HALT                                    ; 16A7EC/09
 
-KirbyStateE3:
+KSTE3_BackdropImpactBackward:
     MOV         $05FC,#$01                  ; 16A7ED/11FC0501
     ASMCALL     $987D                       ; 16A7F1/D07D98 // Zero Kirby's velocities
     ASMCALL     $8FDC                       ; 16A7F4/D0DC8F // Set pose (respect facing)
@@ -932,7 +933,7 @@ L_16A83F:
     .word       $0600                       ; 16A842/0006
     HALT                                    ; 16A844/09
 
-L_16A845:
+KSTE4_BackdropImpactDown:
     ASMCALL     $987D                       ; 16A845/D07D98 // Zero Kirby's velocities
     ASMCALL     $8FDC, WAIT #1              ; 16A848/D1DC8F // Set pose (respect facing)
     .byte       $20                         ; 16A84B/20
@@ -966,7 +967,7 @@ L_16A894:
     .word       $0600                       ; 16A897/0006
     HALT                                    ; 16A899/09
 
-L_16A89A:
+KSTE5_BackdropImpactUp:
     ASMCALL     $987D                       ; 16A89A/D07D98 // Zero Kirby's velocities
     ASMCALL     $8FDC, WAIT #1              ; 16A89D/D1DC8F // Set pose (respect facing)
     .byte       $22                         ; 16A8A0/22
@@ -1010,14 +1011,14 @@ L_16A8F9:
     .word       $0600                       ; 16A8FC/0006
     HALT                                    ; 16A8FE/09
 
-L_16A8FF:
+KSTE6_BackdropImpactJump:
     ASMCALL     $987D                       ; 16A8FF/D07D98 // Zero Kirby's velocities
     MOV         $05FC,#$02                  ; 16A902/11FC0502
     WAIT        #18                         ; 16A906/0612
 L_16A908:
     A_JMP       L_16A994                    ; 16A908/1794A9
 
-KirbyStateE7:
+KSTE7_BackdropImapctJumpCeiling:
     ASMCALL     $987D                       ; 16A90B/D07D98 // Zero Kirby's velocities
     ASMCALL     $8FDC, WAIT #1              ; 16A90E/D1DC8F // Set pose (respect facing)
     .byte       $1A                         ; 16A911/1A
@@ -1070,10 +1071,10 @@ L_16A9B3:
     MOV         $05F9,#$00                  ; 16A9B3/11F90500
     JML         L_14B2D9                    ; 16A9B7/03D9B214
 
-; CODE OR DATA -- $16A9BB .. $16A9C7
+; CODE OR DATA -- $16A9BB .. KSTE1_BackdropWater
 incbinRange "../split/prg/bank16.bin", $09BB, $09C7
 
-KirbyStateE1:
+KSTE1_BackdropWater:
     MOV         $05FC,#$05                  ; 16A9C7/11FC0505
     A_JMP       L_16A9B3                    ; 16A9CB/17B3A9
 
