@@ -817,34 +817,260 @@ splits:
     - bank: 0x3F
   chr:
     - bank: 0
+      splits:
+      - [0x0000, gfx/00_spr_bg_common] # always loaded during gameplay
+      - [0x0400, gfx/01_bg_sky_castle_1]
+      - [0x0800, gfx/02_bg_sky_castle_2]
+      - [0x0c00, gfx/03_bg_sky_castle_3]
+      - [0x1000, gfx/04_bg_cave_1]
+      - [0x1400, gfx/05_bg_extra_game] # i dont even know when this graphic shows up
+      - [0x1800, gfx/06_bg_cave_2]
+      - [0x1c00, gfx/07_bg_desert_1]
     - bank: 1
+      splits:
+      - [0x0000, gfx/08_bg_desert_2]
+      - [0x0400, gfx/09_bg_unknown] # contains some fuse graphics and is only ever paired with 0A. Can't find a room with it
+      - [0x0800, gfx/0A_bg_forest_1]
+      - [0x0c00, gfx/0B_bg_ship_1]
+      - [0x1000, gfx/0C_bg_ship_2]
+      - [0x1400, gfx/0D_bg_ship_3] # airship, paired with 0B
+      - [0x1800, gfx/0E_bg_grass_1]
+      - [0x1c00, gfx/0F_bg_grass_2]
     - bank: 2
+      splits:
+      - [0x0000, gfx/10_bg_indoors_1]
+      - [0x0400, gfx/11_bg_indoors_2]
+      - [0x0800, gfx/12_bg_mountain_1]
+      - [0x0c00, gfx/13_bg_mountain_2]
+      - [0x1000, gfx/14_bg_mountain_3]
+      - [0x1400, gfx/15_bg_ice_1]
+      - [0x1800, gfx/16_bg_ice_2] # ice cave. not used very much
+      - [0x1c00, gfx/17_bg_ice_3] # ice w/ aurora & stars. used with 15 a bunch
     - bank: 3
+      splits:
+      - [0x0000, gfx/18_bg_beach_1]
+      - [0x0400, gfx/19_bg_beach_2]
+      - [0x0800, gfx/1A_bg_forest_2]
+      - [0x0c00, gfx/1B_bg_grass_3]
+      - [0x1000, gfx/1C_bg_anim_A_1] # animated tiles. cycles between 4 frames, each its own page
+      - [0x1400, gfx/1D_bg_anim_A_2]
+      - [0x1800, gfx/1E_bg_anim_A_3]
+      - [0x1c00, gfx/1F_bg_anim_A_4]
     - bank: 4
+      splits:
+      - [0x0000, gfx/20_bg_anim_B_1]
+      - [0x0400, gfx/21_bg_anim_B_2]
+      - [0x0800, gfx/22_bg_anim_B_3]
+      - [0x0c00, gfx/23_bg_anim_B_4]
+      - [0x1000, gfx/24_bg_anim_C_1]
+      - [0x1400, gfx/25_bg_anim_C_2]
+      - [0x1800, gfx/26_bg_anim_C_3]
+      - [0x1c00, gfx/27_bg_anim_C_4]
     - bank: 5
+      splits:
+      - [0x0000, gfx/28_bg_anim_D_1]
+      - [0x0400, gfx/29_bg_anim_D_2]
+      - [0x0800, gfx/2A_bg_anim_D_3]
+      - [0x0c00, gfx/2B_bg_anim_D_4]
+      - [0x1000, gfx/2C_bg_vs_meta_knight_1] # regular room
+      - [0x1400, gfx/2D_bg_vs_meta_knight_2] # mosaic step 1
+      - [0x1800, gfx/2E_bg_vs_meta_knight_3] # mosaic step 2
+      - [0x1c00, gfx/2F_bg_vs_meta_knight_4] # mosaic step 3
     - bank: 6
+      splits:
+      - [0x0000, gfx/30_bg_ocean_1] # the one with the checkerboard stuff
+      - [0x0400, gfx/31_bg_ocean_2]
+      - [0x0800, gfx/32_bg_indoors_3]
+      - [0x0c00, gfx/33_bg_goal_game_1]
+      - [0x1000, gfx/34_bg_goal_game_2]
+      - [0x1400, gfx/35_bg_night_1]
+      - [0x1800, gfx/36_bg_night_2]
+      - [0x1c00, gfx/37_bg_night_3]
     - bank: 7
+      splits:
+      - [0x0000, gfx/38_bg_shine_bright]
+      - [0x0400, gfx/39_bg_warp_star_station]
+      - [0x0800, gfx/3A_bg_overworld_hud]
+      - [0x0c00, gfx/3B_bg_arena]
+      - [0x1000, gfx/3C_3D_spr_enemies_1] # scarfy, fire lion, kabu, slippy, blade knight, hothead
+      - [0x1800, gfx/3E_bg_hud_1]
+      - [0x1c00, gfx/3F_bg_hud_2]
     - bank: 8
+      splits:
+      - [0x0000, gfx/40_bg_ability_portraits_1] # spark, hyper, sword
+      - [0x0400, gfx/41_bg_ability_portraits_2] # normal, fireball, cutter
+      - [0x0800, gfx/42_bg_ability_portraits_3] # wheel, hammer, parasol
+      - [0x0c00, gfx/43_bg_ability_portraits_4] # beam, ball, sleep
+      - [0x1000, gfx/44_bg_ability_portraits_5] # fire, laser, mike
+      - [0x1400, gfx/45_bg_ability_portraits_6] # needle, goal, crash
+      - [0x1800, gfx/46_bg_ability_portraits_7] # ice, hi-jump, freeze
+      - [0x1c00, gfx/47_bg_ability_portraits_8] # clear, light, cannon (unused in JP/NTSC, used in PAL/3DS)
     - bank: 9
+      splits:
+      - [0x0000, gfx/48_bg_ability_portraits_9] # bye bye, warp star, throw
+      - [0x0400, gfx/49_bg_ability_portraits_10] # tornado, stone, ouch
+      - [0x0800, gfx/4A_bg_ability_portraits_11] # star rod, backdrop, miss
+      - [0x0c00, gfx/4B_bg_ability_portraits_12] # ufo, nothing, mix
+      - [0x1000, gfx/4C_bg_prologue_frame]
+      - [0x1400, gfx/4D_bg_minigame_splash_1] # contains a bunch of untranslated Japanese graphics
+      - [0x1800, gfx/4E_bg_minigame_splash_2] # ditto
+      - [0x1c00, gfx/4F_bg_dark_room]
     - bank: 0xA
+      splits:
+      - [0x0000, gfx/50_bg_unknown] # looks kinda like level graphics? Has slope grades, borders, edges, and some stars
+      - [0x0400, gfx/51_bg_butter_building_1] # gfx for rotating butter building stages
+      - [0x0800, gfx/52_bg_butter_building_2]
+      - [0x0c00, gfx/53_bg_butter_building_3]
+      - [0x1000, gfx/54_bg_butter_building_4]
+      - [0x1400, gfx/55_bg_unknown] # there's a 55+0A set, so maybe forest_3, but i can't find where it's used
+      - [0x1800, gfx/56_57_spr_quick_draw_1]
     - bank: 0xB
+      splits:
+      - [0x0000, gfx/58_59_spr_quick_draw_2]
+      - [0x0800, gfx/5A_5B_spr_egg_catcher_1]
+      - [0x1000, gfx/5C_5D_spr_egg_catcher_2]
+      - [0x1800, gfx/5E_spr_bg_quick_draw_3] # hats are used as both spr and bg. rest is bg
+      - [0x1c00, gfx/5F_bg_quick_draw_4]
     - bank: 0xC
+      splits:
+      - [0x0000, gfx/60_spr_bg_minigame_results]
+      - [0x0400, gfx/61_bg_eggcatcher_3]
+      - [0x0800, gfx/62_bg_station_arena_museum_splash_1] # plenty of untranslated JP graphics here too
+      - [0x0c00, gfx/63_bg_station_arena_museum_splash_2] # and just unused tiles in general
+      - [0x1000, gfx/64_65_spr_crane_fever]
+      - [0x1800, gfx/66_bg_crane_fever_1]
+      - [0x1c00, gfx/67_bg_crane_fever_2]
     - bank: 0xD
+      splits:
+      - [0x0000, gfx/68_69_6A_6B_bg_title_screen]
+      - [0x1000, gfx/6C_6D_spr_draw_kirby_the_end]
+      - [0x1800, gfx/6E_bg_draw_kirby_1]
+      - [0x1c00, gfx/6F_bg_draw_kirby_2]
     - bank: 0xE
+      splits:
+      - [0x0000, gfx/70_bg_draw_kirby_3]
+      - [0x0400, gfx/71_bg_draw_kirby_jp] # JP graphics for drawing song lyrics. unused in NTSC/PAL. The "hoshi no kirby!" part is unused in JP too
+      - [0x0800, gfx/72_bg_palace_1]
+      - [0x0c00, gfx/73_bg_palace_2]
+      - [0x1000, gfx/74_bg_palace_3]
+      - [0x1400, gfx/75_bg_vs_nightmare_orb_1]
+      - [0x1800, gfx/76_bg_vs_nightmare_orb_2]
+      - [0x1c00, gfx/77_bg_quick_draw_text]
     - bank: 0xF
+      splits:
+      - [0x0000, gfx/78_79_spr_nightmare_intro] # and some weird speckly graphics? idk what those are for
+      - [0x0800, gfx/7A_bg_anim_hud_fountain_1] # animated HUD components and also animated parts of the fountain of dreams
+      - [0x0c00, gfx/7B_bg_anim_hud_fountain_2]
+      - [0x1000, gfx/7C_bg_anim_hud_fountain_3]
+      - [0x1400, gfx/7D_bg_anim_hud_fountain_4]
+      - [0x1800, gfx/7E_7F_spr_kirby_weapons_misc]
     - bank: 0x10
+      splits:
+      - [0x0000, gfx/80_81_spr_kirby_normal]
+      - [0x0800, gfx/82_83_spr_kirby_mouthful_misc]
+      - [0x1000, gfx/84_85_spr_kirby_slopes_misc] # slopes, mouthful burn damage, beam, laser
+      - [0x1800, gfx/86_87_spr_kirby_sword_star_rod]
     - bank: 0x11
+      splits:
+      - [0x0000, gfx/88_89_spr_kirby_spark_fire_cutter_crash]
+      - [0x0800, gfx/8A_8B_spr_kirby_stone_weapons_slopes]
+      - [0x1000, gfx/8C_8D_spr_kirby_ball_mike_wheel_mini]
+      - [0x1800, gfx/8E_8F_spr_kirby_mouthful_element_damage_cannon] # and a pose for some reason
     - bank: 0x12
+      splits:
+      - [0x0000, gfx/90_91_spr_kirby_element_damage]
+      - [0x0800, gfx/92_93_spr_kirby_tornado_hi_jump_ice_sleep_swim]
+      - [0x1000, gfx/94_95_spr_kirby_needle_sleep_scrambling] # scrambling = special climbing animation during goal game
+      - [0x1800, gfx/96_97_spr_kirby_hammer_parasol]
     - bank: 0x13
+      splits:
+      - [0x0000, gfx/98_99_spr_kirby_ending_kracko]
+      - [0x0800, gfx/9A_9B_spr_enemies_2] # waddle doo, waddle dee, shotzo, bronto burt, sparky, laser ball, poppy bros. jr, blipper, flamer, bounder, hothead
+      - [0x1000, gfx/9C_9D_spr_enemies_3] # waddle doo, waddle dee, squishy, bubbles, twister, parasol, laser ball, twizzy, glunk, wheelie, blade knight, noddy, sir kibble
+      - [0x1800, gfx/9E_9F_spr_enemies_4] # waddle doo, waddle dee, shotzo, bronto burt, broom hatter, kabu, parasol, cool spook, starman, bomber, sword knight, cappy, sir kibble
     - bank: 0x14
+      splits:
+      - [0x0000, gfx/A0_A1_spr_enemies_5] # scarfy, shotzo, bubbles, coner, kabu, slippy, twizzy, glunk, blipper, sword knight, bounder, hothead
+      - [0x0800, gfx/A2_A3_spr_enemies_6] # waddle doo, waddle dee, shotzo, bronto burt, sparky, rocky, pengy, meta knight giving candy, invincible candy, sword knight, chilly, spiny
+      - [0x1000, gfx/A4_A5_spr_meta_knight]
+      - [0x1800, gfx/A6_A7_spr_shine_bright]
     - bank: 0x15
+      splits:
+      - [0x0000, gfx/A8_A9_spr_enemies_5] # mr frosty, sparky, poppy bros. jr, ice cube, bomber, spiny
+      - [0x0800, gfx/AA_AB_spr_enemies_6] # grand wheelie, sparky, blade knight, poppy bros. jr, wheelie, hothead
+      - [0x1000, gfx/AC_AD_spr_enemies_7] # bugzzy, ladybugs, waddle dee, UFO, rocky, flamer, cappy, spiny
+      - [0x1800, gfx/AE_AF_spr_enemies_8] # waddle doo, waddle dee, rolling tutle, sparky, laser ball, poppy bros. jr (walking only), blipper
     - bank: 0x16
+      splits:
+      - [0x0000, gfx/B0_B1_spr_paint_roller]
+      - [0x0800, gfx/B2_B3_spr_heavy_mole]
+      - [0x1000, gfx/B4_B5_spr_bg_warp_star_station_text_level_intros_1] # bg for "LEVEL {}" text in warp star station, spr for ice cream island
+      - [0x1800, gfx/B6_B7_spr_level_intros_2]
     - bank: 0x17
+      splits:
+      - [0x0000, gfx/B8_B9_spr_level_intros_3]
+      - [0x0800, gfx/BA_BB_spr_title_screen]
+      - [0x1000, gfx/BC_level_intros_1]
+      - [0x1400, gfx/BD_bg_level_intros_2]
+      - [0x1800, gfx/BE_bg_level_intros_3]
+      - [0x1c00, gfx/BF_bg_level_intros_4]
     - bank: 0x18
+      splits:
+      - [0x0000, gfx/C0_bg_ui_unknown] # cant find it used in gameplay. loaded during level intro cutscene but ditched right after. Loaded during paint roller fight for some reason
+      - [0x0400, gfx/C1_bg_vs_paint_roller] # looks like paint roller's room, but that uses C0
+      - [0x0800, gfx/C2_bg_grass_4] # flowers
+      - [0x0c00, gfx/C3_bg_game_over]
+      - [0x1000, gfx/C4_C5_spr_enemies_9] # bonkers, bronto burt, twister, poppy bros. jr, chilly, sir kibble
+      - [0x1800, gfx/C6_C7_spr_kirby_ufo_weapon_hover_start] # contains a load of other duplicated kirby graphics but idk when theyre used
     - bank: 0x19
+      splits:
+      - [0x0000, gfx/C8_C9_spr_kirby_game_over_warp_star_station_numbers]
+      - [0x0800, gfx/CA_CB_spr_enemies_10] # scarfy, squishy, UFO, twister, rocky, poppy bros. jr, blipper, flamer, cappy, spiny
+      - [0x1000, gfx/CC_CD_spr_dedede]
+      - [0x1800, gfx/CE_CF_spr_kirby_star_rod_flying_exit_door_meta_knight_death] # long ass filename
     - bank: 0x1A
+      splits:
+      - [0x0000, gfx/D0_D1_spr_kirby_misc_big_switch] # various poses, warp star, a waddle doo?? and the big switch
+      - [0x0800, gfx/D2_D3_spr_nightmare_wizard_1]
+      - [0x1000, gfx/D4_D5_spr_nightmare_wizard_2]
+      - [0x1800, gfx/D6_D7_spr_nightmare_wizard_3]
     - bank: 0x1B
+      splits:
+      - [0x0000, gfx/D8_D9_spr_overworld] # door icons, flags, etc
+      - [0x0800, gfx/DA_bg_ui_1] # largely empty and unused, loaded in during pause screen
+      - [0x0c00, gfx/DB_bg_ui_2] # italic font
+      - [0x1000, gfx/DC_bg_ui_3] # pause screen, among other things (?)
+      - [0x1400, gfx/DD_DE_bg_pause_drawing]
+      - [0x1c00, gfx/DF_bg_moon]
     - bank: 0x1C
+      splits:
+      - [0x0000, gfx/E0_E1_spr_goal_game]
+      - [0x0800, gfx/E2_bg_museum]
+      - [0x0c00, gfx/E3_bg_fountain_1]
+      - [0x1000, gfx/E4_E5_spr_fountain_cutscene_1]
+      - [0x1800, gfx/E6_E7_spr_fountain_cutscene_2]
     - bank: 0x1D
+      splits:
+      - [0x0000, gfx/E8_E9_spr_enemies_11] # waddle doo, waddle dee, squishy, bubbles, coner, mr. tick tock, rocky, hothead
+      - [0x0800, gfx/EA_EB_spr_kirby_cannon]
+      - [0x1000, gfx/EC_ED_spr_enemies_12] # waddle doo, waddle dee, shotzo, bronto burt, twister, parasol ,laser ball, starman, bomber, flamer, cannon, hothead
+      - [0x1800, gfx/EE_EF_spr_enemies_13] # poppy bros. sr, shotzo, bronto burt, meta-knights, sword knight, sir kibble
     - bank: 0x1E
+      splits:
+      - [0x0000, gfx/F0_bg_overworld_1] # common tiles for all overworlds
+      - [0x0400, gfx/F1_bg_overworld_2] # veg. valley & ice cream island
+      - [0x0800, gfx/F2_bg_overworld_3] # butter building
+      - [0x0c00, gfx/F3_bg_overworld_4] # grape garden
+      - [0x1000, gfx/F4_bg_overworld_5] # yogurt yard
+      - [0x1400, gfx/F5_bg_overworld_6] # orange ocean
+      - [0x1800, gfx/F6_bg_overworld_7] # rainbow resort
+      - [0x1c00, gfx/F7_bg_overworld_blocked_1] # these also have doors
     - bank: 0x1F
+      splits:
+      - [0x0000, gfx/F8_bg_prologue_1]
+      - [0x0400, gfx/F9_bg_prologue_2]
+      - [0x0800, gfx/FA_FB_spr_bg_prologue_3]
+      - [0x1000, gfx/FC_bg_overworld_blocked_2] # also supplementary gfx for orange ocean
+      - [0x1400, gfx/FD_bg_overworld_blocked_3]
+      - [0x1800, gfx/FE_bg_credits_font]
+      - [0x1c00, gfx/FF_bg_big_font]
