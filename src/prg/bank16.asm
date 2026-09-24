@@ -47,7 +47,7 @@ KST3E_CopyUnknownLand: ; Does some stuff and then goes to state 1E (copy land)
 
 CopyAttack_Fire:
     MOV         $05E1,#$0C                  ; 16A070/11E1050C
-    ONTICK      $16A0B4                     ; 16A074/08B4A016
+    ONTICK      B16_a0b4                    ; 16A074/08B4A016
     ASMCALL     $8FDC, WAIT #1              ; 16A078/D1DC8F // Set pose (respect facing)
     .byte       $04                         ; 16A07B/04
 L_16A07C:
@@ -59,7 +59,7 @@ L_16A082:
         DEC2POSE    WAIT #1                     ; 16A082/A1
 L_16A083:
     ENDLOOP                                 ; 16A083/02
-    ASMCALL     $A0C4                       ; 16A084/D0C4A0 // Check if player is not holding the B Button
+    ASMCALL     B16_a0c4                    ; 16A084/D0C4A0 // Check if player is not holding the B Button
     JEQ         L_16A07F                    ; 16A087/0A7FA0
     ENDLASTTASK                             ; 16A08A/12
     A_JMP       KST3E_CopyUnknownLand                ; 16A08B/176CA0
@@ -97,8 +97,20 @@ L_16A0AA:
 L_16A0B1:
     A_JMP       L_16A08E                    ; 16A0B1/178EA0
 
-; CODE OR DATA -- $16A0B4 .. $16A0CF
-incbinRange "../split/prg/bank16.bin", $00B4, $00CF
+B16_a0b4:
+    jsr $8049 ; KirbyPhysics
+    STATE_TRANSITION_IF $89d9, $3b ; HasJustEnteredWater
+    jmp $805b ; KirbyFinalize
+
+B16_a0c4: ; SCR_IsNotHoldingB
+    ldx #$00
+    lda temp_pad1_hold
+    and #$40
+    bne B16_a0cd
+    inx
+B16_a0cd:
+    txa
+    rts
 
 CopyAttack_Beam:
     MOV         $05E1,#$0C                  ; 16A0CF/11E1050C
@@ -197,7 +209,7 @@ CopyAttack_Spark:
     .byte       $08                         ; 16A152/08
 L_16A153:
     INC2POSE                                ; 16A153/90
-    ONTICK      $16A17E                     ; 16A154/087EA116
+    ONTICK      B16_a17e                     ; 16A154/087EA116
 L_16A158:
     ASMCALL     $DE4B                       ; 16A158/D04BDE // Play sound effect
     .byte       $39                         ; 16A15B/39
@@ -220,14 +232,44 @@ L_16A16B:
 KST42_SparkEnd:
     ASMCALL     $DE4B                       ; 16A16F/D04BDE // Play sound effect
     .byte       $FF                         ; 16A172/FF
-    ONTICK      $16A0B4                     ; 16A173/08B4A016
+    ONTICK      B16_a0b4                     ; 16A173/08B4A016
     ASMCALL     $8FDC, WAIT #8              ; 16A177/D8DC8F // Set pose (respect facing)
     .byte       $08                         ; 16A17A/08
 L_16A17B:
     A_JMP       KST3E_CopyUnknownLand                ; 16A17B/176CA0
 
-; CODE OR DATA -- $16A17E .. $16A1BD
-incbinRange "../split/prg/bank16.bin", $017E, $01BD
+B16_a17e:
+    jsr $8049 ; KirbyPhysics
+    jsr $a1ad ; KirbySpark_GetHitbox
+    jsr $9420 ; Kirby_DamageEnemyCollision
+    jsr $a19e ; KirbySpark_ShouldStop
+    bcc B16_a191
+    ldx #$42
+    jmp $8ce8 ; DoStateTransition
+B16_a191:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a19b
+    ldx #$3b
+    jmp $8ce8 ; DoStateTransition
+B16_a19b:
+    jmp $805b ; KirbyFinalize
+B16_KirbySpark_ShouldStop:
+    lda OBJ_var2+1
+    beq B16_a1a8
+    dec OBJ_var2+1
+    bpl B16_a1ab
+B16_a1a8:
+    jmp $8afc ; IsHoldingB
+B16_a1ab:
+    clc
+    rts
+B16_KirbySpark_GetHitbox:
+    lda #$b6
+    ldy #$a1
+    ldx #$08
+    jmp $9c72 ; GetKirbyHitbox
+B16_a1b6:
+.byte $04,$00,$00,$00,$00,$19,$14
 
 CopyAttack_Cutter:
     MOV         $05E1,#$0C                  ; 16A1BD/11E1050C
@@ -382,8 +424,38 @@ KST43_MikeEnd:
 L_16A2AD:
     JML         KST01_DiscardAbility        ; 16A2AD/034BA714
 
-; CODE OR DATA -- $16A2B1 .. $16A2F2
-incbinRange "../split/prg/bank16.bin", $02B1, $02F2
+
+B16_a2b1:
+    jsr $95cd ; SetKirbyPosition
+    jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    jsr $a2c7 ; $a2c7
+    bcc B16_a2c4
+    ldx #$43
+    jmp $8ce8 ; DoStateTransition
+B16_a2c4:
+    jmp $805b ; KirbyFinalize
+B16_a2c7:
+    lda OBJ_var0+1
+    cmp #$03
+    rts
+B16_a2cd:
+    lda a:kirby_x_lo
+    sta OBJ_var2+1
+    lda a:kirby_x_hi
+    sta OBJ_var3+1
+    rts
+    lda OBJ_var2+1
+    sta a:kirby_x_lo
+    lda OBJ_var3+1
+    sta a:kirby_x_hi
+    rts
+    lda a:ability_uses
+    bne B16_a2f1
+    ldx #$ff
+    stx a:kirby_copy_ability
+B16_a2f1:
+    rts
 
 CopyAttack_Needle:
     MOV         $05E1,#$0C                  ; 16A2F2/11E1050C
@@ -424,8 +496,37 @@ L_16A31F:
 L_16A321:
     A_JMP       KST3E_CopyUnknownLand                ; 16A321/176CA0
 
-; CODE OR DATA -- $16A324 .. $16A364
-incbinRange "../split/prg/bank16.bin", $0324, $0364
+B16_a324:
+    jsr $8afc ; IsHoldingB
+    bcc B16_a32e
+    ldx #$44
+    jmp $8ce8 ; DoStateTransition
+B16_a32e:
+    jsr $8049 ; KirbyPhysics
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a33b
+    ldx #$3b
+    jmp $8ce8 ; DoStateTransition
+B16_a33b:
+    jsr $a354 ; $a354
+    jsr $9420 ; Kirby_DamageEnemyCollision
+    jmp $805b ; KirbyFinalize
+B16_a344:
+    jsr $8049 ; KirbyPhysics
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a351
+    ldx #$3b
+    jmp $8ce8 ; DoStateTransition
+B16_a351:
+    jmp $805b ; KirbyFinalize
+B16_a354:
+    lda #$5d
+    ldy #$a3
+    ldx #$08
+    jmp $9c72 ; GetKirbyHitbox
+B16_a35d:
+    .byte $04,$00,$00,$FA,$FF,$0E,$0B
+
 
 CopyAttack_Ice:
     MOV         $05E1,#$0C                  ; 16A364/11E1050C
@@ -446,8 +547,31 @@ L_16A379:
     JEQ         L_16A374                    ; 16A37F/0A74A3
     A_JMP       KST3E_CopyUnknownLand                ; 16A382/176CA0
 
-; CODE OR DATA -- $16A385 .. $16A3B9
-incbinRange "../split/prg/bank16.bin", $0385, $03B9
+B16_a385:
+    jsr $a38e ; $a38e
+    jsr $9420 ; Kirby_DamageEnemyCollision
+    jmp $a0b4 ; $a0b4
+B16_a38e:
+    jsr $98c3 ; GetDirectionInX
+    lda $a39c,x
+    ldy $a39e,x
+    ldx #$04
+    jmp $9c72 ; GetKirbyHitbox
+B15_a39c:
+    .byte $A0,$A7,$A3,$A3,$02,$1A,$00,$00
+    .byte $00,$11,$08,$02,$E6,$FF,$00,$00
+    .byte $11,$08
+
+B16_a3ae: ; SCR_IsNotHoldingB_2
+    ldx #$00
+    lda temp_pad1_hold
+    and #$40
+    bne B16_a3b7
+    inx
+B16_a3b7:
+    txa
+    rts
+
 
 CopyAttack_Freeze:
     MOV         $05E1,#$0C                  ; 16A3B9/11E1050C
@@ -474,8 +598,29 @@ KST4A_FreezeEnd:
 L_16A3E1:
     A_JMP       KST3E_CopyUnknownLand                ; 16A3E1/176CA0
 
-; CODE OR DATA -- $16A3E4 .. $16A414
-incbinRange "../split/prg/bank16.bin", $03E4, $0414
+B16_a3e4:
+    jsr $8049 ; KirbyPhysics
+    jsr $a404 ; $a404
+    jsr $9420 ; Kirby_DamageEnemyCollision
+    jsr $a19e ; KirbySpark_ShouldStop
+    bcc B16_a3f7
+    ldx #$4a
+    jmp $8ce8 ; DoStateTransition
+B16_a3f7:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a401
+    ldx #$3b
+    jmp $8ce8 ; DoStateTransition
+B16_a401:
+    jmp $805b ; KirbyFinalize
+B16_a404:
+    lda #$0d
+    ldy #$a4
+    ldx #$06
+    jmp $9c72 ; GetKirbyHitbox
+B16_a40d:
+    .byte $02,$00,$00,$00,$00,$18,$18
+
 
 CopyAttack_Crash:
     MOV         $05E1,#$0C                  ; 16A414/11E1050C
@@ -560,8 +705,10 @@ L_16A47F:
     ASMCALL     $A54B                       ; 16A49C/D04BA5 // Decrement ability uses and remove if depleted (return 0 if depleted)
     JML         KST01_DiscardAbility        ; 16A49F/034BA714
 
-; CODE OR DATA -- $16A4A3 .. $16A4B6
-incbinRange "../split/prg/bank16.bin", $04A3, $04B6
+L_16A4A3: ; unused?
+    .byte $03,$00,$3F,$20,$01,$82,$01
+    .byte $02,$00,$3F,$10,$01,$16,$02,$00
+    .byte $3F,$10,$01,$0F
 
 L_16A4B6:
     ASMCALL     $9952, WAIT #1              ; 16A4B6/D15299 // Create or replace kirby particle (slots 3 through 5) of type `arg3`, offset by (`arg1`, `arg2`) with VAR0=0, VAR1=self.VAR1+`arg4`
@@ -584,8 +731,40 @@ L_16A4C4:
 L_16A4CB:
     A_JMP       L_16A4B6                    ; 16A4CB/17B6A4
 
-; CODE OR DATA -- $16A4CE .. $16A516
-incbinRange "../split/prg/bank16.bin", $04CE, $0516
+B16_a4ce:
+    ldx #$0f
+B16_a4d0:
+    lda color_palette,x
+    cmp #$0f
+    beq B16_a4db
+    and #$f0
+    ora #$07
+B16_a4db:
+    sta $0100,x
+    dex
+    bpl B16_a4d0
+    jsr $c0be ; $c0be
+    .byte $E7,$A4
+    rts
+    .byte $03,$00,$3F,$10,$01,$00,$01
+B16_a4ee:
+    ldx #$03
+B16_a4f0:
+    lda $a512,x
+    sta $0100,x
+    sta $0104,x
+    dex
+    bpl B16_a4f0
+    lda color_palette+0
+    sta $0100
+    sta $0104
+    jsr $c0be ; $c0be
+    .byte $0B,$A5
+    rts
+B16_a50b:
+    .byte $03,$18,$3F,$08,$01,$00,$01,$FF
+    .byte $30,$37,$17
+
 
 CopyAttack_Light:
     MOV         $05E1,#$0C                  ; 16A516/11E1050C
@@ -611,8 +790,18 @@ L_16A538:
     ASMCALL     $A54B                       ; 16A541/D04BA5 // Decrement ability uses and remove if depleted (return 0 if depleted)
     JML         KST01_DiscardAbility        ; 16A544/034BA714
 
-; CODE OR DATA -- $16A548 .. $16A55A
-incbinRange "../split/prg/bank16.bin", $0548, $055A
+B16_a548:
+    jmp $805b ; KirbyFinalize
+B16_a54b:
+    ldx #$01
+    dec ability_uses
+    bne B16_a558
+    dex
+    lda #$ff
+    sta kirby_copy_ability
+B16_a558:
+    txa
+    rts
 
 CopyAttack_BackdropThrow:
     SPRITEMAP   L_1A8846                     ; 16A55A/1A46881A
@@ -631,8 +820,51 @@ L_16A57E:
     INC2POSE                                ; 16A57E/90
     HALT                                    ; 16A57F/09
 
-; CODE OR DATA -- $16A580 .. KSTDF_ThrowBackdropInhaleEnd
-incbinRange "../split/prg/bank16.bin", $0580, $05DF
+B16_a580:
+    jsr $8049 ; KirbyPhysics
+    jsr $8921 ; $8921
+    bcc B16_a58d
+    ldx #$e0
+    jmp $8ce8 ; DoStateTransition
+B16_a58d:
+    jsr $892f ; $892f
+    bcc B16_a597
+    ldx #$df
+    jmp $8ce8 ; DoStateTransition
+B16_a597:
+    jsr $899e ; $899e
+    bcc B16_a5a1
+    ldx #$33
+    jmp $8ce8 ; DoStateTransition
+B16_a5a1:
+    lda OBJ_var4+1
+    beq B16_a5ab
+    dec OBJ_var4+1
+    bpl B16_a5ae
+B16_a5ab:
+    jsr $ebbe ; $ebbe
+B16_a5ae:
+    lda #$02
+    jsr $d805 ; LongCall
+    .byte $52,$AD,$18
+    jsr $a5bc ; $a5bc
+    jmp $805b ; KirbyFinalize
+B16_a5bc:
+    ldx #$00
+    lda OBJ_var1+1
+    bpl B16_a5c4
+    inx
+B16_a5c4:
+    lda $a5cd,x
+    ldy $a5cf,x
+    jmp $9c72 ; GetKirbyHitbox
+
+B16_a5cd:
+    .byte $D1,$D8
+B16_a5cf:
+    .byte $A5,$A5
+    .byte $03,$16,$00,$00,$00,$16,$14
+    .byte $03,$EA,$FF,$00,$00,$16,$14
 
 KSTDF_ThrowBackdropInhaleEnd:
     ASMCALL     $DE4B                       ; 16A5DF/D04BDE // Play sound effect
@@ -643,8 +875,15 @@ KSTDF_ThrowBackdropInhaleEnd:
 L_16A5EB:
     JML         L_14B2D9                    ; 16A5EB/03D9B214
 
-; CODE OR DATA -- $16A5EF .. KSTE0_ThrowBackdropGrab
-incbinRange "../split/prg/bank16.bin", $05EF, $05FF
+B16_a5ef:
+    jsr $8049 ; KirbyPhysics
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a5fc
+    ldx #$33
+    jmp $8ce8 ; DoStateTransition
+B16_a5fc:
+    jmp $805b ; KirbyFinalize
+
 
 KSTE0_ThrowBackdropGrab:
     MOV         $05E1,#$0C                  ; 16A5FF/11E1050C
@@ -834,8 +1073,27 @@ L_16A719:
 L_16A72E:
     A_JMP       L_16A9B3                    ; 16A72E/17B3A9
 
-; CODE OR DATA -- $16A731 .. $16A753
-incbinRange "../split/prg/bank16.bin", $0731, $0753
+B16_a731:
+    jsr $8049 ; KirbyPhysics
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a73e
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a73e:
+    jmp $805b ; KirbyFinalize
+B16_a741:
+    lda temp_pad1_hold
+    and #$08
+    bne B16_a752
+    ldx #$00
+    lda frame_counter
+    and #$07
+    bne B16_a751
+    inx
+B16_a751:
+    txa
+B16_a752:
+    rts
 
 L_16A753:
     ASMCALL     $987D                       ; 16A753/D07D98 // Zero Kirby's velocities
@@ -874,8 +1132,24 @@ KSTE2_BackdropImpactForward:
 L_16A792:
     A_JMP       L_16A994                    ; 16A792/1794A9
 
-; CODE OR DATA -- $16A795 .. $16A7BD
-incbinRange "../split/prg/bank16.bin", $0795, $07BD
+B16_a795:
+    jsr $95cd ; SetKirbyPosition
+    jsr $9021 ; MAYBE_KirbyWallCollision
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    lda kirby_vel_y+0
+    ora kirby_vel_y+1
+    beq B16_a7b0
+    jsr $8bab ; $8bab
+    bcc B16_a7b0
+    ldx #$e2
+    jmp $8ce8 ; DoStateTransition
+B16_a7b0:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a7ba
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a7ba:
+    jmp $805b ; KirbyFinalize
 
 L_16A7BD:
     ASMCALL     $987D                       ; 16A7BD/D07D98 // Zero Kirby's velocities
@@ -908,8 +1182,21 @@ KSTE3_BackdropImpactBackward:
     WAIT        #18                         ; 16A7F8/0612
     A_JMP       L_16A994                    ; 16A7FA/1794A9
 
-; CODE OR DATA -- $16A7FD .. $16A81D
-incbinRange "../split/prg/bank16.bin", $07FD, $081D
+B16_a7fd:
+    jsr $95cd ; SetKirbyPosition
+    jsr $9021 ; MAYBE_KirbyWallCollision
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    jsr $8bab ; $8bab
+    bcc B16_a810
+    ldx #$e3
+    jmp $8ce8 ; DoStateTransition
+B16_a810:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a81a
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a81a:
+    jmp $805b ; KirbyFinalize
 
 L_16A81D:
     ASMCALL     $987D                       ; 16A81D/D07D98 // Zero Kirby's velocities
@@ -943,8 +1230,21 @@ L_16A84C:
 L_16A852:
     A_JMP       L_16A994                    ; 16A852/1794A9
 
-; CODE OR DATA -- $16A855 .. $16A875
-incbinRange "../split/prg/bank16.bin", $0855, $0875
+B16_a855:
+    jsr $95cd ; SetKirbyPosition
+    jsr $9021 ; MAYBE_KirbyWallCollision
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    jsr $8bab ; $8bab
+    bcc B16_a868
+    ldx #$e4
+    jmp $8ce8 ; DoStateTransition
+B16_a868:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a872
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a872:
+    jmp $805b ; KirbyFinalize
 
 L_16A875:
     ASMCALL     $987D                       ; 16A875/D07D98 // Zero Kirby's velocities
@@ -977,8 +1277,21 @@ L_16A8A1:
 L_16A8A7:
     A_JMP       L_16A994                    ; 16A8A7/1794A9
 
-; CODE OR DATA -- $16A8AA .. $16A8CA
-incbinRange "../split/prg/bank16.bin", $08AA, $08CA
+B16_a8aa:
+    jsr $95cd ; SetKirbyPosition
+    jsr $9021 ; MAYBE_KirbyWallCollision
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    jsr $8bab ; $8bab
+    bcc B16_a8bd
+    ldx #$e5
+    jmp $8ce8 ; DoStateTransition
+B16_a8bd:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a8c7
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a8c7:
+    jmp $805b ; KirbyFinalize
 
 L_16A8CA:
     ASMCALL     $987D                       ; 16A8CA/D07D98 // Zero Kirby's velocities
@@ -1026,8 +1339,43 @@ KSTE7_BackdropImapctJumpCeiling:
     WAIT        #18                         ; 16A916/0612
     A_JMP       L_16A9B3                    ; 16A918/17B3A9
 
-; CODE OR DATA -- $16A91B .. $16A966
-incbinRange "../split/prg/bank16.bin", $091B, $0966
+B16_a91b:
+    jsr $8112 ; GetKirbyVelXAbs
+    jsr $a948 ; $a948
+    jsr $95cd ; SetKirbyPosition
+    jsr $9021 ; MAYBE_KirbyWallCollision
+    jsr $8bab ; $8bab
+    bcc B16_a931
+    ldx #$e6
+    jmp $8ce8 ; DoStateTransition
+B16_a931:
+    jsr $8bd3 ; $8bd3
+    bcc B16_a93b
+    ldx #$e7
+    jmp $8ce8 ; DoStateTransition
+B16_a93b:
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a945
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a945:
+    jmp $805b ; KirbyFinalize
+B16_a948:
+    jsr $98c3 ; GetDirectionInX
+    ldy #$01
+    lda temp_pad1_hold
+    and BANKDATA,x
+    bne B16_a95d
+    iny
+    lda temp_pad1_hold
+    and BANKSELECT,x
+    beq B16_a95d
+    iny
+B16_a95d:
+    sty kirby_vel_x_abs+1
+    lda #$00
+    sta kirby_vel_x_abs+0
+    rts
 
 L_16A966:
     ONTICK      $16A984                     ; 16A966/0884A916
@@ -1046,8 +1394,14 @@ L_16A966:
     WAIT        #24                         ; 16A97F/0618
     A_JMP       L_16A9B3                    ; 16A981/17B3A9
 
-; CODE OR DATA -- $16A984 .. $16A994
-incbinRange "../split/prg/bank16.bin", $0984, $0994
+B16_a984:
+    jsr $8049 ; KirbyPhysics
+    jsr $89d9 ; HasJustEnteredWater
+    bcc B16_a991
+    ldx #$e1
+    jmp $8ce8 ; DoStateTransition
+B16_a991:
+    jmp $805b ; KirbyFinalize
 
 L_16A994:
     ONTICK      $16A9BB                     ; 16A994/08BBA916
@@ -1071,8 +1425,11 @@ L_16A9B3:
     MOV         $05F9,#$00                  ; 16A9B3/11F90500
     JML         L_14B2D9                    ; 16A9B7/03D9B214
 
-; CODE OR DATA -- $16A9BB .. KSTE1_BackdropWater
-incbinRange "../split/prg/bank16.bin", $09BB, $09C7
+B16_a9bb:
+    jsr $95cd ; SetKirbyPosition
+    jsr $904a ; TODO_OtherKirbyMapCollision
+    jsr $9016 ; MAYBE_KirbyCeilingFloorCollision
+    jmp $805b ; KirbyFinalize
 
 KSTE1_BackdropWater:
     MOV         $05FC,#$05                  ; 16A9C7/11FC0505
@@ -1086,8 +1443,23 @@ L_16A9CE:
     ZEROVEL                                 ; 16A9DA/38
     HALT                                    ; 16A9DB/09
 
-; CODE OR DATA -- $16A9DC .. $16AA00
-incbinRange "../split/prg/bank16.bin", $09DC, $0A00
+B16_a9dc:
+    jsr $802e ; $802e
+    bcc B16_a9ff
+    ldx curr_object_slot
+    lda OBJ_var0,x
+    ldx #$00
+    jsr $e3a7 ; TODO_InhaledObjectAddScore
+    inc inhaled_count
+    dec inhaling_count
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$00
+    ldy #$aa
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_a9ff:
+    rts
 
 L_16AA00:
     ZEROVEL                                 ; 16AA00/38
@@ -1173,8 +1545,69 @@ L_16AA92:
 L_16AA95:
     END                                     ; 16AA95/00
 
-; CODE OR DATA -- $16AA96 .. $16AB36
-incbinRange "../split/prg/bank16.bin", $0A96, $0B36
+B16_aa96:
+    ldx curr_object_slot
+    lda #$00
+    jsr $c8dd ; Rand
+    and #$07
+    sta OBJ_var1,x
+    rts
+B16_aaa3:
+    ldx curr_object_slot
+    ldy OBJ_var1,x
+    ldx $aab4,y
+    lda $aab2,y
+    tay
+    jmp $aabc ; $aabc
+    .byte $FA,$FB,$00,$05,$06,$05,$00,$FB
+    .byte $FA,$FB
+B16_aabc:
+    lda #$00
+    sta $00
+    sta $01
+    txa
+    bpl B16_aac7
+    dec $00
+B16_aac7:
+    ldx curr_object_slot
+    clc
+    adc OBJ_store_x_lo+1
+    sta OBJ_x_lo,x
+    lda $00
+    adc OBJ_store_x_hi+1
+    sta OBJ_x_hi,x
+    tya
+    bpl B16_aadb
+    dec $01
+B16_aadb:
+    clc
+    adc OBJ_store_y_lo+1
+    sta OBJ_y_lo,x
+    lda $01
+    adc OBJ_store_y_hi+1
+    sta OBJ_y_hi,x
+    rts
+B16_aae9:
+    ldx curr_object_slot
+    ldy OBJ_var1,x
+    lda $ab10,y
+    sta OBJ_vel_x_lo,x
+    lda $ab24,y
+    sta OBJ_vel_x_hi,x
+    lda $ab0e,y
+    sta OBJ_vel_y_lo,x
+    lda $ab22,y
+    sta OBJ_vel_y_hi,x
+    tya
+    clc
+    adc #$0a
+    sta OBJ_var1,x
+    rts
+    .byte $00,$00,$00,$00,$00,$00,$00,$00
+    .byte $00,$00,$00,$80,$00,$80,$00,$80
+    .byte $00,$80,$00,$80,$FD,$FE,$00,$02
+    .byte $03,$02,$00,$FE,$FD,$FE,$FE,$FE
+    .byte $00,$01,$02,$01,$00,$FE,$FE,$FE
 
 SCR02_SkidSmoke:
     SETZPOS     #$00FF                      ; 16AB36/3AFF00
@@ -1189,8 +1622,48 @@ L_16AB42:
     JNE         L_16AB3C                    ; 16AB45/0B3CAB
     END                                     ; 16AB48/00
 
-; CODE OR DATA -- $16AB49 .. $16AB93
-incbinRange "../split/prg/bank16.bin", $0B49, $0B93
+B16_ab49:
+    ldx curr_object_slot
+    ldy #$00
+    lda OBJ_var1,x
+    bpl B16_ab53
+    iny
+B16_ab53:
+    tya
+    pha
+    ldx $ab72,y
+    ldy #$05
+    jsr $aabc ; $aabc
+    pla
+    tay
+    ldx curr_object_slot
+    lda $ab74,y
+    sta OBJ_vel_x_hi,x
+    lda #$80
+    sta OBJ_vel_y_lo,x
+    lda #$ff
+    sta OBJ_vel_y_hi,x
+    rts
+    .byte $FC,$04,$FE,$02
+B16_ab76:
+    ldy #$01
+    lda kirby_05E1
+    cmp #$02
+    bne B16_ab88
+    ldx curr_object_slot
+    dec OBJ_var0,x
+    bne B16_ab91
+    beq B16_ab90
+B16_ab88:
+    cmp #$07
+    beq B16_ab91
+    cmp #$03
+    beq B16_ab91
+B16_ab90:
+    dey
+B16_ab91:
+    tya
+    rts
 
 SCR02_TornadoSmoke:
     SETZPOS     #$00FF                      ; 16AB93/3AFF00
@@ -1204,8 +1677,38 @@ L_16AB9C:
     JNE         L_16AB96                    ; 16AB9F/0B96AB
     END                                     ; 16ABA2/00
 
-; CODE OR DATA -- $16ABA3 .. $16ABDC
-incbinRange "../split/prg/bank16.bin", $0BA3, $0BDC
+B16_aba3:
+    ldx curr_object_slot
+    ldy #$00
+    lda OBJ_var1+1
+    bpl B16_abad
+    iny
+B16_abad:
+    tya
+    pha
+    ldx $abcc,y
+    ldy #$05
+    jsr $aabc ; $aabc
+    pla
+    tay
+    ldx curr_object_slot
+    lda $abce,y
+    sta OBJ_vel_x_hi,x
+    lda #$80
+    sta OBJ_vel_y_lo,x
+    lda #$ff
+    sta OBJ_vel_y_hi,x
+    rts
+    .byte $FC,$04,$FE,$02
+B16_abd0:
+    ldx #$00
+    lda kirby_05E1
+    cmp #$02
+    bne B16_abda
+    inx
+B16_abda:
+    txa
+    rts
 
 SCR02_KParticle06:
     LOOP        #4                          ; 16ABDC/0104
@@ -1226,8 +1729,17 @@ SCR02_KParticle02:
 L_16ABF7:
     END                                     ; 16ABF7/00
 
-; CODE OR DATA -- $16ABF8 .. $16AC0C
-incbinRange "../split/prg/bank16.bin", $0BF8, $0C0C
+B16_abf8:
+    lda kirby_05E0
+    cmp #$07
+    bne B16_ac07
+    lda kirby_05E1
+    cmp #$00
+    bne B16_ac07
+    rts
+B16_ac07:
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
 
 SCR02_EnemyHit:
     SETZPOS     #$00FE                      ; 16AC0C/3AFE00
@@ -1237,8 +1749,14 @@ L_16AC12:
 L_16AC14:
     END                                     ; 16AC14/00
 
-; CODE OR DATA -- $16AC15 .. $16AC23
-incbinRange "../split/prg/bank16.bin", $0C15, $0C23
+B16_ac15:
+    ldx curr_object_slot
+    lda frame_counter
+    and #$03
+    clc
+    adc #$58
+    sta OBJ_pose,x
+    rts
 
 SCR02_SwallowSparkles:
     SETZPOS     #$00FF                      ; 16AC23/3AFF00
@@ -1251,8 +1769,40 @@ L_16AC2E:
     ENDLOOP                                 ; 16AC2E/02
     END                                     ; 16AC2F/00
 
-; CODE OR DATA -- $16AC30 .. $16AC72
-incbinRange "../split/prg/bank16.bin", $0C30, $0C72
+B16_ac30:
+    ldx curr_object_slot
+    ldy a:OBJ_var0,x
+    lda #$18
+    jsr $c8dd ; Rand
+    clc
+    adc a:OBJ_store_x_lo,y
+    pha
+    lda a:OBJ_store_x_hi,y
+    adc #$00
+    sta a:OBJ_x_hi,x
+    pla
+    sec
+    sbc #$0c
+    sta a:OBJ_x_lo,x
+    bcs B16_ac53
+    dec a:OBJ_x_hi,x
+B16_ac53:
+    lda #$18
+    jsr $c8dd ; Rand
+    clc
+    adc a:OBJ_store_y_lo,y
+    pha
+    lda a:OBJ_store_y_hi,y
+    adc #$00
+    sta a:OBJ_y_hi,x
+    pla
+    sec
+    sbc #$0c
+    sta a:OBJ_y_lo,x
+    bcs B16_ac71
+    dec a:OBJ_y_hi,x
+B16_ac71:
+    rts
 
 SCR02_BlockDestroyed:
     SETZPOS     #$00C1                      ; 16AC72/3AC100
@@ -1280,8 +1830,13 @@ L_16AC8A:
 L_16AC8C:
     END                                     ; 16AC8C/00
 
-; CODE OR DATA -- $16AC8D .. $16AC9A
-incbinRange "../split/prg/bank16.bin", $0C8D, $0C9A
+B16_ac8d:
+    ldx curr_object_slot
+    lda a:OBJ_y_lo,x
+    and #$f0
+    ora #$08
+    sta a:OBJ_y_lo,x
+    rts
 
 SCR02_SplashOut:
     SETZPOS     #$00FF                      ; 16AC9A/3AFF00
@@ -1312,8 +1867,58 @@ L_16ACB8:
 L_16ACBA:
     A_JMP       L_16ACB6                    ; 16ACBA/17B6AC
 
-; CODE OR DATA -- $16ACBD .. $16AD15
-incbinRange "../split/prg/bank16.bin", $0CBD, $0D15
+B16_acbd:
+    lda #$00
+    jsr $c8dd ; Rand
+    and #$07
+    tay
+    ldx curr_object_slot
+    pha
+    clc
+    adc #$32
+    sta OBJ_pose,x
+    pla
+    asl a
+    asl a
+    asl a
+    asl a
+    asl a
+    adc #$10
+    sta OBJ_var1,x
+    ldx $ad0d,y
+    bne B16_ace2
+    ldy #$00
+    beq B16_acee
+B16_ace2:
+    dex
+    bne B16_ace9
+    ldx #$ff
+    bne B16_acfb
+B16_ace9:
+    dex
+    bne B16_acf9
+    ldy #$bf
+B16_acee:
+    lda #$a0
+    jsr $c8dd ; Rand
+    clc
+    adc #$30
+    tax
+    bne B16_ad04
+B16_acf9:
+    ldx #$00
+B16_acfb:
+    lda #$70
+    jsr $c8dd ; Rand
+    clc
+    adc #$20
+    tay
+B16_ad04:
+    lda #$00
+    sta temp_x_hi
+    sta temp_y_hi
+    jmp $9d2f ; $9d2f
+    .byte $02,$03,$03,$00,$00,$01,$01,$02
 
 SCR02_CrashExplosion:
     ASMCALL     $AD1F                       ; 16AD15/D01FAD
@@ -1325,8 +1930,25 @@ L_16AD1D:
     ENDLOOP                                 ; 16AD1D/02
     END                                     ; 16AD1E/00
 
-; CODE OR DATA -- $16AD1F .. $16AD3C
-incbinRange "../split/prg/bank16.bin", $0D1F, $0D3C
+B16_ad1f:
+    lda #$0f
+    jsr $c8dd ; Rand
+    asl a
+    asl a
+    asl a
+    asl a
+    tax
+    lda #$0a
+    jsr $c8dd ; Rand
+    asl a
+    asl a
+    asl a
+    asl a
+    tay
+    lda #$00
+    sta temp_x_hi
+    sta temp_y_hi
+    jmp $9d2f ; $9d2f
 
 SCR02_CrashShake:
     LOOP        #3                          ; 16AD3C/0103
@@ -1354,8 +1976,31 @@ L_16AD5F:
     ENDLOOP                                 ; 16AD61/02
     END                                     ; 16AD62/00
 
-; CODE OR DATA -- $16AD63 .. $16AD97
-incbinRange "../split/prg/bank16.bin", $0D63, $0D97
+B16_ad63:
+    ldx curr_object_slot
+    ldy OBJ_var1,x
+    lda $ad6f,y
+    sta OBJ_var1,x
+    rts
+    .byte $AF,$2F,$6F,$EF,$4F,$AF,$0F,$8F
+B16_ad77:
+    jsr $d7b1 ; Script_ReadByte
+    pha
+    jsr $d7b1 ; Script_ReadByte
+    tay
+    lsr a
+    ldx curr_object_slot
+    clc
+    adc OBJ_var1,x
+    ldx #$00
+    jsr $c56b ; $c56b
+    sta $00
+    pla
+    clc
+    adc $00
+    ldx curr_object_slot
+    sta OBJ_pose,x
+    rts
 
 SCR02_KParticle0B:
     ASMCALL     $DE4B                       ; 16AD97/D04BDE // Play sound effect
@@ -1416,8 +2061,116 @@ L_16ADE8:
     ENDLOOP                                 ; 16ADE8/02
     ENDTASK                                 ; 16ADE9/0C
 
-; CODE OR DATA -- $16ADEA .. $16AECE
-incbinRange "../split/prg/bank16.bin", $0DEA, $0ECE
+B16_adea:
+    ldx curr_object_slot
+    lda OBJ_store_x_lo,x
+    sec
+    sbc camera_x+0
+    tay
+    lda OBJ_var1,x
+    beq B16_ae08
+    cmp #$80
+    beq B16_ae08
+    bcs B16_ae04
+    cpy #$80
+    bcs B16_ae28
+    bcc B16_ae08
+B16_ae04:
+    cpy #$81
+    bcc B16_ae28
+B16_ae08:
+    lda OBJ_store_y_lo,x
+    sec
+    sbc camera_y+0
+    tay
+    lda OBJ_var1,x
+    cmp #$40
+    beq B16_ae36
+    bcc B16_ae24
+    cmp #$c0
+    beq B16_ae36
+    bcs B16_ae24
+    cpy #$28
+    bcc B16_ae36
+    bcs B16_ae28
+B16_ae24:
+    cpy #$29
+    bcs B16_ae36
+B16_ae28:
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$b0
+    ldy #$ad
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_ae36:
+    rts
+B16_ae37:
+    ldx curr_object_slot
+    lda OBJ_store_x_lo,x
+    sec
+    sbc camera_x+0
+    sta $00
+    lda OBJ_store_x_hi,x
+    sbc camera_x+1
+    sta $01
+    lda OBJ_store_y_lo,x
+    sec
+    sbc camera_y+0
+    sta $02
+    lda OBJ_store_y_hi,x
+    sbc camera_y+1
+    sta $03
+    lda #$80
+    sta $04
+    lda #$28
+    sta $06
+    lda #$00
+    sta $05
+    sta $07
+    jsr $e012 ; $e012
+    sta OBJ_var1,x
+    rts
+
+B16_ae6c:
+    lda map_bg_bank
+    cmp #$84
+    beq B16_ae79
+    cmp #$8b
+    beq B16_ae79
+    lda #$00
+B16_ae79:
+    ldx curr_object_slot
+    sta OBJ_var0,x
+    lda #$00
+    sta OBJ_var1,x
+    rts
+B16_ae84:
+    ldx curr_object_slot
+    ldy OBJ_var0,x
+    beq B16_aeaf
+    inc OBJ_var0,x
+    jsr $e6d5 ; LoadMapPalette
+    ldx curr_object_slot
+    ldy OBJ_var1,x
+    inc OBJ_var1,x
+    ldx $aeb0,y
+    ldy #$00
+B16_ae9e:
+    lda $aeb7,x
+    sta color_palette+24,y
+    inx
+    iny
+    cpy #$08
+    bcc B16_ae9e
+    jsr $c0be ; $c0be
+    .byte $C7,$AE
+B16_aeaf:
+    rts
+    .byte $00,$08,$00,$00,$08,$00,$08,$FF
+    .byte $03,$0F,$0F,$FF,$04,$0F,$0F,$FF
+    .byte $36,$26,$0F,$FF,$20,$16,$0F,$03
+    .byte $00,$3F,$20,$01,$82,$01
 
 SCR02_KParticle1A:
     ASMCALL     $E298                       ; 16AECE/D098E2 // Set PPUSCROLL to zero
@@ -1509,8 +2262,18 @@ L_16AF52:
 L_16AF53:
     END                                     ; 16AF53/00
 
-; CODE OR DATA -- $16AF54 .. $16AF69
-incbinRange "../split/prg/bank16.bin", $0F54, $0F69
+B16_af54:
+    lda #$07
+    jsr $c8dd ; Rand
+    sec
+    sbc #$03
+    tax
+    lda #$07
+    jsr $c8dd ; Rand
+    sec
+    sbc #$03
+    tay
+    jmp $aabc ; $aabc
 
 SCR02_WaterBubble:
     SETZPOS     #$00FF                      ; 16AF69/3AFF00
@@ -1530,8 +2293,63 @@ L_16AF7E:
 L_16AF7F:
     A_JMP       L_16AF7A                    ; 16AF7F/177AAF
 
-; CODE OR DATA -- $16AF82 .. $16AFFC
-incbinRange "../split/prg/bank16.bin", $0F82, $0FFC
+B16_af82:
+    jsr $9ced ; GetObjectXY
+    jsr $eedb ; IsTileWater
+    bcc B16_af8d
+    jmp $af92 ; $af92
+B16_af8d:
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_af92:
+    ldx curr_object_slot
+    dec a:OBJ_var1,x
+    bne B16_afb4
+    lda #$08
+    sta a:OBJ_var1,x
+    ldy a:OBJ_var0,x
+    lda $afb5,y
+    sta a:OBJ_vel_x_lo,x
+    lda $afb9,y
+    sta a:OBJ_vel_x_hi,x
+    iny
+    tya
+    and #$03
+    sta a:OBJ_var0,x
+B16_afb4:
+    rts
+    .byte $00,$40,$00,$C0,$01,$00,$FF,$FF
+B16_afbd:
+    ldx curr_object_slot
+    lda a:OBJ_store_y_lo+1
+    sec
+    sbc #$04
+    sta a:OBJ_y_lo,x
+    lda a:OBJ_store_y_hi+1
+    sbc #$00
+    sta a:OBJ_y_hi,x
+    lda #$18
+    jsr $c8dd ; Rand
+    ldy #$00
+    sec
+    sbc #$0c
+    bcs B16_afdd
+    dey
+B16_afdd:
+    clc
+    adc a:OBJ_store_x_lo+1
+    sta a:OBJ_x_lo,x
+    tya
+    adc a:OBJ_store_x_hi+1
+    sta a:OBJ_x_hi,x
+    lda #$00
+    jsr $c8dd ; Rand
+    tay
+    and #$03
+    sta a:OBJ_var0,x
+    lda #$01
+    sta a:OBJ_var1,x
+    rts
 
 SCR02_Fireball:
     ONTICK      $16B011                     ; 16AFFC/0811B016
@@ -1547,8 +2365,36 @@ L_16B00F:
     ENDLOOP                                 ; 16B00F/02
     END                                     ; 16B010/00
 
-; CODE OR DATA -- $16B011 .. $16B049
-incbinRange "../split/prg/bank16.bin", $1011, $1049
+B16_b011:
+    lda kirby_05E1
+    cmp #$0c
+    beq B16_b01d
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b01d:
+    rts
+B16_b01e:
+    ldx curr_object_slot
+    lda a:OBJ_store_x_lo+1
+    sta a:OBJ_x_lo,x
+    lda a:OBJ_store_x_hi+1
+    sta a:OBJ_x_hi,x
+    lda #$00
+    tay
+    jsr $c8dd ; Rand
+    and #$0f
+    sec
+    sbc #$08
+    bcs B16_b03a
+    dey
+B16_b03a:
+    clc
+    adc a:OBJ_store_y_lo+1
+    sta a:OBJ_y_lo,x
+    tya
+    adc a:OBJ_store_y_hi+1
+    sta a:OBJ_y_hi,x
+    rts
 
 SCR02_StarDeath:
     SPRITEMAP   L_1C9CD7                     ; 16B049/1AD79C1C
@@ -1596,8 +2442,20 @@ L_16B07F:
 L_16B082:
     END                                     ; 16B082/00
 
-; CODE OR DATA -- $16B083 .. $16B0A0
-incbinRange "../split/prg/bank16.bin", $1083, $10A0
+B16_b083:
+    lda #$03
+    jsr $c8dd ; Rand
+    ldx OBJ_vel_y_hi+1
+    bmi B16_b090
+    clc
+    adc #$03
+B16_b090:
+    tax
+    lda $b09a,x
+    ldx curr_object_slot
+    sta OBJ_var1,x
+    rts
+    .byte $03,$04,$05,$07,$00,$01
 
 SCR02_KParticle12:
     SETBANK     #$1C                        ; 16B0A0/281C
@@ -1606,8 +2464,158 @@ SCR02_KParticle12:
 L_16B0A9:
     HALT                                    ; 16B0A9/09
 
-; CODE OR DATA -- $16B0AA .. $16B1E5
-incbinRange "../split/prg/bank16.bin", $10AA, $11E5
+B16_b0aa:
+    ldx #$07
+B16_b0ac:
+    lda $0158,x
+    beq B16_b0b5
+    dex
+    bpl B16_b0ac
+    inx
+B16_b0b5:
+    lda #$06
+    sta $0158,x
+    ldy curr_object_slot
+    lda OBJ_store_x_lo,y
+    sta $0160,x
+    lda OBJ_store_x_hi,y
+    sta $0168,x
+    lda OBJ_store_y_lo,y
+    sta $0170,x
+    lda OBJ_store_y_hi,y
+    sta $0178,x
+    lda #$11
+    jsr $f826 ; PlaySoundEffect
+    lda #$01
+    ldx #$00
+    jmp $e3a7 ; TODO_InhaledObjectAddScore
+B16_b0e0:
+    ldx #$07
+B16_b0e2:
+    lda $0158,x
+    beq B16_b0ec
+    bmi B16_b0ec
+    jsr $b10a ; $b10a
+B16_b0ec:
+    dex
+    bpl B16_b0e2
+    ldy #$00
+    ldx #$07
+B16_b0f3:
+    lda $0158,x
+    and #$7f
+    beq B16_b0fb
+    iny
+B16_b0fb:
+    sta $0158,x
+    dex
+    bpl B16_b0f3
+    tya
+    beq B16_b105
+    rts
+B16_b105:
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b10a:
+    dec $0158,x
+    lda $0160,x
+    sec
+    sbc camera_x+0
+    sta temp_obj_screen_x+0
+    lda $0168,x
+    sbc camera_x+1
+    sta temp_obj_screen_x+1
+    lda $0170,x
+    sec
+    sbc camera_y+0
+    sta temp_obj_screen_y+0
+    lda $0178,x
+    sbc camera_y+1
+    sta temp_obj_screen_y+1
+    stx $0f
+    lda $0158,x
+    lsr a
+    tay
+    lda $b143,y
+    ldx $b146,y
+    jsr $dcec ; $dcec
+    ldx $0f
+    lda $0158,x
+    beq B16_b149
+    rts
+    .byte $AD,$A4,$9B,$95,$95,$95
+B16_b149:
+    lda $0160,x
+    sta $0c
+    lda $0168,x
+    sta temp_x_hi
+    lda $0170,x
+    sta $0d
+    lda $0178,x
+    sta temp_y_hi
+    stx $0f
+    ldy #$06
+B16_b161:
+    sty $0e
+    lda $0c
+    clc
+    adc $b1d5,y
+    sta $0c
+    lda temp_x_hi
+    adc $b1d6,y
+    sta temp_x_hi
+    lda $0d
+    clc
+    adc $b1dd,y
+    sta $0d
+    lda temp_y_hi
+    adc $b1de,y
+    sta temp_y_hi
+    ldx $0c
+    ldy $0d
+    jsr $ed9c ; GetTileFlagsAND1F
+    cmp #$0b
+    beq B16_b194
+    cmp #$0c
+    beq B16_b194
+    cmp #$10
+    bne B16_b1cc
+B16_b194:
+    ldx #$07
+B16_b196:
+    lda $0158,x
+    beq B16_b1a0
+    dex
+    bpl B16_b196
+    bmi B16_b1cc
+B16_b1a0:
+    lda #$86
+    sta $0158,x
+    lda $0c
+    sta $0160,x
+    lda temp_x_hi
+    sta $0168,x
+    lda $0d
+    sta $0170,x
+    lda temp_y_hi
+    sta $0178,x
+    ldx $0c
+    ldy $0d
+    jsr $eef1 ; $eef1
+    lda #$11
+    jsr $f826 ; PlaySoundEffect
+    lda #$01
+    ldx #$00
+    jsr $e3a7 ; TODO_InhaledObjectAddScore
+B16_b1cc:
+    ldy $0e
+    dey
+    dey
+    bpl B16_b161
+    ldx $0f
+    rts
+    .byte $F0,$FF,$F0,$FF,$10,$00,$00,$00
+    .byte $F0,$FF,$10,$00,$10,$00,$F0,$FF
 
 SCR02_HiJumpStar:
     SETPOSE     #$0A                        ; 16B1E5/500A
@@ -1616,8 +2624,18 @@ SCR02_HiJumpStar:
 L_16B1ED:
     END                                     ; 16B1ED/00
 
-; CODE OR DATA -- $16B1EE .. $16B206
-incbinRange "../split/prg/bank16.bin", $11EE, $1206
+B16_b1ee:
+    ldx curr_object_slot
+    lda OBJ_vel_x_lo+1
+    eor #$ff
+    clc
+    adc #$01
+    sta OBJ_vel_x_lo,x
+    lda OBJ_vel_x_hi+1
+    eor #$ff
+    adc #$00
+    sta OBJ_vel_x_hi,x
+    rts
 
 SCR02_DrinkHeal:
     ZEROVEL                                 ; 16B206/38
@@ -1634,8 +2652,15 @@ L_16B219:
     ASMCALL     $DFFB                       ; 16B219/D0FBDF // Unfreeze all objects
     END                                     ; 16B21C/00
 
-; CODE OR DATA -- $16B21D .. $16B22A
-incbinRange "../split/prg/bank16.bin", $121D, $122A
+B16_b21d:
+    ldx a:extra_game_flag
+    beq B16_b224
+    ldx #$01
+B16_b224:
+    lda Drink_Heal_Amount,x
+    rts
+Drink_Heal_Amount:
+    .byte $02,$01
 
 SCR02_TomatoHeal:
     ZEROVEL                                 ; 16B22A/38
@@ -1649,8 +2674,19 @@ L_16B235:
     ASMCALL     $DFFB                       ; 16B238/D0FBDF // Unfreeze all objects
     END                                     ; 16B23B/00
 
-; CODE OR DATA -- $16B23C .. $16B252
-incbinRange "../split/prg/bank16.bin", $123C, $1252
+B16_b23c:
+    ldx #$00
+    lda kirby_health
+    clc
+    adc #$08
+    cmp kirby_max_health
+    bcc B16_b24d
+    lda kirby_max_health
+    inx
+B16_b24d:
+    sta kirby_health
+    txa
+    rts
 
 SCR02_KParticle17:
     ONTICK      $16B25F                     ; 16B252/085FB216
@@ -1659,15 +2695,34 @@ L_16B259:
     A_JSR       SUB_ViolentShake            ; 16B259/1811AF
     A_JMP       L_16B259                    ; 16B25C/1759B2
 
-; CODE OR DATA -- $16B25F .. $16B26F
-incbinRange "../split/prg/bank16.bin", $125F, $126F
+B16_b25f:
+    ldx curr_object_slot
+    lda OBJ_var6,x
+    bne B16_b267
+    rts
+B16_b267:
+    jsr $e298 ; ZeroPPUSCROLL
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
 
 SCR02_BossHurt:
     ONTICK      $16B274                     ; 16B26F/0874B216
     HALT                                    ; 16B273/09
 
-; CODE OR DATA -- $16B274 .. $16B293
-incbinRange "../split/prg/bank16.bin", $1274, $1293
+B16_b274:
+    ldx curr_object_slot
+    lda #$22
+    sta OBJ_lower_prg,x
+    ldy OBJ_var4,x
+    lda $b290,y
+    sta script_bank
+    lda $b292,y
+    pha
+    lda $b291,y
+    tay
+    pla
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+    .byte $22,$84,$0C
 
 SCR02_KParticle19:
     MOV         REG,#$02                    ; 16B293/1B02
@@ -1724,8 +2779,9 @@ L_16B2DB:
     A_AND       $05FB,#$BF                  ; 16B2DF/16FB0500BF
     END                                     ; 16B2E4/00
 
-; CODE OR DATA -- $16B2E5 .. $16B2F5
-incbinRange "../split/prg/bank16.bin", $12E5, $12F5
+B16_b2e5:
+    .byte $FF,$36,$26,$0F,$FF,$30,$37,$17
+    .byte $FF,$17,$07,$0F,$FF,$38,$37,$30
 
 SCR02_SparkParticle:
     SETZPOS     #$00C1                      ; 16B2F5/3AC100
@@ -1738,8 +2794,51 @@ L_16B302:
 L_16B303:
     END                                     ; 16B303/00
 
-; CODE OR DATA -- $16B304 .. $16B35B
-incbinRange "../split/prg/bank16.bin", $1304, $135B
+B16_b304:
+    ldx curr_object_slot
+    lda a:OBJ_x_lo,x
+    sta $00
+    lda a:OBJ_x_hi,x
+    sta $01
+    lda #$20
+    jsr $c8dd ; Rand
+    ldy #$00
+    sec
+    sbc #$10
+    bcs B16_b31d
+    dey
+B16_b31d:
+    clc
+    adc $00
+    sta $04
+    sta a:OBJ_x_lo,x
+    tya
+    adc $01
+    sta $05
+    sta a:OBJ_x_hi,x
+    lda a:OBJ_y_lo,x
+    sta $02
+    lda a:OBJ_y_hi,x
+    sta $03
+    lda #$20
+    jsr $c8dd ; Rand
+    ldy #$00
+    sec
+    sbc #$10
+    bcs B16_b344
+    dey
+B16_b344:
+    clc
+    adc $02
+    sta $06
+    sta a:OBJ_y_lo,x
+    tya
+    adc $03
+    sta $07
+    sta a:OBJ_y_hi,x
+    jsr $e012 ; $e012
+    sta a:OBJ_var1,x
+    rts
 
 Script03_KirbyProjectile:
     SETBANK     #$21                        ; 16B35B/2821
@@ -1857,8 +2956,53 @@ L_16B408:
 L_16B409:
     END                                     ; 16B409/00
 
-; CODE OR DATA -- $16B40A .. $16B45F
-incbinRange "../split/prg/bank16.bin", $140A, $145F
+B16_b40a:
+    jsr $9ced ; GetObjectXY
+    jsr $eedb ; IsTileWater
+    bcc B16_b420
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$dc
+    ldy #$b3
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b420:
+    jsr $93f5 ; $93f5
+    bcc B16_b42a
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b42a:
+    jsr $b43e ; $b43e
+    bcc B16_b43d
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$f6
+    ldy #$b3
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b43d:
+    rts
+B16_b43e:
+    ldx curr_object_slot
+    lda OBJ_vel_x_hi,x
+    bpl B16_b452
+    jsr $9ced ; GetObjectXY
+    jsr $f39e ; $f39e
+    bcs B16_b450
+    tya
+    bpl B16_b45d
+B16_b450:
+    clc
+    rts
+B16_b452:
+    jsr $9ced ; GetObjectXY
+    jsr $f4e2 ; $f4e2
+    bcs B16_b450
+    tya
+    bpl B16_b450
+B16_b45d:
+    sec
+    rts
 
 SCR03_KProj0C:
     MOV         VAR0,#$01                   ; 16B45F/0D0001
@@ -1895,17 +3039,126 @@ L_16B48E:
     ENDLOOP                                 ; 16B48E/02
     A_JMP       L_16B489                    ; 16B48F/1789B4
 
-; CODE OR DATA -- $16B492 .. $16B52D
-incbinRange "../split/prg/bank16.bin", $1492, $152D
+B16_b492:
+    .byte $08,$C6,$B4,$16,$17,$77,$B4
+B16_b499:
+   jsr $9ced ; GetObjectXY
+   jsr $eedb ; IsTileWater
+   bcc B16_b4af
+   ldx curr_object_slot
+   lda #$16
+   sta script_bank
+   lda #$92
+   ldy #$b4
+   jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b4af:
+   jsr $93fe ; $93fe
+   jsr $b506 ; $b506
+   bcc B16_b4c5
+   ldx curr_object_slot
+   lda #$16
+   sta script_bank
+   lda #$f6
+   ldy #$b3
+   jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b4c5:
+   rts
+   ldx curr_object_slot
+   lda OBJ_vel_x_lo,x
+   ldy OBJ_vel_x_hi,x
+   bmi B16_b4e0
+   sec
+   sbc #$20
+   tay
+   lda OBJ_vel_x_hi,x
+   sbc #$00
+   bcs B16_b4ee
+   lda #$00
+   tay
+   beq B16_b4ee
+B16_b4e0:
+   clc
+   adc #$20
+   tay
+   lda OBJ_vel_x_hi,x
+   adc #$00
+   bcc B16_b4ee
+   lda #$00
+   tay
+B16_b4ee:
+   sta OBJ_vel_x_hi,x
+   tya
+   sta OBJ_vel_x_lo,x
+   lda OBJ_vel_y_lo,x
+   clc
+   adc #$10
+   sta OBJ_vel_y_lo,x
+   bcc B16_b503
+   inc OBJ_vel_y_hi,x
+B16_b503:
+   jmp $b4af ; $b4af
+B16_b506:
+   jsr $b43e ; $b43e
+   bcc B16_b50c
+   rts
+B16_b50c:
+   ldx curr_object_slot
+   lda OBJ_vel_y_hi,x
+   bpl B16_b520
+   jsr $9ced ; GetObjectXY
+   jsr $f14d ; $f14d
+   bcs B16_b51e
+   tya
+   bpl B16_b52b
+B16_b51e:
+   clc
+   rts
+B16_b520:
+   jsr $9ced ; GetObjectXY
+   jsr $f241 ; $f241
+   bcs B16_b51e
+   tya
+   bpl B16_b51e
+B16_b52b:
+   sec
+   rts
 
 SCR03_ThrownEnemy:
     MOV         VAR0,#$12                   ; 16B52D/0D0012
     ASMCALL     $B536                       ; 16B530/D036B5
     A_JMP       L_16B473                    ; 16B533/1773B4
 
-; CODE OR DATA -- $16B536 .. $16B582
-incbinRange "../split/prg/bank16.bin", $1536, $1582
-
+B16_b536:
+    ldy #$01
+    ldx curr_object_slot
+    lda a:OBJ_var1,x
+    bpl B16_b541
+    ldy #$04
+B16_b541:
+    lda temp_pad1_hold
+    and #$08
+    beq B16_b54a
+    dey
+    bpl B16_b551
+B16_b54a:
+    lda temp_pad1_hold
+    and #$04
+    beq B16_b551
+    iny
+B16_b551:
+    lda $b56a,y
+    sta a:OBJ_vel_x_lo,x
+    lda $b570,y
+    sta a:OBJ_vel_x_hi,x
+    lda $b576,y
+    sta a:OBJ_vel_y_lo,x
+    lda $b57c,y
+    sta a:OBJ_vel_y_hi,x
+    rts
+    .byte $94,$00,$94,$6C,$00,$6C,$03,$04
+    .byte $03,$FC,$FC,$FC,$36,$00,$CA,$36
+    .byte $00,$CA,$FE,$00,$01,$FE,$00,$01
+    
 SCR03_Fire:
     SETZPOS     #$00FF                      ; 16B582/3AFF00
     MOV         VAR0,#$05                   ; 16B585/0D0005
@@ -1922,8 +3175,39 @@ L_16B59D:
     ENDLOOP                                 ; 16B59D/02
     END                                     ; 16B59E/00
 
-; CODE OR DATA -- $16B59F .. $16B5DA
-incbinRange "../split/prg/bank16.bin", $159F, $15DA
+B16_b59f:
+    jsr $93f5 ; $93f5
+    bcc B16_b5a9
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b5a9:
+    jsr $b43e ; $b43e
+    bcc B16_b5bc
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$fa
+    ldy #$b3
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b5bc:
+    rts
+B16_b5bd:
+    lda frame_counter
+    and #$0c
+    lsr a
+    adc #$00
+    jmp $8fe6 ; SetPoseWithFacing
+B16_b5c8:
+    ldx curr_object_slot
+    lda OBJ_pose,x
+    clc
+    adc #$02
+    cmp #$08
+    bcc B16_b5d6
+    sbc #$08
+B16_b5d6:
+    sta OBJ_pose,x
+    rts
 
 SCR03_Cutter:
     MOV         VAR0,#$04                   ; 16B5DA/0D0004
@@ -1969,8 +3253,59 @@ L_16B628:
     ENDLOOP                                 ; 16B628/02
     END                                     ; 16B629/00
 
-; CODE OR DATA -- $16B62A .. $16B68E
-incbinRange "../split/prg/bank16.bin", $162A, $168E
+B16_b62a:
+    ldx curr_object_slot
+    lda OBJ_store_x_lo,x
+    sec
+    sbc OBJ_store_x_lo+1
+    bcs B16_b639
+    eor #$ff
+    adc #$01
+B16_b639:
+    cmp #$08
+    bcs B16_b656
+    lda OBJ_store_y_lo,x
+    sec
+    sbc OBJ_store_y_lo+1
+    bcs B16_b64a
+    eor #$ff
+    adc #$01
+B16_b64a:
+    cmp #$08
+    bcs B16_b656
+    lda #$0e
+    jsr $f826 ; PlaySoundEffect
+    jmp $d655 ; OBJ_Destroy
+B16_b656:
+    lda frame_counter
+    and #$03
+    clc
+    adc #$1c
+    sta OBJ_pose,x
+    jsr $93f5 ; $93f5
+    bcc B16_b66b
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b66b:
+    jsr $b43e ; $b43e
+    bcc B16_b67e
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$11
+    ldy #$b6
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b67e:
+    rts
+B16_b67f:
+    ldx curr_object_slot
+    lda frame_counter
+    and #$0c
+    lsr a
+    lsr a
+    adc #$1c
+    sta OBJ_pose,x
+    rts
 
 SCR03_Laser:
     ONPOSITION  $D9BB                       ; 16B68E/21BBD9
@@ -2021,8 +3356,147 @@ L_16B6DE:
 L_16B6DF:
     END                                     ; 16B6DF/00
 
-; CODE OR DATA -- $16B6E0 .. $16B7F8
-incbinRange "../split/prg/bank16.bin", $16E0, $17F8
+B16_b6e0:
+    ldx curr_object_slot
+    ldy a:OBJ_pose,x
+    lda $b6e7,y
+    sta a:OBJ_z_lo,x
+    jsr $93f5 ; $93f5
+    bcc B16_b6f5
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b6f5:
+    jsr $b714 ; $b714
+    bcc B16_b706
+    ldx curr_object_slot
+    jsr $d7c6 ; $d7c6
+    .byte $02,$AC,$B6,$16,$C9,$B6,$16
+B16_b706:
+    rts
+    .byte $FF,$80,$FF,$80,$FF,$80,$FF,$80
+    .byte $FF,$80,$FF,$80,$FF
+B16_b714:
+    ldx curr_object_slot
+    lda a:OBJ_var1,x
+    and #$c0
+    asl a
+    rol a
+    rol a
+    bne B16_b742
+    jsr $9ced ; GetObjectXY
+    jsr $f14d ; $f14d
+    bcs B16_b767
+    cpy #$00
+    bmi B16_b767
+    pha
+    lda a:kirby_0579_unknown_x_offset+0
+    ldx a:kirby_0579_unknown_x_offset+1
+    jsr $9d56 ; $9d56
+    pla
+    cmp #$07
+    beq B16_b7b8
+    cmp #$08
+    bne B16_b7b4
+    jmp $b7c3 ; $b7c3
+B16_b742:
+    tax
+    dex
+    bne B16_b769
+    jsr $9ced ; GetObjectXY
+    jsr $f4e2 ; $f4e2
+    bcs B16_b767
+    cpy #$00
+    beq B16_b754
+    bpl B16_b767
+B16_b754:
+    pha
+    jsr $b7d7 ; $b7d7
+    pla
+    cmp #$03
+    beq B16_b7c3
+    cmp #$05
+    beq B16_b7c3
+    cmp #$08
+    beq B16_b7b8
+    bne B16_b7b4
+B16_b767:
+    clc
+    rts
+B16_b769:
+    dex
+    bne B16_b797
+    jsr $9ced ; GetObjectXY
+    jsr $f241 ; $f241
+    bcs B16_b767
+    cpy #$00
+    beq B16_b77a
+    bpl B16_b767
+B16_b77a:
+    pha
+    lda a:kirby_0579_unknown_x_offset+0
+    ldx a:kirby_0579_unknown_x_offset+1
+    jsr $9d56 ; $9d56
+    pla
+    cmp #$03
+    beq B16_b7b8
+    cmp #$05
+    beq B16_b7b8
+    cmp #$04
+    beq B16_b7c3
+    cmp #$06
+    beq B16_b7c3
+    bne B16_b7b4
+B16_b797:
+    jsr $9ced ; GetObjectXY
+    jsr $f39e ; $f39e
+    bcs B16_b767
+    cpy #$00
+    bmi B16_b767
+    pha
+    jsr $b7d7 ; $b7d7
+    pla
+    cmp #$04
+    beq B16_b7b8
+    cmp #$06
+    beq B16_b7b8
+    cmp #$07
+    beq B16_b7c3
+B16_b7b4:
+    lda #$01
+    sec
+    rts
+B16_b7b8:
+    ldx curr_object_slot
+    lda a:OBJ_var1,x
+    clc
+    adc #$40
+    jmp $b7cb ; $b7cb
+B16_b7c3:
+    ldx curr_object_slot
+    lda a:OBJ_var1,x
+    sec
+    sbc #$40
+B16_b7cb:
+    dec a:OBJ_var2,x
+    beq B16_b7b4
+    sta a:OBJ_var1,x
+    lda #$00
+    sec
+    rts
+B16_b7d7:
+    ldx curr_object_slot
+    lda a:kirby_0579_unknown_x_offset+0
+    clc
+    adc a:OBJ_x_lo,x
+    sta a:OBJ_x_lo,x
+    sta a:OBJ_store_x_lo,x
+    lda a:kirby_0579_unknown_x_offset+1
+    adc a:OBJ_x_hi,x
+    sta a:OBJ_x_hi,x
+    sta a:OBJ_store_x_hi,x
+    lda #$80
+    sta a:OBJ_x_frac,x
+    rts
 
 SCR03_Mike:
     ASMCALL     $B82D                       ; 16B7F8/D02DB8 // Set pose to one of [0x0C, 0x0A, 0x08] based on remaining ability uses
@@ -2056,8 +3530,37 @@ L_16B824:
     .byte       $03                         ; 16B829/03
     A_JMP       L_16B3FA                    ; 16B82A/17FAB3
 
-; CODE OR DATA -- $16B82D .. $16B866
-incbinRange "../split/prg/bank16.bin", $182D, $1866
+B16_b82d:
+    ldx ability_uses
+    lda $b836,x
+    jmp $8fe6 ; SetPoseWithFacing
+    .byte $0C,$0A,$08
+B16_b839:
+    ldy curr_object_slot
+    ldx OBJ_var1,y
+    cpx #$12
+    bcs B16_b84c
+B16_b842:
+    lda OBJ_script,x
+    bpl B16_b852
+    inx
+    cpx #$12
+    bcc B16_b842
+B16_b84c:
+    inc OBJ_var0+1
+    lda #$01
+    rts
+B16_b852:
+    txa
+    sta OBJ_var2,y
+    lda OBJ_tick_bank,x
+    and #$7f
+    sta OBJ_tick_bank,x
+    inx
+    txa
+    sta OBJ_var1,y
+    lda #$00
+    rts
 
 SCR03_AirExhale:
     MOV         VAR0,#$02                   ; 16B866/0D0002
@@ -2082,8 +3585,22 @@ L_16B888:
 L_16B88B:
     END                                     ; 16B88B/00
 
-; CODE OR DATA -- $16B88C .. $16B8AA
-incbinRange "../split/prg/bank16.bin", $188C, $18AA
+B16_b88c:
+    jsr $93f5 ; $93f5
+    bcc B16_b896
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b896:
+    jsr $b43e ; $b43e
+    bcc B16_b8a9
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$fa
+    ldy #$b3
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b8a9:
+    rts
 
 SCR03_IceCube:
     MOV         VAR0,#$0A                   ; 16B8AA/0D000A
@@ -2111,8 +3628,13 @@ L_16B8D0:
 L_16B8D3:
     END                                     ; 16B8D3/00
 
-; CODE OR DATA -- $16B8D4 .. $16B8DF
-incbinRange "../split/prg/bank16.bin", $18D4, $18DF
+B16_b8d4:
+    jsr $93f5 ; $93f5
+    bcc B16_b8de
+    ldx curr_object_slot
+    jmp $d655 ; OBJ_Destroy
+B16_b8de:
+    rts
 
 SCR03_Crash:
     MOV         VAR0,#$1D                   ; 16B8DF/0D001D
@@ -2125,8 +3647,20 @@ SCR03_GrabbedEnemy:
     ASMCALL     $B8EE                       ; 16B8E8/D0EEB8 // Copy spritemap and pose from parent object, and destroy parent object
     A_JMP       L_16B914                    ; 16B8EB/1714B9
 
-; CODE OR DATA -- $16B8EE .. $16B914
-incbinRange "../split/prg/bank16.bin", $18EE, $1914
+B16_b8ee:
+    ldy curr_object_slot
+    ldx OBJ_var2,y
+    lda OBJ_spritemap_lo,x
+    sta OBJ_spritemap_lo,y
+    lda OBJ_spritemap_hi,x
+    sta OBJ_spritemap_hi,y
+    lda OBJ_spritemap_bank,x
+    sta OBJ_spritemap_bank,y
+    lda OBJ_pose,x
+    sta OBJ_pose,y
+    lda OBJ_z_lo,x
+    sta OBJ_z_lo,y
+    jmp $d655 ; OBJ_Destroy
 
 L_16B914:
     SETBANK     #$21                        ; 16B914/2821
@@ -2135,8 +3669,122 @@ L_16B914:
     ONTICK      $16B91F                     ; 16B91A/081FB916
     HALT                                    ; 16B91E/09
 
-; CODE OR DATA -- $16B91F .. $16BA2F
-incbinRange "../split/prg/bank16.bin", $191F, $1A2F
+B16_b91f:
+    ldx curr_object_slot
+    ldy $05fc
+    dey
+    bne B16_b935
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$2f
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b935:
+    dey
+    bne B16_b946
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$95
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b946:
+    dey
+    bne B16_b957
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$8a
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b957:
+    dey
+    bne B16_b95d
+    jmp $d655 ; OBJ_Destroy
+B16_b95d:
+    dey
+    bne B16_b96e
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$b1
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_b96e:
+    lda kirby_05E1
+    cmp #$0c
+    beq B16_b979
+    lda #$00
+    beq B16_b97c
+B16_b979:
+    lda OBJ_pose+1
+B16_b97c:
+    lsr a
+    pha
+    pha
+    tay
+    lda $b9e9,y
+    and #$06
+    tay
+    lda $b9fd,y
+    sta obj_draw_lo,x
+    lda $b9fe,y
+    sta obj_draw_hi,x
+    pla
+    tay
+    lda $b9e9,y
+    and #$01
+    tay
+    lda OBJ_z_lo,x
+    cmp #$ff
+    beq B16_b9a7
+    lda $ba05,y
+    sta OBJ_z_lo,x
+B16_b9a7:
+    pla
+    tay
+    ldx curr_object_slot
+    lda #$00
+    sta $00
+    sta $01
+    lda $ba1b,y
+    bpl B16_b9b8
+    dec $00
+B16_b9b8:
+    sta OBJ_y_lo,x
+    lda $00
+    sta OBJ_y_hi,x
+    lda $ba07,y
+    ldy OBJ_var1+1
+    bpl B16_b9cb
+    eor #$ff
+    clc
+    adc #$01
+B16_b9cb:
+    tay
+    bpl B16_b9d0
+    dec $01
+B16_b9d0:
+    sta OBJ_x_lo,x
+    lda $01
+    sta OBJ_x_hi,x
+    lda OBJ_vel_x_lo+1
+    sta OBJ_vel_x_lo,x
+    lda OBJ_vel_x_hi+1
+    sta OBJ_vel_x_hi,x
+    lda OBJ_var1+1
+    sta OBJ_var1,x
+    rts
+    .byte $00,$06,$06,$06,$02,$02,$01,$00
+    .byte $06,$00,$00,$07,$07,$07,$02,$06
+    .byte $06,$06,$07,$06,$89,$DA,$F4,$DD
+    .byte $F9,$DD,$FE,$DD,$BF,$C1,$0C,$F2
+    .byte $F5,$06,$0F,$F2,$08,$FC,$F6,$05
+    .byte $00,$00,$05,$05,$08,$0C,$00,$00
+    .byte $00,$0A,$00,$02,$F4,$F1,$FF,$09
+    .byte $F8,$F1,$03,$0A,$0E,$0E,$08,$FC
+    .byte $F8,$08,$08,$FA,$F2,$03
 
 L_16BA2F:
     SETYVEL     #$0400                      ; 16BA2F/C00004
@@ -2146,8 +3794,46 @@ L_16BA2F:
     ONTICK      $16BA40                     ; 16BA3B/0840BA16
     HALT                                    ; 16BA3F/09
 
-; CODE OR DATA -- $16BA40 .. $16BA95
-incbinRange "../split/prg/bank16.bin", $1A40, $1A95
+B16_ba40:
+    jsr $9ced ; GetObjectXY
+    jsr $ed9c ; GetTileFlagsAND1F
+    cmp #$02
+    bcc B16_ba5c
+    cmp #$0e
+    bcs B16_ba5c
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$9b
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_ba5c:
+    jsr $9ced ; GetObjectXY
+    jsr $eedb ; IsTileWater
+    bcc B16_ba72
+    ldx curr_object_slot
+    lda #$16
+    sta script_bank
+    lda #$a6
+    ldy #$ba
+    jmp $cca7 ; OBJ_TryReplaceScriptPc
+B16_ba72:
+    rts
+B16_ba73:
+    ldx curr_object_slot
+    lda OBJ_store_x_lo,x
+    sta OBJ_x_lo,x
+    lda OBJ_store_x_hi,x
+    sta OBJ_x_hi,x
+    lda OBJ_store_y_lo,x
+    sta OBJ_y_lo,x
+    lda OBJ_store_y_hi,x
+    sta OBJ_y_hi,x
+    rts
+
+B16_ba8a: ; script? D0 is an asmcall
+    .byte $D0,$6A,$E2,$00,$01,$C0,$00,$06
+    .byte $17,$32,$BA
 
 L_16BA95:
     ASMCALL     $BA73                       ; 16BA95/D073BA
